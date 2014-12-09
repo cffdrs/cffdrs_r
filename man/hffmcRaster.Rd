@@ -59,7 +59,7 @@ Van Wagner, C.E. 1977. A method of computing fine fuel moisture content througho
 library(cffdrs)
 require(raster)
 ## load the test data for the first hour, namely hour01:
-hour01src <- system.file("extdata","hour01.tif",package="cffdrs")
+hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
 hour01 <- stack(hour01src)
 # Assign names to the layers:
 names(hour01)<-c("temp","rh","ws","prec")
@@ -69,7 +69,7 @@ plot(foo)
 # (2) Based on previous day's hffmc:
 # load the test data for the second hour, namely hour02:
 data("hour02")
-hour02src <- system.file("extdata","hour02.tif",package="cffdrs")
+hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
 hour02 <- stack(hour02src)
 # Assign variable names to the layers:
 names(hour02)<-c("temp","rh","ws","prec")
