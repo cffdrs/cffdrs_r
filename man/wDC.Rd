@@ -60,7 +60,8 @@ data("test_wDC")
 # rain 110mm
 winter_DC <- wDC(DCf=300,rw=110)
 winter_DC
-#(2) modified a and b parameters. Find table values in listed #reference for Lawson and Armitage, 2008.
+#(2) modified a and b parameters. Find table values in listed 
+# reference for Lawson and Armitage, 2008.
 winter_DC <- wDC(DCf=300,rw=110,a=1.0,b=0.9)
 winter_DC
 #(3)with multiple inputs:
@@ -79,7 +80,8 @@ input.2 <- input[input$id==2,]
 data("test_wDC_fs")
 print(test_wDC_fs)
 #Set date field
-test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",test_wDC_fs$day,sep="")))
+test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",
+                                             test_wDC_fs$day,sep="")))
 #match to current id value
 input.2.fs <- test_wDC_fs[test_wDC_fs$id==2,]
 #assign start of winter date (or end of fire season date)

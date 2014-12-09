@@ -7,7 +7,8 @@ Raster-based Fire Weather Index System
 \code{fwiRaster} is used to calculate the outputs of the Canadian Forest Fire Weather Index (FWI) System for one day or one fire season based on noon local standard time (LST) weather observations of temperature, relative humidity, wind speed, and 24-hour rainfall, as well as the previous day's fuel moisture conditions. This function takes rasterized input and generates raster maps as outputs. 
 }
 \usage{
-fwiRaster(input,init=c(ffmc=85,dmc=6,dc=15),mon=7,out= "all",lat.adjust=TRUE,uppercase=TRUE)
+fwiRaster(input,init=c(ffmc=85,dmc=6,dc=15),mon=7,out= "all",lat.adjust=TRUE,
+  uppercase=TRUE)
 }
 \arguments{
   \item{input}{
