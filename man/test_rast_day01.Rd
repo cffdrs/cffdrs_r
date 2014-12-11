@@ -1,7 +1,7 @@
 \name{test_rast_day01}
 \docType{data}
 \alias{test_rast_day01}
-\title{Raster Data for ffmcRaster function}
+\title{Raster Data for fwiRaster function}
 \description{
  Daily fire weather inputs obtained from the Global Environmental Multiscale Model (GEM) in northern Alberta
 }
