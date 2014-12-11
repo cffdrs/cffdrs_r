@@ -7,8 +7,8 @@ Fire Weather Index System
 \code{fwi} is used to calculate the outputs of the Canadian Forest Fire Weather Index (FWI) System for one day or one fire season based on noon local standard time (LST) weather observations of temperature, relative humidity, wind speed, and 24-hour rainfall, as well as the previous day's fuel moisture conditions. This function could be used for either one weather station or for multiple weather stations. 
 }
 \usage{
-fwi(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55), batch=TRUE,out= "all",lat.adjust=TRUE,
-  uppercase=TRUE)
+fwi(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55), batch=TRUE,out= "all",
+    lat.adjust=TRUE,uppercase=TRUE)
 }
 \arguments{
   \item{input}{

@@ -102,14 +102,16 @@ fwi_fs_wDC <- function(input){
       curYr.owd <- rbind(curYr.owd, curYr.d[1,])
       
       #accumulate precipitation for the period between end of last and start of current
-      curYr.owdata <- sum(input[(input$date>curYr.owd[1,"date"] & input$date < curYr.owd[2,"date"]),]$prec)
+      curYr.owdata <- sum(input[(input$date>curYr.owd[1,"date"] & 
+                          input$date < curYr.owd[2,"date"]),]$prec)
       owDC <- wDC(DCf=tail(curYr.fwi$DC,n=1),rw=curYr.owdata) #calculate overwinter DC value
       curYr.init <- data.frame(ffmc=80,dmc=10,dc=owDC) #Initialize moisture codes
     }    
     
     curYr.fsd <- curYr.d[c(1,nrow(curYr.d)),]#get first and last dates of this year
     #match input data to those dates for fire season data
-    curYr.fsdata <- input[input$yr == curYr & input$date >= curYr.fsd[1,"date"] & input$date <= curYr.fsd[2,"date"],]
+    curYr.fsdata <- input[input$yr == curYr & input$date >= curYr.fsd[1,"date"] & 
+                          input$date <= curYr.fsd[2,"date"],]
     
     #run fwi on fireseason data
     curYr.fwi <- fwi(curYr.fsdata,init=curYr.init)
