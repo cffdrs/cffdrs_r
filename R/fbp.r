@@ -185,7 +185,7 @@ if (output=="SECONDARY"|output=="ALL"|output =="S"|output =="A"){
       DB <- ifelse(ACCEL==1,.DISTtcalc(FUELTYPE, BROS, HR, CFB),BROS*HR  )
       DF <- ifelse(ACCEL==1, (DH+DB)/(LBt*2), (DH+DB)/(LB*2)   )
   }
-  if (exists("ID")) ID<-ID else ID <- row.names(input)  
+  if (exists("ID") && !is.null(ID)) ID<-ID else ID <- row.names(input)  
   if (output == "PRIMARY"|output == "P"){
     FBP    <- data.frame(ID,CFB,CFC,FD,HFI,RAZ,ROS,SFC,TFC)
     FBP[,c(2:3,5:ncol(FBP))]<-apply(FBP[,c(2:3,5:ncol(FBP))],2,function(.x) ifelse(FUELTYPE %in% c("WA","NF"),0,.x))
