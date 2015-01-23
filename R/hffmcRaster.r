@@ -94,6 +94,7 @@ hffmcRaster<-function(weatherstream,ffmc_old=85,time.step=1,hourlyFWI=FALSE) {
       names(output)<-c("hffmc","hisi","hfwi","hdsr")
       output
    } else {
+    names(fo) <- "hffmc"
     fo
   }
 }
