@@ -42,7 +42,13 @@ fireSeason <- function(input, fs.start=12,fs.end=5,method="WF93"){
       if (k>3){
         if(!seasonActive & (all(tmax[seq(k-3,k-1,1)]>fs.start))){
           seasonActive <- TRUE #set season to active
-          seasonStartEnd <- rbind(seasonStartEnd,data.frame(yr=yr[k],mon=mon[k],day=day[k],fsdatetype="start"))
+          theday <- day[k]
+          #If the data is starting us on January 4th, then we should have started on January 1st
+          #Should be modified to work on any starting data, but for now, just calendar year to allow for year-round calculations
+          if(mon[k] == 1 && day[k] == 4){
+            theday <- day[k-3]
+          }
+          seasonStartEnd <- rbind(seasonStartEnd,data.frame(yr=yr[k],mon=mon[k],day=theday,fsdatetype="start"))
         }
         if(seasonActive & all(tmax[seq(k-3,k-1,1)]<fs.end)){
           seasonActive <- FALSE
