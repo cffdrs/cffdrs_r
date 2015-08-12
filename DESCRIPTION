@@ -5,7 +5,7 @@ Version: 1.2
 Date: 2015-08-12
 Author: Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, Brett Moore, and Mike Flannigan
 Maintainer: Alan Cantin <Alan.Cantin@RNCan-NRCan.gc.ca>
-Depends: raster (>= 2.3-12), rgdal, R (>= 2.15.1)
+Depends: raster (>= 2.3-12), rgdal, R (>= 3.1)
 Description: This project provides a group of new functions to calculate the outputs of the two main components of the Canadian Forest Fire Danger Rating System (CFFDRS) at various time scales (e.g. daily and hourly): the Fire Weather Index (FWI) System and the Fire Behaviour Prediction (FBP) System. A few of the functions have two versions, the spreadsheet- and raster- based.
 License: GPL-2
 URL: https://r-forge.r-project.org/projects/cffdrs/
