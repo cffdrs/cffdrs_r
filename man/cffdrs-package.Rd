@@ -6,7 +6,7 @@
 Canadian Forest Fire Danger Rating System
 }
 \description{
-The cffdrs package allows R users to calculate the outputs of the two main components of the Canadian Forest Fire Danger Rating System (CFFDRS; \url{http://cwfis.cfs.nrcan.gc.ca/en_CA/background/summary/fdr}): the Fire Weather Index (FWI) System (\url{http://cwfis.cfs.nrcan.gc.ca/en_CA/background/summary/fwi}) and the Fire Behaviour Prediction (FBP) System (\url{http://cwfis.cfs.nrcan.gc.ca/en_CA/background/summary/fbp}). These systems are widely used internationally to assess fire danger (FWI System) and quantify fire behavior (FBP System).
+The cffdrs package allows R users to calculate the outputs of the two main components of the Canadian Forest Fire Danger Rating System (CFFDRS; \url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fdr}): the Fire Weather Index (FWI) System (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fwi}) and the Fire Behaviour Prediction (FBP) System (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fbp}). These systems are widely used internationally to assess fire danger (FWI System) and quantify fire behavior (FBP System).
 
 The FWI System (Van Wagner 1987) is based on the moisture content and the effect of wind of three classes of forest fuels on fire behavior. It consists of six components: three fuel moisture codes (Fire Fuel Moisture Code, Duff Moisture Code, Drought Code), and three fire behavior indexes representing rate of spread (Initial Spread Index), fuel consumption (Buildup Index), and fire intensity (Fire Weather Index). The FWI System outputs are determined from daily noon weather observations: temperature, relative humidity, wind speed, and 24-hour rainfall.
 
