@@ -43,7 +43,7 @@ fwi(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55), batch=TRUE,out= "all",
   }
 
   \item{out}{
-    The function offers two output options, \code{out="all"} will produce a raster stack include both the input and the FWI System outputs; \code{out="fwi"} will generate a stack with only the FWI system components. 
+    The function offers two output options, \code{out="all"} will produce a data frame that includes both the input and the FWI System outputs; \code{out="fwi"} will generate a data frame with only the FWI system components. 
   }
   \item{lat.adjust}{
     The function offers options for whether day length adjustments should be applied to the calculations.  The default value is "TRUE".
