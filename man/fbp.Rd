@@ -23,7 +23,7 @@ fbp(input, output="Primary")
                             "non-fuel", respectively. The "-" in the Fuel Type names could\cr\tab
                              be omitted, and the Fuel Type names are also case-insensitive.\tab "C2"\cr
         \var{LAT} \tab Latitude [decimal degrees] \tab 55\cr
-        \var{LON} \tab Longitude [decimal degrees] \tab -120\cr
+        \var{LONG} \tab Longitude [decimal degrees] \tab -120\cr
         \var{FFMC} \tab Fine fuel moisture code [FWI System component] \tab 90\cr
         \var{BUI} \tab Buildup index [FWI System component] \tab 60\cr
         \var{WS} \tab Wind speed [km/h] \tab 10\cr
