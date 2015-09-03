@@ -1,3 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 import(raster)
 import(rgdal)
+import(foreach)
