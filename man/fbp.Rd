@@ -7,14 +7,14 @@ Fire Behavior Prediction System function
 \code{fbp} calculates the outputs from the Canadian Forest Fire Behavior Prediction (FBP) System (Forestry Canada Fire Danger Group 1992) based on given fire weather and fuel moisture conditions (from the Canadian Forest Fire Weather Index (FWI) System (Van Wagner 1987)), fuel type, date, and slope. Fire weather, for the purpose of FBP System calculation, comprises observations of 10 m wind speed and direction at the time of the fire, and two associated outputs from the Fire Weather Index System, the Fine Fuel Moisture Content (FFMC) and Buildup Index (BUI). FWI System components can be calculated with the sister function \code{\link{fwi}}.
 }
 \usage{
-fbp(input, output="Primary")
+fbp(input, output="Primary",m=NULL,cores=1)
 }
 \arguments{
   \item{input}{
     The input data, a data.frame containing fuel types, fire weather component, and slope (see below). Each vector of inputs defines a single FBP System prediction for a single fuel type and set of weather conditions. The data.frame can be used to evaluate the FBP System for a single fuel type and instant in time, or multiple records for a single point (e.g., one weather station, either hourly or daily for instance) or multiple points (multiple weather stations or a gridded surface). All input variables have to be named as listed below, but they are case insensitive, and do not have to be in any particular order. Fuel type is of type character; other arguments are numeric. Missing values in numeric variables could either be assigned as NA or leave as blank.\cr
     \bold{Required Inputs:}\cr    
     \tabular{lll}{
-        \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr
+        \bold{Input} \tab \bold{Description/Full name} \tab \bold{Defaults}\cr
         \var{id} \tab Unique identifier of a weather station or spatial point (no restriction on\cr\tab
                       data type). Will use row.names of the Inputs dataset if not specified \tab N/A\cr
         \var{FuelType} \tab FBP System Fuel Types including "C-1", "C-2", "C-3", "C-4", "C-5",\cr\tab
@@ -66,6 +66,12 @@ fbp(input, output="Primary")
         \var{Secondary} \tab 34\cr
         \var{All} \tab 42\cr
     }
+  }
+  \item{m}{
+    Optimal number of pixels at each iteration of computation when \code{nrow(input) >= 1000}. Default \code{m = NULL}, where the function will assign \code{m = 1000} when \code{nrow(input)} is between 1000 and 5,000,000, and \code{m = 3000} otherwise. By including this option, the function is able to process large dataset more efficiently. The optimal value may vary with different computers.  
+  }
+  \item{cores}{
+    Number of CPU cores (integer) used in the computation, default is 1.  By signing \code{cores > 1}, the function will apply parallel computation technique provided by the foreach package, which significantly reduces the computation time for large input data (over a million records). For small dataset, \code{cores=1} is actually faster. 
   }
 * Elevation is only used in the calculation of Foliar Moisture Content (FMC). However, FMC can also be calculated without elevation input. The default is to not use elevation in the calculation of FMC.
 
