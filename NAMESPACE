@@ -1,5 +1,6 @@
 exportPattern("^[[:alpha:]]+")
 import(raster)
+import(rgdal)
 importFrom(foreach, "%dopar%")
 importFrom(foreach, foreach)
 importFrom(foreach, registerDoSEQ)

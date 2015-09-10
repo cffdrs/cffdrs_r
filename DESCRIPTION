@@ -5,7 +5,7 @@ Version: 1.4
 Date: 2015-09-10
 Author: Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, Brett Moore, and Mike Flannigan
 Maintainer: Alan Cantin <Alan.Cantin@RNCan-NRCan.gc.ca>
-Depends: raster, R(>= 3.1.0)
+Depends: rgdal, raster, R(>= 3.1.0)
 Imports: foreach, data.table, parallel,doParallel, spatial.tools
 Description: This project provides a group of new functions to calculate the outputs of the two main components of the Canadian Forest Fire Danger Rating System (CFFDRS) at various time scales: the Fire Weather Index (FWI) System and the Fire Behaviour Prediction (FBP) System. Some functions have two versions, table and raster based.
 License: GPL-2
