@@ -25,7 +25,7 @@ gfmc(input, GFMCold=85,batch=TRUE,time.step=1,roFL=0.3, out="GFMCandMC")
   }
   \item{GFMCold}{
     Previous value of GFMC (i.e. value calculated at the previous time step)[default is 85 (which corresponds to a moisture content of about 16\%)]. On the first calculation this is the estimate of the GFMC value at the start of the time step. The \code{GFMCold} argument can accept a single initial value for multiple weather stations, and also accept a vector of initial values for multiple weather stations. 
-NOTE: this input represents the CODE value, not a direct moisture content value. The CODE values in the Canadian FWI System increase within decreasing moisture content. To roughly convert a moisture content value to a CODE value on the FF-scale (used in the FWI Systems FFMC) use   \code{GFMCold} =101-gmc  (where gmc is moisture content in %) 
+NOTE: this input represents the CODE value, not a direct moisture content value. The CODE values in the Canadian FWI System increase within decreasing moisture content. To roughly convert a moisture content value to a CODE value on the FF-scale (used in the FWI Systems FFMC) use   \code{GFMCold} =101-gmc  (where gmc is moisture content in \%) 
 
   }
 
