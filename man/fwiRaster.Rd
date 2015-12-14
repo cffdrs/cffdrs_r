@@ -12,7 +12,7 @@ fwiRaster(input,init=c(ffmc=85,dmc=6,dc=15),mon=7,out= "all",lat.adjust=TRUE,
 }
 \arguments{
   \item{input}{
-    A stack or brick containing rasterized daily weather observations taken at noon LST. Variable names have to be the same as in the following list, but they are case insensitive. The order in which the input variables are entered is not important. 
+    A stack or brick containing rasterized daily weather observations taken at noon LST. Variable names have to be the same as in the following list, but they are case insensitive. The order in which the inputs are entered is not important. 
 
     \tabular{lll}{
         \var{lat}  \tab (recommended) \tab Latitude (decimal degree, default=55)\cr
@@ -61,7 +61,7 @@ The default initial (i.e., "start-up") fuel moisture code values (FFMC=85, DMC=6
 }
 \value{
 By default, \code{fwi} returns a raster stack which includes both the input and the FWI System variables, as describe below:
-  \item{Input Variables }{Including \code{temp}, \code{rh}, \code{ws}, and \code{prec} with \code{lat} as optional.}
+  \item{Inputs }{Including \code{temp}, \code{rh}, \code{ws}, and \code{prec} with \code{lat} as optional.}
   \item{ffmc }{Fine Fuel Moisture Code}
   \item{dmc }{Duff Moisture Code}
   \item{dc }{Drought Code}
@@ -87,6 +87,7 @@ Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, and 
 
 \seealso{
    \code{\link{fbp}},
+   \code{\link{fbpRaster}},
    \code{\link{fwi}},
    \code{\link{hffmc}},
    \code{\link{hffmcRaster}}
