@@ -10,16 +10,16 @@ Overwintering Drought Code
 wDC(DCf=100,rw=200,a=0.75,b=0.75)
 }
 \arguments{
-  \item{DCf}{Final fall DC value from previous year}
-  \item{rw}{Winter precipitation (mm)}
-  \item{a}{User selected values accounting for carry-over fraction (view table below)}
-  \item{b}{User selected values accountain for wetting efficiency fraction (view table below)}
+  \item{DCf}{ Final fall DC value from previous year}
+  \item{rw}{ Winter precipitation (mm)}
+  \item{a}{ User selected values accounting for carry-over fraction (view table below)}
+  \item{b}{ User selected values accountain for wetting efficiency fraction (view table below)}
 
 User-selected values and criteria for constants a and b, overwintering the Drought Code. 
 Source: Lawson and Armitage (2008) - Table 9.
   \tabular{lll}{
       \bold{Constant} \tab \bold{Value} \tab \bold{Criteria}\cr    
-      \var{Carry-over fraction of last fall's moisture (a)}   \tab 1.0 \tab Daily DC calculated up to 1 November;\cr continuous snow cover, or freeze-up, whichever comes first\cr
+      \var{Carry-over fraction of last fall's moisture (a)}   \tab 1.0 \tab Daily DC calculated up to 1 November; continuous snow cover, or freeze-up, whichever comes first\cr
         \tab 0.75 \tab Daily DC calculations stopped before any of the above
 conditions met or the area is subject to occasional winter chinook conditions, leaving the ground bare and subject to moisture depletion
 \cr
