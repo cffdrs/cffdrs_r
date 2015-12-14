@@ -18,7 +18,7 @@ hffmcRaster(weatherstream,ffmc_old=85,time.step=1,hourlyFWI=FALSE)
         \var{rh}   \tab (required) \tab Relative humidity (\%)\cr
         \var{ws}   \tab (required) \tab 10-m height wind speed (km/h)\cr
         \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
-        \var{bui}  \tab (optional) \tab Daily BUI value for the \cr computation of hourly FWI.\cr It is required when \code{hourlyFWI=TRUE}.\cr
+        \var{bui}  \tab (optional) \tab Daily BUI value for the computation of hourly FWI. It is required when \code{hourlyFWI=TRUE}.\cr
     }
   }
   \item{ffmc_old}{
