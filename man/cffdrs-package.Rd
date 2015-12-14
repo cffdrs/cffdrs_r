@@ -17,16 +17,16 @@ The FBP System (Forestry Canada Fire Danger Group 1992; Hirsch 1996) provides a 
 \tabular{ll}{
 Package: \tab cffdrs\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2015-09-08\cr
+Version: \tab 1.5\cr
+Date: \tab 2015-12-14\cr
 License: \tab GPL-2\cr
 }
-This package includes nine functions. Seven functions, fwi, fwiRaster, hffmc, hffmcRaster, sdmc, gfmc, and wDC are used for FWI System calculation, whereas one function, fbp, is used for FBP System calculation. In addition, one function, fireSeason, has been added to determine fire season start and end dates based on weather. These functions are not fully independent: their inputs overlap greatly and the users will have to provide FWI System outputs to calculate FBP System outputs. The fwi, fwiRaster, and sdmc functions calculate the outputs based on daily noon local standard time (LST) weather observations of temperature, relative humidity, wind speed, and 24-hour rainfall, as well as the previous day's moisture content. The hffmc, gfmc, and hffmcRaster functions calculate the outputs based on hourly weather observations of temperature, relative humidity, wind speed, and hourly rainfall, as well as the previous hour's weather conditions. The fbp function calculates the outputs of the FBP System based on given set of information about fire weather conditions (weather observations and their associated FWI System components), fuel type, and slope (optional).
+This package includes ten functions. Seven functions, fwi, fwiRaster, hffmc, hffmcRaster, sdmc, gfmc, and wDC are used for FWI System calculation, whereas two functions, fbp and fbpRaster are used for FBP System calculation. In addition, one function, fireSeason, has been added to determine fire season start and end dates based on weather. These functions are not fully independent: their inputs overlap greatly and the users will have to provide FWI System outputs to calculate FBP System outputs. The fwi, fwiRaster, and sdmc functions calculate the outputs based on daily noon local standard time (LST) weather observations of temperature, relative humidity, wind speed, and 24-hour rainfall, as well as the previous day's moisture content. The hffmc, gfmc, and hffmcRaster functions calculate the outputs based on hourly weather observations of temperature, relative humidity, wind speed, and hourly rainfall, as well as the previous hour's weather conditions. The fbp and fbpRaster functions calculate the outputs of the FBP System based on given set of information about fire weather conditions (weather observations and their associated FWI System components), fuel type, and slope (optional).
 }
 \author{
 Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, Brett Moore, and Mike Flannigan
 s
-Maintainer: Alan Cantin \email{Alan.Cantin@RNCan-NRCan.gc.ca}
+Maintainer: Alan Cantin \email{Alan.Cantin@Canada.ca}
 }
 \references{
 1. Van Wagner, C.E. and T.L. Pickett. 1985. Equations and FORTRAN program for the Canadian Forest Fire Weather Index System. Can. For. Serv., Ottawa, Ont. For. Tech. Rep. 33. 18 p.
