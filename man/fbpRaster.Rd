@@ -195,21 +195,22 @@ system.time(foo<-fbpRaster(input = input,output="S"))
 # All outputs:
 system.time(foo<-fbpRaster(input = input,output="A"))
 
+### Additional, longer running examples are commented out below ###
 # Keep only the required input layers, the other layers would be
 # assigned with default values:
 # keep only the required inputs:
-dat0<-input[[c("FuelType","LAT","LONG","FFMC","BUI","WS","GS", "Dj","Aspect")]]
-system.time(foo<-fbpRaster(input = dat0,output="A"))
+# dat0<-input[[c("FuelType","LAT","LONG","FFMC","BUI","WS","GS", "Dj","Aspect")]]
+# system.time(foo<-fbpRaster(input = dat0,output="A"))
 
 # Using parallel computation option. This works better only when 
 # the input is large. 
 # First, create a large input by expanding the input stack:
-s<-input
-nrow(s)<-1000
-ncol(s)<-1000 
-s<-resample(input,s,method='ngb')
+# s<-input
+# nrow(s)<-1000
+# ncol(s)<-1000 
+# s<-resample(input,s,method='ngb')
 # Compare whether assign multiple cores would save running time:
-system.time(foo1<-fbpRaster(s))
-#system.time(foo2<-fbpRaster(s,cores=4))
+# system.time(foo1<-fbpRaster(s))
+# system.time(foo2<-fbpRaster(s,cores=4))
 }
 \keyword{ methods }
