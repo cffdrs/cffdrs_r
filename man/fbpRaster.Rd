@@ -193,7 +193,7 @@ system.time(foo<-fbpRaster(input = input,select=c("HFI","TFC", "ROS")))
 # Secondary outputs:
 system.time(foo<-fbpRaster(input = input,output="S"))
 # All outputs:
-system.time(foo<-fbpRaster(input = input,output="A"))
+#system.time(foo<-fbpRaster(input = input,output="A"))
 
 ### Additional, longer running examples are commented out below ###
 # Keep only the required input layers, the other layers would be
