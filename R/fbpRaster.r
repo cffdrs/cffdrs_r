@@ -24,18 +24,28 @@ fbpRaster<-function(input,output = "Primary",select=NULL,m=NULL,cores=1){
   }
   names(input)<-toupper(names(input))
   output<-toupper(output)
-  registerDoSEQ()
-  r<-getValuesBlock_stackfix(input,nrows=nrow(input))
-  r<-as.data.frame(r)
-  names(r)<-names(input)
+  if("LAT" %in% names(input)){
+    registerDoSEQ()
+    r<-getValuesBlock_stackfix(input,nrows=nrow(input))
+    r<-as.data.frame(r)
+    names(r)<-names(input)
+  }else{
+    r<-as.data.frame(rasterToPoints(input))
+    names(r)[names(r)=="y"]<-"LAT"
+    if (max(r$LAT)>90|min(r$LAT)< -90){
+      warning("Input projection is not in lat/long, consider re-projection or include LAT as input")
+    }
+  }
   r$ID<-1:nrow(r)
   
   fuelCross<-data.frame(FUELTYPE0=sort(c(paste("C",1:7,sep="-"),"D-1",paste("M",1:4,sep="-"),
-                                         paste("S",1:3,sep="-"),"O-1a","O-1b","WA","NF")),code=1:19)
+                                    paste("S",1:3,sep="-"),"O-1a","O-1b","WA","NF")),code=1:19)
   r<-merge(r,fuelCross,by.x="FUELTYPE",by.y="code",all.x=TRUE,all.y=FALSE)
+  
   r$FUELTYPE<-NULL
   names(r)[names(r)=="FUELTYPE0"] <- "FUELTYPE"
   r<-r[with(r,order(ID)),]
+  names(r)[names(r)=="x"]<-"LONG"
   FBP<-fbp(r,output=output,m=m,cores=cores)
   if (!(output == "SECONDARY" | output == "S")){
     FBP$FD<-ifelse(FBP$FD=="I",2,FBP$FD)
