@@ -18,6 +18,7 @@ hffmc(weatherstream,ffmc_old=85,time.step=1,calc.step=FALSE,batch=TRUE,hourlyFWI
         \var{rh}   \tab (required) \tab Relative humidity (\%)\cr
         \var{ws}   \tab (required) \tab 10-m height wind speed (km/h)\cr
         \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
+        \var{hr}   \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr
         \var{bui}  \tab (optional) \tab Daily BUI value for the computation of hourly FWI. It is required when \code{hourlyFWI=TRUE}.\cr
     }
     Typically this dataframe also contains date and hour fields so outputs can be associated with a specific day and time, however these fields are not used in the calculations.  If multiple weather stations are being used, a weather station ID field is typically included as well, though this is simply for bookkeeping purposes and does not affect the calculation.
