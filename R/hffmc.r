@@ -14,13 +14,17 @@ hffmc<-function(weatherstream,ffmc_old=85,time.step=1,calc.step=FALSE,batch=TRUE
   
   if (length(ffmc_old)==1&n>1){Fo <- rep(ffmc_old,n)} else {Fo<-ffmc_old}
   
-  hr <- weatherstream$hr
+
   Tp <- weatherstream$temp
   H  <- weatherstream$rh
   W  <- weatherstream$ws
   ro <- weatherstream$prec
-  if (!exists("hr") | is.null(hr)) 
-    warning("hour value is missing!")
+
+  if (calc.step){
+    hr <- weatherstream$hr
+    if (!exists("hr") | is.null(hr)) 
+      warning("hour value is missing!")
+  }
   if (!exists("Tp") | is.null(Tp)) 
     warning("temperature (temp) is missing!")
   if (!exists("ro") | is.null(ro)) 
