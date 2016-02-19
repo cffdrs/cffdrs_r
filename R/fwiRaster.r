@@ -84,6 +84,7 @@ fwiRaster<-function(input,init=c(ffmc=85,dmc=6,dc=15),mon=7,out="all",lat.adjust
     ws0<-mask(ws,z0)
     z<-0.424 * (1 - (((100 - rh0)/100)^1.7)) + 0.0694 * sqrt(ws0) * (1 - ((100 - rh0)/100)^8)
     z[is.na(z)]<-0  ## originally, it was assigned as NA, now it is 0
+    z<-mask(z,temp) ## this to take care of missing temp values
     rm(rh0,ws0,z0)
     x <- z * 0.581 * exp(0.0365 * temp)
     z0<-overlay(wmo,ed,ew,fun=function(a,b,c){return(a<b&a<c)})
