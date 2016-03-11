@@ -1,4 +1,4 @@
-.ffmcCalc <- function(ffmc_yda, temp, rh, prec, ws) {
+.ffmcCalc <- function(ffmc_yda, temp, rh, ws, prec) {
   #############################################################################
   # Description: Fine Fuel Moisture Code Calculation. All code
   #              is based on a C code library that was written by Canadian
