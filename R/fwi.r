@@ -1,31 +1,79 @@
-fwi<-function(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55),batch=TRUE,out="all",lat.adjust=TRUE,uppercase=TRUE)
-{
-  ell01 <- c(6.5, 7.5, 9, 12.8, 13.9, 13.9, 12.4, 10.9, 9.4, 8, 7, 6)
-  ell02 <- c(7.9, 8.4, 8.9, 9.5, 9.9, 10.2, 10.1, 9.7, 9.1,8.6, 8.1, 7.8)
-  ell03 <- c(10.1, 9.6, 9.1, 8.5, 8.1, 7.8, 7.9, 8.3, 8.9, 9.4, 9.9, 10.2)
-  ell04 <- c(11.5, 10.5, 9.2, 7.9, 6.8, 6.2, 6.5, 7.4, 8.7, 10, 11.2, 11.8)
-  fl01 <- c(-1.6, -1.6, -1.6, 0.9, 3.8, 5.8, 6.4, 5, 2.4, 0.4, -1.6, -1.6)
-  fl02 <- c(6.4, 5, 2.4, 0.4, -1.6, -1.6, -1.6, -1.6, -1.6, 0.9, 3.8, 5.8)
+fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
+              batch = TRUE, out = "all", lat.adjust = TRUE, uppercase = TRUE) {
+  #############################################################################
+  # Description: Canadian Forest Fire Weather Index Calculations. All code
+  #              is based on a C code library that was written by Canadian
+  #              Forest Service Employees, which was originally based on
+  #              the Fortran code listed in the reference below. All equations
+  #              in this code refer to that document, unless otherwise noted.
+  #
+  #              Equations and FORTRAN program for the Canadian Forest Fire 
+  #              Weather Index System. 1985. Van Wagner, C.E.; Pickett, T.L. 
+  #              Canadian Forestry Service, Petawawa National Forestry 
+  #              Institute, Chalk River, Ontario. Forestry Technical Report 33. 
+  #              18 p.
+  #
+  #              Additional reference on FWI system
+  #
+  #              Development and structure of the Canadian Forest Fire Weather 
+  #              Index System. 1987. Van Wagner, C.E. Canadian Forestry Service,
+  #              Headquarters, Ottawa. Forestry Technical Report 35. 35 p.
+  #  
+  #Args:  input:    View Documentation (fwi.Rd) for full description
+  #                 of input data frame
+  #       init:     Initializing moisture values
+  #                 ffmc:     Fine Fuel Moisture Code (default 85)
+  #                 dmc:      Duff Moisture Code (default 6)
+  #                 dc:       Drought Code (default 15)
+  #                 lat:      Latitude (decimal degrees, default 55)
+  #       batch:    Function can be run in a batch mode, where multiple 
+  #                 weather stations or points can be calculated at once. 
+  #                 (TRUE/FALSE, default TRUE)
+  #       out:      Display the calculated FWI values, with or without the 
+  #                 inputs. (all/fwi, default all)
+  #       lat.adjust: Option to adjust day length in the calculations 
+  #                   (TRUE/FALSE, default TRUE)
+  #       uppercase:  Output names in upper or lower case - a commonly 
+  #                   asked for feature, as dataset naming conventions vary 
+  #                   considerably. (TRUE/FALSE, default TRUE)
+  #       
+  #
+  # Returns: A data.frame of the calculated FWI values with or without
+  #          the input data attached to it.
+  #
+  #############################################################################
+  
+  #Quite often users will have a data frame called "input" already attached
+  #  to the workspace. To mitigate this, we remove that if it exists, and warn
+  #  the user of this case.
   if (!is.na(charmatch("input", search()))) {
     detach(input)
   }
   names(input) <- tolower(names(input))
   
-  if (is.vector(init)){init<-as.data.frame(t(init))}
+  #convert vector to data.frame to ensure consitency
+  if (is.vector(init)){
+    init <- as.data.frame(t(init))
+  }
   names(init) <- tolower(names(init))
-  if (substr(names(init),1,1)[1]=="x"|substr(names(init),1,1)[1]=="v"){
+  #resolve missing names of the initializing variables if necessary
+  if(substr(names(init), 1, 1)[1] == "x" | substr(names(init), 1, 1)[1] == "v"){
     if (ncol(init) == 3){
-      names(init) <- c("ffmc","dmc","dc")
-      init$lat    <- 55
-    }else if(ncol(init)==4){
-      names(init) <- c("ffmc","dmc","dc","lat")
+      names(init) <- c("ffmc", "dmc", "dc")
+      init$lat <- 55
+    }else if(ncol(init) == 4){
+      names(init) <- c("ffmc", "dmc", "dc", "lat")
     }
   }
     
+  #############################################################################
+  #                                 
+  # Set local variables and display warnings to user if default is being used
+  #############################################################################
   ffmc_yda <- init$ffmc
   dmc_yda  <- init$dmc
   dc_yda   <- init$dc
- 
+
   if ("lat" %in% names(input)) {
     lat <- input$lat
   }
@@ -62,17 +110,26 @@ fwi<-function(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55),batch=TRUE,out="
     day <- rep(-99, nrow(input))
   }
 
+  #If batch selected, then sort the data by Date and id and determine the 
+  # length of each run.
+  # Currently when running multiple stations, the stations much have the same
+  # amount of data and same start/end dates
+  #Function stops running if these requirements are not met
   if (batch){
     if ("id" %in% names(input)) {
-      input<-input[with(input,order(yr,mon,day,id)),]
+      input <- input[with(input,order(yr,mon,day,id)),]
+      #number of stations
       n <- length(unique(input$id))
-      if(length(unique(input[1:n,"id"]))!=n){
-        stop("Multiple stations have to start and end at the same dates, and input data must be sorted by date/time and id")
+      if(length(unique(input[1:n, "id"])) != n){
+        stop("Multiple stations have to start and end at the same dates, and 
+             input data must be sorted by date/time and id")
       }
     } else {
       n <- 1
     }
-  }else{n <- nrow(input)}
+  }else{
+    n <- nrow(input)
+  }
 
   temp <- input$temp
   prec <- input$prec
@@ -94,93 +151,74 @@ fwi<-function(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55),batch=TRUE,out="
     warning("Latitude has to be between -90 and 90")
   if (length(unique(long>180))>1|length(unique(long< -180))>1)
     warning("Longitude has to be between -180 and 180")
+  #############################################################################
+  #                                 END
+  # Set local variables and display warnings to user if default is being used
+  #############################################################################
 
-
-  if (length(temp)%%n != 0)
+  if (length(temp) %% n != 0)
     warning("Missing records may generate wrong outputs")
-  if (nrow(init)==1&n>1){
+  if (nrow(init) == 1 & n > 1){
     warning("Same initial data were used for multiple weather stations")
-    ffmc_yda<-rep(ffmc_yda,n)
-    dmc_yda<-rep(dmc_yda,n)
-    dc_yda<-rep(dc_yda,n)
+    ffmc_yda <- rep(ffmc_yda, n)
+    dmc_yda <- rep(dmc_yda, n)
+    dc_yda <- rep(dc_yda, n)
   }
-  if (nrow(init)>1&nrow(init)!=n)
-    stop("Number of initial values do not match with number of weather stations")
+  #if the number of rows in the init file does not equal that of the number of
+  # stations, then stop execution as we do not have a complete input set
+  if(nrow(init) > 1 & nrow(init) != n) {
+    stop("Number of initial values do not match with number of weather 
+         stations")
+  }
   
-  n0<-length(temp)/n
-  ffmc<-dmc<-dc<-isi<-bui<-fwi<-dsr<-NULL
+  #Length of weather run
+  n0 <- length(temp) / n
+  #Initialize variables
+  ffmc <- dmc <- dc <- isi <- bui <- fwi <- dsr <- NULL
+  #For each day in the run
   for (i in 1:n0){
-    k  <- ((i-1)*n+1):(i*n)
-    
+    #k is the data for all stations by day
+    k  <- ((i - 1) * n + 1):(i * n)
+    #constrain relative humidity
     rh[k] <- ifelse(rh[k] >= 100, 99.9999, rh[k])
-    wmo <- 147.2 * (101 - ffmc_yda)/(59.5 + ffmc_yda)
-    ra <- ifelse(prec[k] > 0.5, prec[k] - 0.5, prec[k])
-    wmo <- ifelse(prec[k] > 0.5, ifelse(wmo > 150, wmo + 0.0015 * 
-          (wmo - 150) * (wmo - 150) * sqrt(ra) + 42.5 * ra * exp(-100/(251 - 
-           wmo)) * (1 - exp(-6.93/ra)), wmo + 42.5 * ra * exp(-100/(251 - wmo)) * (1 - exp(-6.93/ra))), wmo)
-    wmo <- ifelse(wmo > 250, 250, wmo)
-    ed <- 0.942 * (rh[k]^0.679) + (11 * exp((rh[k] - 100)/10)) + 0.18 * 
-      (21.1 - temp[k]) * (1 - 1/exp(rh[k] * 0.115))
-    ew <- 0.618 * (rh[k]^0.753) + (10 * exp((rh[k] - 100)/10)) + 0.18 * 
-      (21.1 - temp[k]) * (1 - 1/exp(rh[k] * 0.115))
-    z <- ifelse(wmo < ed & wmo < ew, 0.424 * (1 - (((100 - rh[k])/100)^1.7)) + 
-         0.0694 * sqrt(ws[k]) * (1 - ((100 - rh[k])/100)^8), 0)
-    x <- z * 0.581 * exp(0.0365 * temp[k])
-    wm <- ifelse(wmo < ed & wmo < ew, ew - (ew - wmo)/(10^x), wmo)
-    z <- ifelse(wmo > ed, 0.424 * (1 - (rh[k]/100)^1.7) + 0.0694 * sqrt(ws[k]) * (1 - (rh[k]/100)^8), z)
-    x <- z * 0.581 * exp(0.0365 * temp[k])
-    wm <- ifelse(wmo > ed, ed + (wmo - ed)/(10^x), wm)
-    ffmc1 <- (59.5 * (250 - wm))/(147.2 + wm)
-    ffmc1 <- ifelse(ffmc1 > 101, 101, ffmc1)
-    ffmc1 <- ifelse(ffmc1 < 0, 0, ffmc1)
-    t0 <- temp[k]
-    t0 <- ifelse(t0 < (-1.1), -1.1, t0)
-    rk <- 1.894 * (t0 + 1.1) * (100 - rh[k]) * ell01[mon[k]] * 1e-04
-    if (lat.adjust) {
-      rk <- ifelse(lat[k] <= 30 & lat[k] > 10, 1.894 * (t0 + 1.1) * (100 - rh[k]) * ell02[mon[k]] * 1e-04, rk)
-      rk <- ifelse(lat[k] <= -10 & lat[k] > -30, 1.894 * (t0 + 1.1) * (100 - rh[k]) * ell03[mon[k]] * 1e-04, rk)
-      rk <- ifelse(lat[k] <= -30 & lat[k] >= -90, 1.894 * (t0 + 1.1) * (100 - rh[k]) * ell04[mon[k]] * 1e-04, rk)
-      rk <- ifelse(lat[k] <= 10 & lat[k] > -10, 1.894 * (t0 + 1.1) * (100 - rh[k]) * 9 * 1e-04, rk)
-    }
-    ra <- prec[k]
-    rw <- 0.92 * ra - 1.27
-    wmi <- 20 + 280/exp(0.023 * dmc_yda)
-    b <- ifelse(dmc_yda <= 33, 100/(0.5 + 0.3 * dmc_yda), ifelse(dmc_yda <= 65, 14 - 1.3 * log(dmc_yda), 6.2 * log(dmc_yda) - 17.2))
-    wmr <- wmi + 1000 * rw/(48.77 + b * rw)
-    op <- options(warn = (-1))
-    pr0 <- 43.43 * (5.6348 - log(wmr - 20))
-    options(op)
-    pr <- ifelse(prec[k] <= 1.5, dmc_yda, pr0)
-    pr <- ifelse(pr < 0, 0, pr)
-    dmc1 <- pr + rk
-    dmc1 <- ifelse(dmc1 < 0, 0, dmc1)
-    t0 <- ifelse(temp[k] < (-2.8), -2.8, t0)
-    pe <- (0.36 * (t0 + 2.8) + fl01[mon[k]])/2
-    if (lat.adjust) {
-      pe <- ifelse(lat[k] <= -10, (0.36 * (t0 + 2.8) + fl02[mon[k]])/2, pe)
-      pe <- ifelse(lat[k] > -10 & lat[k] <= 10, (0.36 * (t0 + 2.8) + 1.4)/2, pe)
-    }
-    ra <- prec[k]
-    rw <- 0.83 * ra - 1.27
-    smi <- 800 * exp(-1 * dc_yda/400)
-    dr0 <- dc_yda - 400 * log(1 + 3.937 * rw/smi)
-    dr0 <- ifelse(dr0 < 0, 0, dr0)
-    dr <- ifelse(prec[k] <= 2.8, dc_yda, dr0)
-    dc1 <- dr + pe
-    dc1 <- ifelse(dc1 < 0, 0, dc1)
-    fW <- exp(0.05039 * ws[k])
-    fm <- 147.2 * (101 - ffmc1)/(59.5 + ffmc1)
-    fF <- 91.9 * exp(-0.1386 * fm) * (1 + (fm^5.31)/49300000)
-    isi1 <- 0.208 * fW * fF
-    bui1 <- ifelse(dmc1 == 0 & dc1 == 0, 0, 0.8 * dc1 * dmc1/(dmc1 + 0.4 * dc1))
-    p <- ifelse(dmc1 == 0, 0, (dmc1 - bui1)/dmc1)
-    cc <- 0.92 + ((0.0114 * dmc1)^1.7)
-    bui0 <- dmc1 - cc * p
-    bui0 <- ifelse(bui0 < 0, 0, bui0)
-    bui1 <- ifelse(bui1 < dmc1, bui0, bui1)
-    bb <- ifelse(bui1 > 80, 0.1 * isi1 * (1000/(25 + 108.64/exp(0.023 * bui1))), 0.1 * isi1 * (0.626 * (bui1^0.809) + 2))
-    fwi1 <- ifelse(bb <= 1, bb, exp(2.72 * ((0.434 * log(bb))^0.647)))
+    ###########################################################################
+    # Fine Fuel Moisture Code (FFMC)
+    ###########################################################################
+    ffmc1 = .ffmcCalc(ffmc_yda, temp[k], rh[k], ws[k], prec[k])
+    
+    ###########################################################################
+    # Duff Moisture Code (DMC)
+    ###########################################################################
+    dmc1 = .dmcCalc(dmc_yda, temp[k], rh[k], prec[k], lat[k], mon[k], 
+                    lat.adjust)
+    
+    ###########################################################################
+    # Drought Code (DC)
+    ###########################################################################
+    dc1 <- .dcCalc(dc_yda, temp[k], rh[k], prec[k], lat[k], mon[k],
+                   lat.adjust)
+    
+    ###########################################################################
+    # Initial Spread Index (ISI)
+    ###########################################################################
+    isi1 <- .ISIcalc(ffmc1, ws[k], FALSE)
+    
+    ###########################################################################
+    # Buildup Index (BUI)
+    ###########################################################################
+    bui1 <- .buiCalc(dmc1, dc1)
+    
+    ###########################################################################
+    # Fire Weather Index (FWI)
+    ###########################################################################
+    fwi1 <- .fwiCalc(isi1, bui1)
+    ###########################################################################
+    #                   Daily Severity Rating (DSR)
+    ###########################################################################
+    #Eq. 31
     dsr1 <- 0.0272 * (fwi1^1.77)
+    
+    #Concatenate values
     ffmc<-c(ffmc,ffmc1)
     dmc<-c(dmc,dmc1)
     dc<-c(dc,dc1)
@@ -193,20 +231,22 @@ fwi<-function(input,init=data.frame(ffmc=85,dmc=6,dc=15,lat=55),batch=TRUE,out="
     dc_yda<-dc1
   } 
   
+  #If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
-    new_FWI <- data.frame(ffmc=ffmc,dmc=dmc,dc=dc,isi=isi,bui=bui,fwi=fwi,dsr=dsr)
+    new_FWI <- data.frame(ffmc = ffmc, dmc = dmc, dc = dc, isi = isi, 
+                          bui = bui, fwi = fwi, dsr = dsr)
     if (uppercase){
-      names(new_FWI)<-toupper(names(new_FWI))
+      names(new_FWI) <- toupper(names(new_FWI))
     }
-    new_FWI
   }
+  #If output specified is "all", then return both FWI and input weather vars
   else {
     if (out == "all") {
-      new_FWI <- cbind(input,ffmc,dmc,dc,isi,bui,fwi,dsr)
+      new_FWI <- cbind(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
       if (uppercase){
-        names(new_FWI)<-toupper(names(new_FWI))
+        names(new_FWI) <- toupper(names(new_FWI))
       }
-      new_FWI
     }
   }
+  return(new_FWI)
 }
