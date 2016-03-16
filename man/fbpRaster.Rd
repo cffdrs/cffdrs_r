@@ -92,7 +92,7 @@ fbpRaster(input,output="Primary",select=NULL,m=NULL,cores=1)
     Selected outputs
   }
   \item{m}{
-    m	Optimal number of pixels at each iteration of computation when \code{ncell(input) >= 1000}. Default m = NULL, where the function will assign m = 1000 when \code{ncell(input)} is between 1000 and 5,000,000, and m=3000 otherwise. By including this option, the function is able to process large dataset more efficiently. The optimal value may vary with different computers.    
+    m	Optimal number of pixels at each iteration of computation when \code{ncell(input) >= 1000}. Default m = NULL, where the function will assign m = 1000 when \code{ncell(input)} is between 1000 and 500,000, and m=3000 otherwise. By including this option, the function is able to process large dataset more efficiently. The optimal value may vary with different computers.    
   }
   \item{cores}{Number of CPU cores (integer) used in the computation, default is 1.  By signing \code{cores > 1}, the function will apply parallel computation technique provided by the \code{foreach} package, which significantly reduces the computation time for large input data (over a million grid points). For small dataset, \code{cores=1} is actually faster. 
   }

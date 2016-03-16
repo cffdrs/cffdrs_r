@@ -68,7 +68,7 @@ fbp(input, output="Primary",m=NULL,cores=1)
     }
   }
   \item{m}{
-    Optimal number of pixels at each iteration of computation when \code{nrow(input) >= 1000}. Default \code{m = NULL}, where the function will assign \code{m = 1000} when \code{nrow(input)} is between 1000 and 5,000,000, and \code{m = 3000} otherwise. By including this option, the function is able to process large dataset more efficiently. The optimal value may vary with different computers.  
+    Optimal number of pixels at each iteration of computation when \code{nrow(input) >= 1000}. Default \code{m = NULL}, where the function will assign \code{m = 1000} when \code{nrow(input)} is between 1000 and 500,000, and \code{m = 3000} otherwise. By including this option, the function is able to process large dataset more efficiently. The optimal value may vary with different computers.  
   }
   \item{cores}{
     Number of CPU cores (integer) used in the computation, default is 1.  By signing \code{cores > 1}, the function will apply parallel computation technique provided by the \code{foreach} package, which significantly reduces the computation time for large input data (over a million records). For small dataset, \code{cores=1} is actually faster. 
