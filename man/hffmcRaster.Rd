@@ -4,7 +4,7 @@
 Raster-based Hourly Fine Fuel Moisture Code
 }
 \description{
-\code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code (FFMC) and is based on a calculation routine first described in detail by Van Wagner (1977) and which has been updated in minor ways by the Canadian Forest Service to have it agree with the daily FFMC (see \code{\link{fwi}}).  In its simplest typical use this current routine calculates a value of FFMC based on a series of uninterrupted hourly weather observations of screen level (~1.4 m) temperature, relative humidity, 10 m wind speed, and 1-hour rainfall. This implementation of the function includes an optional timestep input which is defaulted to one hour, but which can be reduced if sub-hourly calculation of the code is needed.  The FFMC is in essence a bookkeeping system for moisture content and thus it needs to use the last timestep's value of FFMC in its calculation as well. This function takes rasterized inputs and generates raster maps as outputs. 
+\code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code (FFMC) based on hourly weather observations of screen level (~1.4 m) temperature, relative humidity, 10 m wind speed, and 1-hour rainfall. This implementation of the function includes an optional timestep input which is defaulted to one hour, but can be reduced if sub-hourly calculation of the code is needed.  The FFMC is in essence a bookkeeping system for moisture content and thus it needs to use the last timestep's value of FFMC in its calculation. \code{hffmcRaster} takes rasterized inputs and generates raster maps as outputs. 
 }
 \usage{
 hffmcRaster(weatherstream,ffmc_old=85,time.step=1,hourlyFWI=FALSE)
