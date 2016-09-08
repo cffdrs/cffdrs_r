@@ -106,7 +106,7 @@ fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
     day <- input$day
   }
   else {
-    warning("day was not provided, assigned default number -99")
+    warning("Day was not provided, assigned default number -99")
     day <- rep(-99, nrow(input))
   }
 
@@ -136,21 +136,19 @@ fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
   ws <- input$ws
   rh <- input$rh
   if (!exists("temp") | is.null(temp)) 
-    warning("temperature (temp) is missing!")
+    stop("temperature (temp) is missing!")
   if (!exists("prec") | is.null(prec)) 
-    warning("precipitation (prec) is missing!")
+    stop("precipitation (prec) is missing!")
+  if (prec < 0)
+    stop("precipiation (prec) cannot be negative!")
   if (!exists("ws") | is.null(ws)) 
-    warning("wind speed (ws) is missing!")
+    stop("wind speed (ws) is missing!")
+  if (ws < 0)
+    stop("wind speed (ws) cannot be negative!")
   if (!exists("rh") | is.null(rh)) 
-    warning("relative humidity (rh) is missing!")
-  if (length(unique(!mon %in% 1:12))>1)
-    warning("Month has to be between 1 and 12")
-  if (length(unique(!day %in% 1:31))>1)
-    warning("Day has to be between 1 and 31")
-  if (length(unique(lat>90))>1|length(unique(lat< -90))>1)
-    warning("Latitude has to be between -90 and 90")
-  if (length(unique(long>180))>1|length(unique(long< -180))>1)
-    warning("Longitude has to be between -180 and 180")
+    stop("relative humidity (rh) is missing!")
+  if (rh < 0)
+    stop("relative humidity (rh) cannot be negative!")
   #############################################################################
   #                                 END
   # Set local variables and display warnings to user if default is being used
