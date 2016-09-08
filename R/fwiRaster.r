@@ -79,13 +79,19 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   }
   
   if (!exists("temp") | is.null(temp)) 
-    warning("temperature (temp) is missing!")
+    stop("temperature (temp) is missing!")
   if (!exists("prec") | is.null(prec)) 
-    warning("precipitation (prec) is missing!")
+    stop("precipitation (prec) is missing!")
+  if (!is.null(prec[prec < 0]))
+    stop("precipiation (prec) cannot be negative!")
   if (!exists("ws") | is.null(ws)) 
-    warning("wind speed (ws) is missing!")
+    stop("wind speed (ws) is missing!")
+  if (!is.null(ws[ws < 0]))
+    stop("wind speed (ws) cannot be negative!")
   if (!exists("rh") | is.null(rh)) 
-    warning("relative humidity (rh) is missing!")
+    stop("relative humidity (rh) is missing!")
+  if (!is.null(rh[rh < 0]))
+    stop("relative humidity (rh) cannot be negative!")
 
   names(init) <- tolower(names(init))
 
