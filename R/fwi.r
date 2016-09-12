@@ -139,15 +139,15 @@ fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
     stop("temperature (temp) is missing!")
   if (!exists("prec") | is.null(prec)) 
     stop("precipitation (prec) is missing!")
-  if (prec < 0)
+  if (length(prec[prec < 0]) > 0)
     stop("precipiation (prec) cannot be negative!")
   if (!exists("ws") | is.null(ws)) 
     stop("wind speed (ws) is missing!")
-  if (ws < 0)
+  if (length(ws[ws < 0]) > 0)
     stop("wind speed (ws) cannot be negative!")
   if (!exists("rh") | is.null(rh)) 
     stop("relative humidity (rh) is missing!")
-  if (rh < 0)
+  if (length(rh[rh < 0]) > 0)
     stop("relative humidity (rh) cannot be negative!")
   #############################################################################
   #                                 END
