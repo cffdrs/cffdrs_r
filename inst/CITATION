@@ -1,0 +1,24 @@
+citHeader("To cite cffdrs in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{cffdrs}: An R package for the Canadian Forest Fire Danger Rating System",
+  author       = personList(as.person("Wang X"),
+                            as.person("Wotton B M"),
+                            as.person("Cantin A"),
+                            as.person("Parisien M-A"),
+                            as.person("Anderson K"),
+                            as.person("Moore B"),
+                            as.person("Flannigan M D")),
+  journal      = "Ecological Processes",
+  year         = "2017",
+  volume       = "6",
+  number       = "1",
+  pages        = "5",
+  url          = "https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0070-z",
+  
+  textVersion  =
+  paste("Wang X, Wotton B M, Cantin A, Parisien M-A, Anderson K, Moore B and Flannigan M D (2017).",
+        "cffdrs: An R package for the Canadian Forest Fire Danger Rating System.",
+        "Ecological Processes, 6(1), 5.",
+        "URL https://ecologicalprocesses.springeropen.com/articles/10.1186/s13717-017-0070-z")
+)
