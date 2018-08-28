@@ -7,7 +7,7 @@ Fire Season Start and End
 \code{\link{fireSeason}} calculates the start and end fire season dates for a given weather station. The current method used in the function is based on three consecutive daily maximum temperature thresholds (Wotton and Flannigan 1993, Lawson and Armitage 2008). This function process input from a single weather station. 
 }
 \usage{
-fireSeason(input,fs.start=12,fs.end=5,method="WF93")
+fireSeason(input,fs.start=12,fs.end=5,method="WF93", consistent.snow=FALSE)
 }
 \arguments{
   \item{input}{
@@ -18,7 +18,7 @@ fireSeason(input,fs.start=12,fs.end=5,method="WF93")
         \var{mon} \tab (required) \tab Month of the observations\cr
         \var{day} \tab (required) \tab Day of the observations\cr
         \var{tmax} \tab (required) \tab Maximum Daily Temperature (degrees C)\cr
-
+        \var{snow_depth} \tab (optional) \tab Is consistent snow data in the input?\cr
     }
   }
   
@@ -29,11 +29,14 @@ fireSeason(input,fs.start=12,fs.end=5,method="WF93")
     Temperature threshold (degrees C) to end the fire season (default=5)
   }
   \item{method}{
-    Method of fire season calculation. Current option is "WF93". Additional methods will be added
+    Method of fire season calculation. Options are "wf93"" or "la08" (default=WF93)
+  }
+  \item{consistent.snow}{
+    Is consistent snow data in the input? (default=FALSE)
   }
 }
 \details{
-An important aspect to consider when calculating Fire Weather Index (FWI) System variables is a definition of the fire season start and end dates (Lawson and Armitage 2008). If a user starts calculations on a fire season too late in the year, the FWI System variables may take too long to reach equilibrium, thus throwing off the resulting indices. This function presents one method of calculating these start and end dates, adapted from Wotton and Flannigan (1993). The approach taken in this function starts the fire season after three days of maximum temperature greater than 12 degrees Celsius. The end of the fire season is determined after three consecutive days of maximum temperature less than 5 degrees Celsius.  The two temperature thresholds can be adjusted as parameters in the function call.
+An important aspect to consider when calculating Fire Weather Index (FWI) System variables is a definition of the fire season start and end dates (Lawson and Armitage 2008). If a user starts calculations on a fire season too late in the year, the FWI System variables may take too long to reach equilibrium, thus throwing off the resulting indices. This function presents two method of calculating these start and end dates, adapted from Wotton and Flannigan (1993),  and Lawson and Armitage (2008). The approach taken in this function starts the fire season after three days of maximum temperature greater than 12 degrees Celsius. The end of the fire season is determined after three consecutive days of maximum temperature less than 5 degrees Celsius.  The two temperature thresholds can be adjusted as parameters in the function call.
 
 This fire season length definition can also feed in to the overwinter DC calculations (\link{wDC}). View the cffdrs package help files for an example of using the \code{fireSeason}, \link{wDC}, and \link{fwi} functions in conjunction.
 
