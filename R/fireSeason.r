@@ -1,4 +1,4 @@
-fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93"){
+fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", consistent.snow = FALSE){
   #############################################################################
   # Description:
   #   Calculation of fire season. The intent of this function is to allow
@@ -23,6 +23,8 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93"){
   #   fs.end:   Temperature threshold to end the fire season (deg celcius)
   #   method:   Fire Season calculation method. The default and only current
   #             method being used is "WF93".
+  #   consistent.snow  TRUE/FALSE value if consistent snow data is available
+  #             if it is not, then we will default to WF93.
   #   
   #   
   # Returns:
@@ -63,7 +65,7 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93"){
          required for this function.")
   }
   method <- tolower(method)
-  if(method != "wf93"){
+  if(method != "wf93" & method != "la08"){
     stop(paste("Selected method \"", method, "\" is unavailable, read 
                documentation for available methods.",sep=""))
   }
@@ -111,7 +113,74 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93"){
         }
       }
     }
+  #Run the CFS1984 / Lawson and Armitage 2008 combined procedure
+  } else {
+    if(method == "la08"){
+      # In regions normally covered by snow, begin calculations 3rd day after snow has left the area
+      if(consistent.snow){
+        # Check that data has snow_depth variable
+        if(!("snow_depth" %in% names(input))){
+          stop(paste("Snow depth is required for the selected method \"", method, "\", read
+                     documentation for appropriate use.",sep=""))
+        } else {
+          # set a local snow_depth variable
+          snow_depth = input$snow_depth
+          for (k in 1:n0){
+            # Must be more than 3 days in the dataset to test this out
+            if (k > 3){
+              #If we are not already in a fire season AND
+              #  the last 3 days (includsive) are all snow free then set the starting date
+              if(!seasonActive & (all(snow_depth[seq(k-2, k, 1)] <= 0))){
+                seasonActive <- TRUE #set season to active
+                theday <- day[k]
+                #If the data is starting us on January 4th, then we should have 
+                #  started on January 1st Should be modified to work on any starting 
+                #  data, but for now, just calendar year to allow for year-round 
+                #  calculations.
+                if(mon[k] == 1 && day[k] == 4){
+                  theday <- day[k-3]
+                }
+                #Bind the start date to the data.frame
+                seasonStartEnd <- rbind(seasonStartEnd, 
+                                        data.frame(yr = yr[k], 
+                                                   mon = mon[k],
+                                                   day = theday,
+                                                   fsdatetype = "start"))
+              }
+              #  Stop the season if we are already in a fire season AND
+              #  there is a day with snow on the ground OR it is after 
+              #  November 30, and temperatures dip below the fs.end 
+              #  threshold for LA08, which is 12C by default.
+              if(seasonActive & 
+                 (snow_depth[k] > 0 |
+                   (mon[k] == 12 &
+                   all(tmax[seq(k-2, k, 1)] < fs.end)))
+                  ){
+                seasonActive <- FALSE
+                #Bind the end date to the data frame.
+                seasonStartEnd <- rbind(seasonStartEnd, 
+                                        data.frame(yr = yr[k],
+                                                   mon = mon[k],
+                                                   day = day[k],
+                                                   fsdatetype = "end"))
+              }
+            }
+          }
+        }
+      }
+      # Not an area of consistent snow, so run the wf93 algorithm
+      else{
+        fireSeason(input, fs.start, fs.end, method = "WF93")
+      }
+    }
   }
+  # If there is a start and an end on the same date, remove both
+  # This may happen when starting/ending in Dec for LA08 method
+  dups <- seasonStartEnd[duplicated(seasonStartEnd[,0:3]), 0:3]
+  seasonStartEnd <- seasonStartEnd[!(seasonStartEnd$yr %in% dups$yr & 
+                                     seasonStartEnd$mon %in% dups$mon & 
+                                     seasonStartEnd$day %in% dups$day),]
+  
   #Return the season start end dates data.frame to caller
   return(seasonStartEnd)
 }
