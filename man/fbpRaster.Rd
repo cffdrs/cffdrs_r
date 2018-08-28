@@ -158,7 +158,7 @@ Note that Wind Direction (WD) is the compass direction from which wind is coming
 *These outputs represent fire behaviour at a point on the perimeter of an elliptical fire defined by a user input angle theta. theta represents the bearing of a line running between the fire ignition point and a point on the perimeter of the fire. It is important to note that in this formulation the theta is a bearing and does not represent the angle from the semi-major axis (spread direction) of the ellipse. This formulation is similar but not identical to methods presented in Wotton et al (2009) and Tymstra et al (2009).
 }
 \author{
-Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
+Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
 }
 
 \references{

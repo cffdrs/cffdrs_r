@@ -139,7 +139,7 @@ Note that Wind Direction (WD) is the compass direction from which wind is coming
 }
 
 \author{
-Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
+Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
 }
 
 \references{

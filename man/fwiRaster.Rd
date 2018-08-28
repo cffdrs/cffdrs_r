@@ -73,7 +73,7 @@ By default, \code{fwi} returns a raster stack which includes both the input and 
 }
 
 \author{
-Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
+Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
 }
 
 \references{

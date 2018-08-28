@@ -79,7 +79,7 @@ The default initial (i.e., "start-up") fuel moisture code values (FFMC=85, DMC=6
 }
 
 \author{
-Xianli Wang, Alan Cantin, Marc-Andre Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
+Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry Anderson, and Mike Flannigan
 }
 
 \references{
