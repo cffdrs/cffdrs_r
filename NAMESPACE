@@ -1,6 +1,8 @@
 exportPattern("^[[:alpha:]]+")
 import(raster)
 import(rgdal)
+importFrom(geosphere, bearing)
+importFrom(geosphere, distHaversine)
 importFrom(foreach, "%dopar%")
 importFrom(foreach, foreach)
 importFrom(foreach, registerDoSEQ)
