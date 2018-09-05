@@ -1,35 +1,35 @@
-#############################################################################
-# Description:
-#   Simple Simard function to calculate the rate of spread and direction 
-#   given one set of three line-based observations of fire arrival time. 
-#   The function requires that the user specify time that the fire crossed 
-#   each point, along with the measured lengths between each pair of 
-#   observational points, and a reference bearing (one specified side of 
-#   the triangle). This function allows quick input of a dataframe 
-#   specifying one or more many triangles. 
-#
-#   Units: length in meters, time depends on if user enters minutes or 
-#   seconds (regardless, must enter fractional time, e.g, 1.86 minutes)
-#
-#
-# Args:
-#   input, a data frame with columns:
-#     T1          Time that the fire front crossed points 1.
-#     T2          Time that the fire front crossed point 2.
-#     T3          Time that the fire front crossed points 3.
-#     LENGTHT1T2  Length between each pair of observation points (T1 and T2)
-#     LENGTHT2T3  Length between each pair of observation points (T2 and T3)
-#     LENGTHT1T3  Length between each pair of observation points (T1 and T3)
-#     BEARINGT1T2 Reference bearing in degrees (T1 to T2).
-#     BEARINGT1T3 Reference bearing in degrees (T1 to T3).
-#   
-
-# Returns:
-#   Dataframe containing ROS and Direction
-#
-#############################################################################
-# Simple Simard function for Rate-of-Spread
 lros <- function(input) {
+  #############################################################################
+  # Description:
+  #   Simple Simard function to calculate the rate of spread and direction 
+  #   given one set of three line-based observations of fire arrival time. 
+  #   The function requires that the user specify time that the fire crossed 
+  #   each point, along with the measured lengths between each pair of 
+  #   observational points, and a reference bearing (one specified side of 
+  #   the triangle). This function allows quick input of a dataframe 
+  #   specifying one or more many triangles. 
+  #
+  #   Units: length in meters, time depends on if user enters minutes or 
+  #   seconds (regardless, must enter fractional time, e.g, 1.86 minutes)
+  #
+  #
+  # Args:
+  #   input, a data frame with columns:
+  #     T1          Time that the fire front crossed points 1.
+  #     T2          Time that the fire front crossed point 2.
+  #     T3          Time that the fire front crossed points 3.
+  #     LENGTHT1T2  Length between each pair of observation points (T1 and T2)
+  #     LENGTHT2T3  Length between each pair of observation points (T2 and T3)
+  #     LENGTHT1T3  Length between each pair of observation points (T1 and T3)
+  #     BEARINGT1T2 Reference bearing in degrees (T1 to T2).
+  #     BEARINGT1T3 Reference bearing in degrees (T1 to T3).
+  #   
+  #
+  # Returns:
+  #   Dataframe containing ROS and Direction
+  #
+  #############################################################################
+  
   if(is.data.frame(input)){
     # Force uppercase to the column names
     names(input) <- toupper(names(input))
