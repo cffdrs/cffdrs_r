@@ -42,14 +42,12 @@ pros <- function(input) {
     
     stop(errmsg)
   }
-  
-  
   LengthT1T2 <- geosphere::distHaversine(cbind(input$LONG1, input$LAT1), 
-                              cbind(input$LONG2, input$LAT2))
+                                         cbind(input$LONG2, input$LAT2))
   LengthT1T3 <- geosphere::distHaversine(cbind(input$LONG1, input$LAT1), 
-                              cbind(input$LONG3, input$LAT3))
+                                         cbind(input$LONG3, input$LAT3))
   LengthT2T3 <- geosphere::distHaversine(cbind(input$LONG2, input$LAT2), 
-                              cbind(input$LONG3, input$LAT3))
+                                         cbind(input$LONG3, input$LAT3))
   bearingT1T2 <- geosphere::bearing(cbind(input$LONG1, input$LAT1),
                          cbind(input$LONG2, input$LAT2))
   bearingT1T3 <- geosphere::bearing(cbind(input$LONG1, input$LAT1),
@@ -67,5 +65,6 @@ pros <- function(input) {
   ThetaAdeg <- (ThetaArad * 180) / (pi)
   DIR <- .direction(bearingT1T2, bearingT1T3, ThetaAdeg)
   ROS <- (LengthT1T2 * cos(ThetaArad)) / (input$T2-input$T1)
+  
   return(data.frame(Ros = ROS, Direction = DIR))
 }
