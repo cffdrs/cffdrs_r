@@ -2,7 +2,7 @@ Package: cffdrs
 Type: Package
 Title: Canadian Forest Fire Danger Rating System
 Version: 1.8
-Date: 2018-08-31
+Date: 2018-09-06
 Author: Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
     Anderson, Brett Moore, and Mike Flannigan
 Maintainer: Alan Cantin <Alan.Cantin@Canada.ca>
@@ -26,3 +26,4 @@ URL: https://r-forge.r-project.org/projects/cffdrs/
 BugReports: https://r-forge.r-project.org/tracker/?
     func=browse&group_id=1970&atid=5372
 Encoding: UTF-8
+RoxygenNote: 6.1.0
