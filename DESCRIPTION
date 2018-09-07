@@ -4,7 +4,7 @@ Title: Canadian Forest Fire Danger Rating System
 Version: 1.8
 Date: 2018-09-06
 Author: Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
-    Anderson, Brett Moore, and Mike Flannigan
+    Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 Maintainer: Alan Cantin <Alan.Cantin@Canada.ca>
 Depends:
     R(>= 3.2.2),
