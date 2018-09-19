@@ -4,7 +4,7 @@
 Line-based input for Simard Rate of Spread and Direction
 }
 \description{
-\code{lros} is used to calculate the rate of spread and direction given one set of three point-based observations of fire arrival time. The function requires that the user specify time that the fire crossed each point, along with the measured lengths between each pair of observational points, and a reference bearing (one specified side of the triangle). This function allows quick input of a dataframe specifying one or many triangles.
+\code{lros} is used to calculate the rate of spread and direction given one set of three point-based observations of fire arrival time. The function requires that the user specify the time that the fire crossed each point, along with the measured lengths between each pair of observational points, and a reference bearing (one specified side of the triangle). This function allows quick input of a dataframe specifying one or many triangles.
 }
 \usage{
 lros(input)
