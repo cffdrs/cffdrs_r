@@ -70,8 +70,6 @@ colnames(lros.in1)<-c("T1","LengthT1T2", "T2", "LengthT1T3", "T3",
                       "LengthT2T3", "bearingT1T2", "bearingT1T3")
 lros.out1 <- lros(lros.in1)
 lros.out1
-#        Ros Direction
-#1 0.1785182  21.36591
 
 # multiple entries using a dataframe
 # load the test dataframe for lros
