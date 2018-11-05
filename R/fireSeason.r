@@ -1,4 +1,5 @@
-fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", consistent.snow = FALSE){
+fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", 
+                       consistent.snow = FALSE, multi.year = FALSE){
   #############################################################################
   # Description:
   #   Calculation of fire season. The intent of this function is to allow
@@ -89,8 +90,10 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", consis
           #  started on January 1st Should be modified to work on any starting 
           #  data, but for now, just calendar year to allow for year-round 
           #  calculations.
-          if(mon[k] == 1 && day[k] == 4){
-            theday <- day[k-3]
+          if (!multi.year){
+            if(mon[k] == 1 && day[k] == 4){
+              theday <- day[k-3]
+            }
           }
           #Bind the start date to the data.frame
           seasonStartEnd <- rbind(seasonStartEnd, 
@@ -133,12 +136,14 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", consis
               if(!seasonActive & (all(snow_depth[seq(k-2, k, 1)] <= 0))){
                 seasonActive <- TRUE #set season to active
                 theday <- day[k]
-                #If the data is starting us on January 4th, then we should have 
+                # If running annual seasons only, and if the data is starting us on January 4th, then we should have 
                 #  started on January 1st Should be modified to work on any starting 
                 #  data, but for now, just calendar year to allow for year-round 
                 #  calculations.
-                if(mon[k] == 1 && day[k] == 4){
-                  theday <- day[k-3]
+                if (!multi.year){
+                  if(mon[k] == 1 && day[k] == 4){
+                    theday <- day[k-3]
+                  }
                 }
                 #Bind the start date to the data.frame
                 seasonStartEnd <- rbind(seasonStartEnd, 
@@ -176,10 +181,9 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", consis
   }
   # If there is a start and an end on the same date, remove both
   # This may happen when starting/ending in Dec for LA08 method
-  dups <- seasonStartEnd[duplicated(seasonStartEnd[,0:3]), 0:3]
-  seasonStartEnd <- seasonStartEnd[!(seasonStartEnd$yr %in% dups$yr & 
-                                     seasonStartEnd$mon %in% dups$mon & 
-                                     seasonStartEnd$day %in% dups$day),]
+  seasonStartEnd$date <- as.Date(as.POSIXlt(paste(seasonStartEnd$yr, "-", seasonStartEnd$mon, "-", seasonStartEnd$day,sep="")))
+  dups <- seasonStartEnd[duplicated(seasonStartEnd[,0:3]),]
+  seasonStartEnd <- seasonStartEnd[!seasonStartEnd$date %in% dups$date, ]
   
   #Return the season start end dates data.frame to caller
   return(seasonStartEnd)
