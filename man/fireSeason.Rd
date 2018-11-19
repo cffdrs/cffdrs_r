@@ -7,7 +7,8 @@ Fire Season Start and End
 \code{\link{fireSeason}} calculates the start and end fire season dates for a given weather station. The current method used in the function is based on three consecutive daily maximum temperature thresholds (Wotton and Flannigan 1993, Lawson and Armitage 2008). This function process input from a single weather station. 
 }
 \usage{
-fireSeason(input,fs.start=12,fs.end=5,method="WF93", consistent.snow=FALSE, multi.year=FALSE)
+fireSeason(input,fs.start=12,fs.end=5,method="WF93", consistent.snow=FALSE, 
+           multi.year=FALSE)
 }
 \arguments{
   \item{input}{
