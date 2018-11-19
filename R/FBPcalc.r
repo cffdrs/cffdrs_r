@@ -152,7 +152,7 @@
   D0 <- ifelse(is.na(D0) | D0 < 0 | D0 > 366, 0, D0)
   ELV <- ifelse(ELV < 0 | ELV > 10000, 0, ELV)
   ELV <- ifelse(is.na(ELV), 0, ELV)
-  BUIEFF <- ifelse(BUIEFF < 0, 0, 1)
+  BUIEFF <- ifelse(BUIEFF <= 0, 0, 1)
   BUIEFF <- ifelse(is.na(BUIEFF), 1, BUIEFF)
   HR <- ifelse(HR < 0, -HR, HR)
   HR <- ifelse(HR > 366 * 24, 24, HR)
