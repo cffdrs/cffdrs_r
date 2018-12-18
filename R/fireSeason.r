@@ -43,7 +43,7 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93",
   }
   if ("mon" %in% names(input)) {
     mon <- input$mon
-    if(mon<1 || mon>12){
+    if(!all(mon %in% seq(1, 12))){
       stop("mon value is out of bounds (1-12), stopping execution.")
     }
   } else {
@@ -51,7 +51,7 @@ fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93",
   }
   if ("day" %in% names(input)) {
     day <- input$day
-    if(day < 1 || day > 31){
+    if(!all(day %in% seq(1, 31))){
       stop("day value is out of bounds (1-31), stopping execution.")      
     }
   } else {
