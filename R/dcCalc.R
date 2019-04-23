@@ -43,9 +43,11 @@
   pe <- (0.36 * (temp + 2.8) + fl01[mon]) / 2
   #Daylength factor adjustment by latitude for Potential Evapotranspiration
   if (lat.adjust) {
-    pe <- ifelse(lat <= -10, (0.36 * (temp + 2.8) + fl02[mon]) / 2, pe)
-    pe <- ifelse(lat > -10 & lat <= 10, (0.36 * (temp + 2.8) + 1.4)/2, pe)
+    pe <- ifelse(lat <= -20, (0.36 * (temp + 2.8) + fl02[mon]) / 2, pe)
+    pe <- ifelse(lat > -20 & lat <= 20, (0.36 * (temp + 2.8) + 1.4)/2, pe)
   }
+  # Cap potential evapotranspiration at 0 for negative winter DC values
+  pe <- ifelse(pe < 0, 0, pe)
   ra <- prec
   #Eq. 18 - Effective Rainfall
   rw <- 0.83 * ra - 1.27
