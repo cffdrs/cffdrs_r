@@ -130,9 +130,9 @@
   if (!exists("BUIEFF") | is.null(BUIEFF)) 
     BUIEFF <- rep(1, n0)
   if (!exists("CBH") | is.null(CBH)) 
-    CBH <- rep(3, n0)
+    CBH <- rep(0, n0)
   if (!exists("CFL") | is.null(CFL)) 
-    CFL <- rep(1, n0)
+    CFL <- rep(0, n0)
   if (!exists("ISI") | is.null(ISI)) 
     ISI <- rep(0, n0)
   #Convert Wind Direction from degress to radians
