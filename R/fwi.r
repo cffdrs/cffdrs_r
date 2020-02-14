@@ -89,21 +89,21 @@ fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
     long <- rep(-120, nrow(input))
   }
   if ("yr" %in% names(input)) {
-    yr <- input$yr
+    yr <- as.numeric(as.character(input$yr))
   }
   else {
     warning("Year was not provided, assigned default number 5000")
     yr <- rep(5000, nrow(input))
   }
   if ("mon" %in% names(input)) {
-    mon <- input$mon
+    mon <- as.numeric(as.character(input$mon))
   }
   else {
     warning("Month was not provided, assigned the default value, July")
     mon <- rep(7, nrow(input))
   }
   if ("day" %in% names(input)) {
-    day <- input$day
+    day <- as.numeric(as.character(input$day))
   }
   else {
     warning("Day was not provided, assigned default number -99")
