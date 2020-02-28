@@ -61,7 +61,7 @@ Maintainer: Alan Cantin \email{Alan.Cantin@Canada.ca}
 \examples{
 #Calculating daily FWI with wintering DC 
 
-#This exercise demonstrates how to calculate daily FWI System variables given a chronical two years
+# This exercise demonstrates how to calculate daily FWI System variables given a chronical two years
 # daily fire weather observations from one weather station. In the example, we showed first how to 
 # decide fire season start and end dates with fireSeason, we then made overwintering DC adjustment
 # with wDC for the second fire season, and eventually calculated the daily FWI System variables over
