@@ -5,6 +5,6 @@
 \description{
   Sample dataset for use with the \code{hffmc} function.
 }
-\usage{test_hffmc}
+\usage{data(test_hffmc)}
 \format{A data frame containing 8 columns and 481 rows, including 1 header line}
 \keyword{datasets}

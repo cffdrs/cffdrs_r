@@ -5,7 +5,7 @@
 \description{
   This is a set of input data to test the lros function.
 }
-\usage{test_lros}
+\usage{data(test_lros)}
 \format{A data frame containing 8 columns, 4 rows, including 1 header line. }
 \source{
   no source
