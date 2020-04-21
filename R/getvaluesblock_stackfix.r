@@ -7,7 +7,7 @@
 #             back to it.
 #  original link to package:https://cran.r-project.org/package=spatial.tools
 #############################################################################
-getValuesBlock_stackfix <-
+.getValuesBlock_stackfix <-
 function (x, row = 1, nrows = 1, col = 1, ncols = (ncol(x) - 
                                                      col + 1), lyrs = (1:nlayers(x))) 
 {

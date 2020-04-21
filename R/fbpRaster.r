@@ -68,7 +68,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     #register a sequential parallel backend
     registerDoSEQ()
     #Get the specified raster cell values
-    r <- getValuesBlock_stackfix(input, nrows=nrow(input))
+    r <- .getValuesBlock_stackfix(input, nrows=nrow(input))
     #convert to data.frame
     r <- as.data.frame(r)
     names(r) <- names(input)
