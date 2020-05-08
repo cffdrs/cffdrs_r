@@ -179,8 +179,7 @@ Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry Anderson, and
 # The dataset is the standard test data for FBP system
 # provided by Wotton et al (2009), and randomly assigned
 # to a stack of raster layers
-test_fbpRastersrc <- system.file("extdata", "test_fbpRaster.tif", package="cffdrs")
-test_fbpRaster <- stack(test_fbpRastersrc)
+test_fbpRaster <- stack(system.file("extdata", "test_fbpRaster.tif", package="cffdrs"))
 input<-test_fbpRaster
 # Stack doesn't hold the raster layer names, we have to assign
 # them:
