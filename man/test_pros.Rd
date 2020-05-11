@@ -11,6 +11,14 @@
   no source
 }
 \references{
-  none
+  1. Simard, A.J., Eenigenburg, J.E., Adams, K.B., Nissen, R.L., Deacon, and Deacon, A.G. 1984. A general procedure for sampling and analyzing wildland fire spread. 
+
+2. Byram, G.M. 1959. Combustion of forest fuels. In: Davis, K.P. Forest Fire Control and Use. McGraw-Hill, New York.
+
+3. Curry, J.R., and Fons, W.L. 1938. Rate of spread of surface fires in the Ponderosa Pine Type of California. Journal of Agricultural Research 57(4): 239-267.
+
+4. Simard, A.J., Deacon, A.G., and Adams, K.B. 1982. Nondirectional sampling wildland fire spread. Fire Technology: 221-228. 
 }
-\keyword{datasets, simard, lros}
+\keyword{datasets}
+\keyword{simard}
+\keyword{lros}
