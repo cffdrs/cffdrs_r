@@ -105,20 +105,11 @@ names(day01)<-c("temp","rh","ws","prec")
 # (1) use the initial values
 foo<-fwiRaster(day01)
 plot(foo)
-### Additional, longer running examples are commented out below ###
+### Additional, longer running examples ###
 # (2) use initial values with larger raster
-# day01 <- stack(day01src)
-# names(day01)<-c("temp","rh","ws","prec")
-# foo<-fwiRaster(day01)
-# plot(foo)
-# (3) Calculate FWI System variables based on the previous day's
-# fwi output:
-# load the second day inputs:
-# day02src <- system.file("extdata","test_rast_day02.tif",package="cffdrs")
-# day02 <- stack(day02src)
-# names(day02)<-c("temp","rh","ws","prec")
-# use the previous day's output as initial:
-# foo1<-fwiRaster(day02,init=foo)
-# plot(foo1)
+day01 <- stack(day01src)
+names(day01)<-c("temp","rh","ws","prec")
+foo<-fwiRaster(day01)
+plot(foo)
 }
 \keyword{ methods }
