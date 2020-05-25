@@ -1,10 +1,18 @@
 Package: cffdrs
 Type: Package
 Title: Canadian Forest Fire Danger Rating System
-Version: 1.8.13
-Date: 2020-05-11
-Author: Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
-    Anderson, Brett Moore, Tom Schiks, and Mike Flannigan 
+Version: 1.8.15
+Date: 2020-05-25
+Authors@R: c(
+    person("Xianli", "Wang", email = "xianli.wang@canada.ca", role = c("cre", "aut")),
+    person("Alan", "Cantin", email = "alan.cantin@canada.ca", role = "aut"),
+    person("Marc-André", "Parisien", email = "marc-andre.parisien@canada.ca", role = "aut"),
+    person("Mike", "Wotton", email = "mike.wotton@canada.ca", role = "aut"),
+    person("Kerry", "Anderson", email = "", role = "aut"),
+    person("Brett", "MOore", email = "brett.moore@canada.ca", role = "aut"),
+    person("Tom", "Schiks", email = "tom.schiks@mail.utoronto.ca", role = "aut"),
+    person("Mike", "Flannigan", email = "mike.flannigan@ualberta.ca", role = "aut")
+    )
 Maintainer: Alan Cantin <Alan.Cantin@Canada.ca>
 Depends:
     R(>= 3.2.2),
@@ -17,9 +25,13 @@ Imports:
     doParallel
 Description: This project provides a group of new functions to calculate the
     outputs of the two main components of the Canadian Forest Fire Danger Rating
-    System (CFFDRS) at various time scales: the Fire Weather Index (FWI) System and
-    the Fire Behaviour Prediction (FBP) System. Some functions have two versions,
-    table and raster based.
+    System (CFFDRS) Van Wagner and Pickett (1985) 
+    <doi:<https://cfs.nrcan.gc.ca/publications?id=19973>>)
+    at various time scales: the Fire Weather Index (FWI) System Wan Wagner 
+    (1985) <doi:<https://cfs.nrcan.gc.ca/publications?id=19927>> and the Fire 
+    Behaviour Prediction (FBP) System Forestry Canada Fire Danger Group (1992) 
+    <doi:<http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf>>. Some functions 
+    have two versions, table and raster based.
 License: GPL-2
 URL: https://r-forge.r-project.org/projects/cffdrs/
 BugReports: https://r-forge.r-project.org/tracker/?func=browse&group_id=1970&atid=5372
