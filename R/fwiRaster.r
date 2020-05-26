@@ -246,10 +246,8 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   }
   #Eq. 14 - Moisture content after rain
   wmr <- wmi + 1000 * rw / (48.77 + b * rw)
-  op <- options(warn = (-1))
   #Alteration to Eq. 15 to calculate more accurately
   pr0 <- 43.43 * (5.6348 - log(wmr - 20))
-  options(op)
 
   pr<-pr0
   #Constrain P

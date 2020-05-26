@@ -79,7 +79,6 @@
   ISF_M3 <- rep(-99,length(FFMC))
   ISF_M4 <- rep(-99,length(FFMC))
   
-  options(warn=-1)
   #Eqs. 41a, 41b (Wotton 2009) - Calculate the slope equivalend ISI
   ISF <- ifelse(FUELTYPE %in% c("C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", 
                                 "S1", "S2", "S3"),
@@ -88,7 +87,6 @@
              log(0.01)/(-b[FUELTYPE])),
            ISF)
 
-  options(warn=1)
   #When calculating the M1/M2 types, we are going to calculate for both C2
   # and D1 types, and combine
   #Surface spread rate with 0 wind on level ground

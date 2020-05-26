@@ -71,10 +71,9 @@
                      6.2 * log(dmc_yda) - 17.2))
   #Eq. 14 - Moisture content after rain
   wmr <- wmi + 1000 * rw/(48.77 + b * rw)
-  op <- options(warn = (-1))
+
   #Alteration to Eq. 15 to calculate more accurately
   pr0 <- 43.43 * (5.6348 - log(wmr - 20))
-  options(op)
   #Constrain P
   pr <- ifelse(prec <= 1.5, dmc_yda, pr0)
   pr <- ifelse(pr < 0, 0, pr)
