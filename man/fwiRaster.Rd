@@ -109,7 +109,7 @@ plot(foo)
 # (2) use initial values with larger raster
 day01 <- stack(day01src)
 names(day01)<-c("temp","rh","ws","prec")
-foo<-fwiRaster(day01)
+\donttest{foo<-fwiRaster(day01)}
 plot(foo)
 }
 \keyword{ methods }

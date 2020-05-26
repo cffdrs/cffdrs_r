@@ -200,15 +200,5 @@ system.time(foo<-fbpRaster(input = input,output="S"))
 # keep only the required inputs:
 dat0<-input[[c("FuelType","LAT","LONG","FFMC","BUI","WS","GS", "Dj","Aspect")]]
 system.time(foo<-fbpRaster(input = dat0,output="A"))
-
-# Using parallel computation option. This works better only when 
-# the input is large. 
-# First, create a large input by expanding the input stack:
-s<-input
-nrow(s)<-1000
-ncol(s)<-1000 
-s<-resample(input,s,method='ngb')
-# you can assign # of cores to distribute computing time
-system.time(foo2<-fbpRaster(s,cores=1))
 }
 \keyword{ methods }

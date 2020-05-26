@@ -73,8 +73,8 @@ hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
 hour02 <- stack(hour02src)
 # Assign variable names to the layers:
 names(hour02)<-c("temp","rh","ws","prec")
-foo1<-hffmcRaster(hour02,ffmc_old=foo)
-plot(foo1)
+\donttest{foo1<-hffmcRaster(hour02,ffmc_old=foo)}
+\donttest{plot(foo1)}
 # (3) Calculate other hourly FWI components (ISI, FWI, and DSR):
 # Need BUI layer, 
 bui<-hour02$temp
@@ -83,8 +83,8 @@ hour02<-stack(hour02,bui)
 # Re-assign variable names to the layers:
 names(hour02)<-c("temp","rh","ws","prec","bui")
 # Calculate all the variables:
-foo2<-hffmcRaster(hour02,ffmc_old=foo,hourlyFWI=TRUE)
+\donttest{foo2<-hffmcRaster(hour02,ffmc_old=foo,hourlyFWI=TRUE)}
 # Visualize the maps:
-plot(foo2)
+\donttest{plot(foo2)}
 }
 \keyword{ methods }
