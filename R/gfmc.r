@@ -18,8 +18,8 @@ gfmc <- function(input, GFMCold = 85, batch = TRUE, time.step = 1, roFL = 0.3,
   #         ws	 (required)	    10-m height wind speed (km/h)
   #         prec (required)	    1-hour rainfall (mm)
   #         isol (required)	    Solar radiation (kW/m^2)
-  #         mon	 (recommended)	Month of the year (integer 1-12)
-  #         day	 (optional)	    Day of the month (integer)
+  #         mon	 (recommended)	Month of the year (integer 1-12) _Currently not implemented_
+  #         day	 (optional)	    Day of the month (integer) _Currently not implemented_
   #       GFMCold:    GFMC from yesterday (double, default=85)
   #       batch:      Compute multiple locations (TRUE/FALSE, default=TRUE)
   #       time.step:  The hourly time steps (integer hour, default=1)

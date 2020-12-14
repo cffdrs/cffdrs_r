@@ -18,15 +18,13 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
   #         ws	 (required)	    10-m height wind speed (km/h)
   #         prec (required)	    1-hour rainfall (mm)
   #         isol (required)	    Solar radiation (kW/m^2)
-  #         mon	 (recommended)	Month of the year (integer 1-12)
-  #         day	 (optional)	    Day of the month (integer)
   #       GFMCold:    GFMC from yesterday (double, default=85)
   #       time.step:  The hourly time steps (integer hour, default=1)
   #       roFL:       Nominal fuel load of the fine fuel layer
   #                   (kg/m^2 double, default=0.3)
   #       out:        Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)
   #
-  # Returns: Returns a data.frame of either MC, GMFC, All, or GFMCandMC
+  # Returns: Returns a raster stack of either MC, GMFC, All, or GFMCandMC
   #
   #############################################################################
   t0 <- time.step ## Currently locked at 1

@@ -38,7 +38,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                   considerably. (TRUE/FALSE, default TRUE)
   #       
   #
-  # Returns: A data.frame of the calculated FWI values with or without
+  # Returns: A raster stack of the calculated FWI values with or without
   #          the input data attached to it.
   #
   #############################################################################

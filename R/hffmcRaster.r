@@ -26,7 +26,7 @@ hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1,
   #              Headquarters, Ottawa. Forestry Technical Report 35. 35 p.
   #  
   #
-  # Args: weatherstream:   Input weather stream data.frame which includes
+  # Args: weatherstream:   Input weather stream raster stack which includes
   #                        temperature, relative humidity, wind speed, 
   #                        precipitation, hourly value, and bui. More specific
   #                        info can be found in the hffmc.Rd help file.
