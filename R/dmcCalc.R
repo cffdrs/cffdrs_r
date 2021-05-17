@@ -76,7 +76,8 @@
     wmr <- wmi + 1000 * rw/(48.77 + b * rw)
 
     #Alteration to Eq. 15 to calculate more accurately
-    43.43 * (5.6348 - log(wmr - 20))}
+    43.43 * (5.6348 - log(wmr - 20))
+    }
 
   pr <- ifelse(pr < 0, 0, pr)
   #Calculate final P (DMC)
