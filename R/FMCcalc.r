@@ -1,24 +1,24 @@
-.FMCcalc <- function(LAT, LONG, ELV, DJ, D0) {                                                                                               # if D0, date of min FMC, is not known then D0 = NULL.
-  #############################################################################
-  # Description:
-  #   Calculate Foliar Moisture Content on a specified day.
-  #
-  #   All variables names are laid out in the same manner as Forestry Canada 
-  #   Fire Danger Group (FCFDG) (1992). Development and Structure of the 
-  #   Canadian Forest Fire Behavior Prediction System." Technical Report 
-  #   ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  # Args:
-  #   LAT:    Latitude (decimal degrees)
-  #   LONG:   Longitude (decimal degrees)
-  #   ELV:    Elevation (metres)
-  #   DJ:     Day of year (offeren referred to as julian date)
-  #   D0:     Date of minimum foliar moisture content
-  #   
-  # Returns:
-  #   FMC:    Foliar Moisture Content
-  #
-  #############################################################################
+#' Foliar Moisture Content Calculator
+#' 
+#' Calculate Foliar Moisture Content on a specified day.
+#' All variables names are laid out in the same manner as Forestry Canada
+#' Fire Danger Group (FCFDG) (1992). Development and Structure of the 
+#' Canadian Forest Fire Behavior Prediction System." Technical Report 
+#' ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' 
+#' @param LAT    Latitude (decimal degrees)
+#' @param LONG   Longitude (decimal degrees)
+#' @param ELV    Elevation (metres)
+#' @param DJ     Day of year (offeren referred to as julian date)
+#' @param D0     Date of minimum foliar moisture content. _If D0, date of min FMC, is not known then D0 = NULL._
+#' 
+#' @return FMC: Foliar Moisture Content value
+#' @noRd
+#' 
+
+
+.FMCcalc <- function(LAT, LONG, ELV, DJ, D0) {                                                                                               
+
   #Initialize vectors
   FMC <- rep(-1, length(LAT))
   LATN <- rep(0, length(LAT))   

@@ -1,29 +1,30 @@
+#' Initial Spread Index Calculator
+#' 
+#' Computes the Initial Spread Index From the FWI System. Equations are from
+#' Van Wagner (1985) as listed below, except for the modification for fbp
+#' takene from FCFDG (1992).
+#' 
+#' Equations and FORTRAN program for the Canadian Forest Fire 
+#' Weather Index System. 1985. Van Wagner, C.E.; Pickett, T.L. 
+#' Canadian Forestry Service, Petawawa National Forestry 
+#' Institute, Chalk River, Ontario. Forestry Technical Report 33. 
+#' 18 p.
+#' 
+#' Forestry Canada  Fire Danger Group (FCFDG) (1992). Development and 
+#' Structure of the Canadian Forest Fire Behavior Prediction System."  
+#' Technical ReportST-X-3, Forestry Canada, Ottawa, Ontario.
+#' 
+#' @param ffmc Fine Fuel Moisture Code
+#' @param ws Wind Speed (km/h)
+#' @param fbpMod TRUE/FALSE if using the fbp modification at the extreme end
+#' 
+#' @returns ISI - Intial Spread Index
+#' 
+#' @noRd
+
+
 .ISIcalc <- function(ffmc, ws, fbpMod=FALSE){
-  #############################################################################
-  # Description:
-  #   Computes the Initial Spread Index From the FWI System. Equations are from
-  #   Van Wagner (1985) as listed below, except for the modification for fbp
-  #   takene from FCFDG (1992).
-  
-  #   Equations and FORTRAN program for the Canadian Forest Fire 
-  #   Weather Index System. 1985. Van Wagner, C.E.; Pickett, T.L. 
-  #   Canadian Forestry Service, Petawawa National Forestry 
-  #   Institute, Chalk River, Ontario. Forestry Technical Report 33. 
-  #   18 p.
-  #
-  #   Forestry Canada  Fire Danger Group (FCFDG) (1992). Development and 
-  #   Structure of the Canadian Forest Fire Behavior Prediction System."  
-  #   Technical ReportST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  # Args:
-  #   ffmc:   Fine Fuel Moisture Code
-  #     ws:   Wind Speed (km/h)
-  # fbpMod:   TRUE/FALSE if using the fbp modification at the extreme end
-  #
-  # Returns:
-  #   ISI:    Intial Spread Index
-  #
-  #############################################################################
+
   #Eq. 10 - Moisture content
   fm <- 147.2 * (101 - ffmc)/(59.5 + ffmc)
   #Eq. 24 - Wind Effect

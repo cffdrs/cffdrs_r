@@ -1,36 +1,29 @@
+#' Duff Moisture Code Calculator 
+#' 
+#' Duff Moisture Code Calculation. All code is based on a C code library that was written by Canadian Forest Service Employees, which was originally based on the Fortran code listed in the reference below. All equations in this code refer to that document.
+#' 
+#' Equations and FORTRAN program for the Canadian Forest Fire Weather Index System. 1985. Van Wagner, C.E.; Pickett, T.L. Canadian Forestry Service, Petawawa National Forestry Institute, Chalk River, Ontario. Forestry Technical Report 33. 18 p.
+#' 
+#' Additional reference on FWI system
+#' 
+#' Development and structure of the Canadian Forest Fire Weather Index System. 1987. Van Wagner, C.E. Canadian Forestry Service, Headquarters, Ottawa. Forestry Technical Report 35. 35 p.
+#' 
+
+#' @param dmc_yda    The Duff Moisture Code from previous iteration
+#' @param temp       Temperature (centigrade)
+#' @param rh         Relative Humidity (%)
+#' @param prec       Precipitation(mm)
+#' @param lat        Latitude (decimal degrees)
+#' @param mon        Month (1-12)
+#' @param lat.adjust Latitude adjustment (TRUE, FALSE, default=TRUE)
+#' 
+#' @references \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf} Development and structure of the Canadian Forest Fire Weather Index System. 1987. Van Wagner, C.E. Canadian Forestry Service, Headquarters, Ottawa. Forestry Technical Report 35. 35 p.
+#' 
+#' @return A single drought moisture code value
+#' 
+#' @noRd
+#' 
 .dmcCalc <- function(dmc_yda, temp, rh, prec, lat, mon, lat.adjust=TRUE) {
-  #############################################################################
-  # Description: Duff Moisture Code Calculation. All code
-  #              is based on a C code library that was written by Canadian
-  #              Forest Service Employees, which was originally based on
-  #              the Fortran code listed in the reference below. All equations
-  #              in this code refer to that document.
-  #
-  #              Equations and FORTRAN program for the Canadian Forest Fire
-  #              Weather Index System. 1985. Van Wagner, C.E.; Pickett, T.L.
-  #              Canadian Forestry Service, Petawawa National Forestry
-  #              Institute, Chalk River, Ontario. Forestry Technical Report 33.
-  #              18 p.
-  #
-  #              Additional reference on FWI system
-  #
-  #              Development and structure of the Canadian Forest Fire Weather
-  #              Index System. 1987. Van Wagner, C.E. Canadian Forestry Service,
-  #              Headquarters, Ottawa. Forestry Technical Report 35. 35 p.
-  #
-  #
-  # Args:  dmc_yda:   The Duff Moisture Code from previous iteration
-  #           temp:   Temperature (centigrade)
-  #             rh:   Relative Humidity (%)
-  #           prec:   Precipitation(mm)
-  #            lat:   Latitude (decimal degrees)
-  #            mon:   Month (1-12)
-  #     lat.adjust:   Latitude adjustment (TRUE, FALSE, default=TRUE)
-  #
-  #
-  # Returns: A single dmc value
-  #
-  #############################################################################
 
   #Reference latitude for DMC day length adjustment
   #46N: Canadian standard, latitude >= 30N   (Van Wagner 1987)

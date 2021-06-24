@@ -1,3 +1,126 @@
+#' Fire Season Start and End
+#' 
+#' \code{\link{fireSeason}} calculates the start and end fire season dates for
+#' a given weather station. The current method used in the function is based on
+#' three consecutive daily maximum temperature thresholds (Wotton and Flannigan
+#' 1993, Lawson and Armitage 2008). This function process input from a single
+#' weather station.
+#' 
+#' An important aspect to consider when calculating Fire Weather Index (FWI)
+#' System variables is a definition of the fire season start and end dates
+#' (Lawson and Armitage 2008). If a user starts calculations on a fire season
+#' too late in the year, the FWI System variables may take too long to reach
+#' equilibrium, thus throwing off the resulting indices. This function presents
+#' two method of calculating these start and end dates, adapted from Wotton and
+#' Flannigan (1993), and Lawson and Armitage (2008). The approach taken in this
+#' function starts the fire season after three days of maximum temperature
+#' greater than 12 degrees Celsius. The end of the fire season is determined
+#' after three consecutive days of maximum temperature less than 5 degrees
+#' Celsius.  The two temperature thresholds can be adjusted as parameters in
+#' the function call. In regions where temperature thresholds will not end a
+#' fire season, it is possible for the fire season to span multiple years, in
+#' this case setting the multi.year parameter to TRUE will allow these
+#' calculations to proceed.
+#' 
+#' This fire season length definition can also feed in to the overwinter DC
+#' calculations (\link{wDC}). View the cffdrs package help files for an example
+#' of using the \code{fireSeason}, \link{wDC}, and \link{fwi} functions in
+#' conjunction.
+#' 
+#' @param input A data.frame containing input variables of including the
+#' date/time and daily maximum temperature. Variable names have to be the same
+#' as in the following list, but they are case insensitive. The order in which
+#' the input variables are entered is not important either.
+#' 
+#' \tabular{lll}{ 
+#' \var{yr} \tab (required) \tab Year of the observations\cr
+#' \var{mon} \tab (required) \tab Month of the observations\cr 
+#' \var{day} \tab (required) \tab Day of the observations\cr 
+#' \var{tmax} \tab (required) \tab Maximum Daily Temperature (degrees C)\cr 
+#' \var{snow_depth} \tab (optional) \tab Is consistent snow data in the input?\cr }.
+#' 
+#' @param fs.start Temperature threshold (degrees C) to start the fire season
+#' (default=12)
+#' @param fs.end Temperature threshold (degrees C) to end the fire season
+#' (default=5)
+#' @param method Method of fire season calculation. Options are "wf93"" or
+#' "la08" (default=WF93)
+#' @param consistent.snow Is consistent snow data in the input? (default=FALSE)
+#' @param multi.year Should the fire season span multiple years?
+#' (default=FALSE)
+#' @return \link{fireSeason} returns a data frame of season and start and end
+#' dates. Columns in data frame are described below.
+#' 
+#' Primary FBP output includes the following 8 variables: 
+#' \item{yr }{Year of the fire season start/end date} 
+#' \item{mon }{Month of the fire season start/end date} 
+#' \item{day }{Day of the fire season start/end date}
+#' \item{fsdatetype }{Fire season date type (values are either "start" or "end")} 
+#' \item{date}{Full date value}
+#' 
+#' @author Alan Cantin, Xianli Wang, Mike Wotton, and Mike Flannigan
+#' 
+#' @seealso \code{\link{fwi}, \link{wDC}}
+#' 
+#' @references Wotton, B.M. and Flannigan, M.D. (1993). Length of the fire
+#' season in a changing climate. Forestry Chronicle, 69, 187-192.
+#' 
+#' \url{http://www.ualberta.ca/~flanniga/publications/1993_Wotton_Flannigan.pdf}
+#' 
+#' Lawson, B.D. and O.B. Armitage. 2008. Weather guide for the Canadian Forest
+#' Fire Danger Rating System. Nat. Resour. Can., Can. For. Serv., North. For.
+#' Cent., Edmonton, AB \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
+#' @keywords methods
+#' @examples
+#' 
+#' library(cffdrs)
+#' #The standard test data:
+#' data("test_wDC")
+#' print(head(test_wDC))
+#' ## Sort the data:
+#' input <- with(test_wDC, test_wDC[order(id,yr,mon,day),])
+#' 
+#' #Using the default fire season start and end temperature 
+#' #thresholds:
+#' a_fs <- fireSeason(input[input$id==1,])
+#' 
+#' #Check the result:
+#' a_fs
+#' 
+#' #    yr mon day fsdatetype
+#' #1 1999   5   4      start
+#' #2 1999   5  12        end
+#' #3 1999   5  18      start
+#' #4 1999   5  25        end
+#' #5 1999   5  30      start
+#' #6 1999  10   6        end
+#' #7 2000   6  27      start
+#' #8 2000  10   7        end
+#' 
+#' #In the resulting data frame, the fire season starts 
+#' #and ends multiple times in the first year. It is up to the user #for how to interpret this.
+#' 
+#' #modified fire season start and end temperature thresholds
+#' a_fs <- fireSeason (input[input$id==1,],fs.start=10, fs.end=3)
+#' a_fs
+#' #    yr mon day fsdatetype
+#' #1 1999   5   2      start
+#' #2 1999  10  20        end
+#' #3 2000   6  16      start
+#' #4 2000  10   7        end
+#' #select another id value, specify method explicitly
+#' b_fs <- fireSeason(input[input$id==2,],method="WF93")
+#' #print the calculated fireseason
+#' b_fs
+#' #   yr mon day fsdatetype
+#' #1 1980   4  21      start
+#' #2 1980   9  19        end
+#' #3 1980  10   6      start
+#' #4 1980  10  16        end
+#' #5 1981   5  21      start
+#' #6 1981  10  13        end
+#' 
+#' @export fireSeason
 fireSeason <- function(input, fs.start = 12, fs.end = 5, method = "WF93", 
                        consistent.snow = FALSE, multi.year = FALSE){
   #############################################################################

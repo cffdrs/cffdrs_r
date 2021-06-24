@@ -1,32 +1,37 @@
+#' @title Grass Fuel Moisture Raster Calculation
+#' 
+#' @description Calculation of the Grass Fuel Moisture Code. This calculates the
+#' moisture content of both the surface of a fully cured matted grass layer and 
+#' also an equivalent Grass Fuel Moisture Code. All equations come from Wotton 
+#' (2009) as cited below unless otherwise specified.
+#' 
+#' @references 
+#' Wotton, B.M. 2009. A grass moisture model for the Canadian
+#' Forest Fire Danger Rating System. In: Proceedings 8th Fire and
+#' Forest Meteorology Symposium, Kalispell, MT Oct 13-15, 2009.
+#' Paper 3-2. \url{https://ams.confex.com/ams/pdfpapers/155930.pdf}
+#' 
+#' @param input (raster stack)
+#' \tabular{lll}{
+#' \var{temp} \tab (required) \tab Temperature (centigrade)\cr
+#' \var{rh}   \tab (required) \tab Relative humidity (\%)\cr 
+#' \var{ws}   \tab (required) \tab 10-m height wind speed (km/h)\cr 
+#' \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
+#' \var{isol} \tab (required) \tab Solar radiation (kW/m^2)\cr }
+#' @param GFMCold    GFMC from yesterday (double, default=85)
+#' @param time.step  The hourly time steps (integer hour, default=1)
+#' @param roFL       Nominal fuel load of the fine fuel layer (kg/m^2 double, default=0.3)
+#' @param out        Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)
+#' 
+#' @return Returns a raster stack of either MC, GMFC, All, or GFMC and MC
+#' 
+#' @export gfmcRaster
+#' 
+
+
 gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
                  out = "GFMCandMC") {
-  #############################################################################
-  # Description: Calculation of the Grass Fuel Moisture Code. This calculates
-  #              the moisture content of both the surface of a fully cured
-  #              matted grass layer and also an equivalent Grass Fuel Moisture
-  #              Code. All equations come from Wotton (2009) as cited below
-  #              unless otherwise specified.
-  #
-  #              Wotton, B.M. 2009. A grass moisture model for the Canadian
-  #              Forest Fire Danger Rating System. In: Proceedings 8th Fire and
-  #              Forest Meteorology Symposium, Kalispell, MT Oct 13-15, 2009.
-  #              Paper 3-2. https://ams.confex.com/ams/pdfpapers/155930.pdf
-  #
-  # Args: input (rasterstack):
-  #         temp (required)	    Temperature (centigrade)
-  #         rh	 (required)	    Relative humidity (%)
-  #         ws	 (required)	    10-m height wind speed (km/h)
-  #         prec (required)	    1-hour rainfall (mm)
-  #         isol (required)	    Solar radiation (kW/m^2)
-  #       GFMCold:    GFMC from yesterday (double, default=85)
-  #       time.step:  The hourly time steps (integer hour, default=1)
-  #       roFL:       Nominal fuel load of the fine fuel layer
-  #                   (kg/m^2 double, default=0.3)
-  #       out:        Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)
-  #
-  # Returns: Returns a raster stack of either MC, GMFC, All, or GFMCandMC
-  #
-  #############################################################################
+
   t0 <- time.step ## Currently locked at 1
   names(input) <- tolower(names(input))
   #Quite often users will have a data frame called "input" already attached

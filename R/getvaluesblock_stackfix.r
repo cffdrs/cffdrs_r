@@ -1,12 +1,16 @@
+#' Get Values Block Stackfix
+#' 
+#' This function is originally from spatial.tools package which
+#' has been archived. We do not accept responsibility for writing
+#' this function and all IP belongs to the previous maintainers
+#' of that package. If that pacakage is revived we will revert
+#' back to it.
+#' 
+#' @seealso \code{\link{spatial.tools}}
+#' 
+#' @noRd
+#' 
 
-#############################################################################
-# Description: This function is originally from spatial.tools package which
-#             has been archived. We do not accept responsibility for writing
-#             this function and all IP belongs to the previous maintainers
-#             of that package. If that pacakage is revived we will revert
-#             back to it.
-#  original link to package:https://cran.r-project.org/package=spatial.tools
-#############################################################################
 .getValuesBlock_stackfix <-
 function (x, row = 1, nrows = 1, col = 1, ncols = (ncol(x) - 
                                                      col + 1), lyrs = (1:nlayers(x))) 

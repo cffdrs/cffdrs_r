@@ -1,32 +1,33 @@
+#' Total Fuel Consumption calculation
+#' 
+#'   Computes the Total (Surface + Crown) Fuel Consumption by Fuel Type.
+#'   All variables names are laid out in the same manner as FCFDG (1992) or
+#'   Wotton et. al (2009) 
+#'   
+#'   Forestry Canada Fire Danger Group (FCFDG) (1992). "Development and 
+#'   Structure of the Canadian Forest Fire Behavior Prediction System." 
+#'   Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#'
+#'   Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
+#'   the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
+#'   Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
+#'   Canada. Information Report GLC-X-10, 45p.
+#'
+#' @param FUELTYPE The Fire Behaviour Prediction FuelType
+#' @param CFL      Crown Fuel Load (kg/m^2)
+#' @param CFB      Crown Fraction Burned (0-1)
+#' @param SFC      Surface Fuel Consumption (kg/m^2)
+#' @param  PC      Percent Conifer (%)
+#' @param PDF      Percent Dead Balsam Fir (%)
+#' @param option   Type of output (TFC, CFC, default=TFC)
+#' 
+#' @returns TFC Total (Surface + Crown) Fuel Consumption (kg/m^2) OR
+#' CFC Crown Fuel Consumption (kg/m^2)
+#' 
+#' @noRd
+
 .TFCcalc <- function(FUELTYPE, CFL, CFB, SFC, PC, PDF, option = "TFC") {
-  #############################################################################
-  # Description:
-  #   Computes the Total (Surface + Crown) Fuel Consumption by Fuel Type.
-  #   All variables names are laid out in the same manner as FCFDG (1992) or
-  #   Wotton et. al (2009) 
-  
-  #   Forestry Canada Fire Danger Group (FCFDG) (1992). "Development and 
-  #   Structure of the Canadian Forest Fire Behavior Prediction System." 
-  #   Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  #   Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
-  #   the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
-  #   Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
-  #   Canada. Information Report GLC-X-10, 45p.
-  #
-  # Args:
-  #   FUELTYPE: The Fire Behaviour Prediction FuelType
-  #        CFL: Crown Fuel Load (kg/m^2)
-  #        CFB: Crown Fraction Burned (0-1)
-  #        SFC: Surface Fuel Consumption (kg/m^2)
-  #         PC: Percent Conifer (%)
-  #        PDF: Percent Dead Balsam Fir (%)
-  #     option: Type of output (TFC, CFC, default=TFC)
-  # Returns:
-  #        TFC: Total (Surface + Crown) Fuel Consumption (kg/m^2)
-  #       OR
-  #        CFC: Crown Fuel Consumption (kg/m^2)
-  # #############################################################################
+
   #Eq. 66a (Wotton 2009) - Crown Fuel Consumption (CFC)
   CFC <- CFL * CFB
   #Eq. 66b (Wotton 2009) - CFC for M1/M2 types

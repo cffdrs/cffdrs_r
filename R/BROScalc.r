@@ -1,29 +1,25 @@
+#' Back Fire Rate of Spread Calculator
+#' 
+#' Calculate the Back Fire Spread Rate. All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). 
+#' 
+#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
+#' 
+#' @param FUELTYPE    The Fire Behaviour Prediction FuelType
+#' @param FFMC        Fine Fuel Moisture Code
+#' @param BUI         Buildup Index
+#' @param WSV         Wind Speed Vector
+#' @param FMC         Foliar Moisture Content
+#' @param SFC         Surface Fuel Consumption
+#' @param PC          Percent Conifer
+#' @param PDF         Percent Dead Balsam Fir
+#' @param CC          Degree of Curing (just "C" in FCFDG 1992)
+#' @param CBH         Crown Base Height
+#' 
+#' @return BROS: Back Fire Rate of Spread
+#' @noRd
+
 .BROScalc <- function(FUELTYPE, FFMC, BUI, WSV, FMC, SFC, PC, PDF, CC, CBH){
-  #############################################################################
-  # Description:
-  #   Calculate the Back Fire Spread Rate. 
-  #
-  #   All variables names are laid out in the same manner as Forestry Canada 
-  #   Fire Danger Group (FCFDG) (1992). Development and Structure of the 
-  #   Canadian Forest Fire Behavior Prediction System." Technical Report 
-  #   ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  # Args:
-  #   FUELTYPE: The Fire Behaviour Prediction FuelType
-  #   FFMC:     Fine Fuel Moisture Code
-  #   BUI:      Buildup Index
-  #   WSV:      Wind Speed Vector
-  #   FMC:      Foliar Moisture Content
-  #   SFC:      Surface Fuel Consumption
-  #   PC:       Percent Conifer
-  #   PDF:      Percent Dead Balsam Fir
-  #   CC:       Degree of Curing (just "C" in FCFDG 1992)
-  #   CBH:      Crown Base Height
-  
-  # Returns:
-  #   BROS:     Back Fire Spread Rate
-  #
-  #############################################################################
+
   #Eq. 46 (FCFDG 1992)
   #Calculate the FFMC function from the ISI equation
   m <- 147.2 * (101 - FFMC) / (59.5 + FFMC)

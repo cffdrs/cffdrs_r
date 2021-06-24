@@ -1,29 +1,30 @@
+#' Surface Fuel Consumption Calculator
+#' 
+#'   Computes the Surface Fuel Consumption by Fuel Type.
+#'   All variables names are laid out in the same manner as FCFDG (1992) or
+#'   Wotton et. al (2009) 
+#'   
+#'   Forestry Canada Fire Danger Group (FCFDG) (1992). "Development and 
+#'   Structure of the Canadian Forest Fire Behavior Prediction System." 
+#'   Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#'
+#'   Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
+#'   the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
+#'   Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
+#'   Canada. Information Report GLC-X-10, 45p.
+#'
+#' @param FUELTYPE The Fire Behaviour Prediction FuelType
+#' @param BUI      Buildup Index
+#' @param FFMC     Fine Fuel Moisture Code
+#' @param PC       Percent Conifer (%)
+#' @param GFL      Grass Fuel Load (kg/m^2)
+#'        
+#' @returns   SFC Surface Fuel Consumption (kg/m^2)
+#' 
+#' @noRd
+
 .SFCcalc <- function(FUELTYPE, FFMC, BUI, PC, GFL) {
-  #############################################################################
-  # Description:
-  #   Computes the Surface Fuel Consumption by Fuel Type.
-  #   All variables names are laid out in the same manner as FCFDG (1992) or
-  #   Wotton et. al (2009) 
-  
-  #   Forestry Canada Fire Danger Group (FCFDG) (1992). "Development and 
-  #   Structure of the Canadian Forest Fire Behavior Prediction System." 
-  #   Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  #   Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
-  #   the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
-  #   Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
-  #   Canada. Information Report GLC-X-10, 45p.
-  #
-  # Args:
-  #   FUELTYPE: The Fire Behaviour Prediction FuelType
-  #        BUI: Buildup Index
-  #       FFMC: Fine Fuel Moisture Code
-  #         PC: Percent Conifer (%)
-  #        GFL: Grass Fuel Load (kg/m^2)
-  # Returns:
-  #        SFC: Surface Fuel Consumption (kg/m^2)
-  #
-  #############################################################################
+
   SFC <- rep(-999,length(FFMC))
   #Eqs. 9a, 9b (Wotton et. al. 2009) - Solving the lower bound of FFMC value
   # for the C1 fuel type SFC calculation

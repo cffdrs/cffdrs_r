@@ -1,16 +1,16 @@
+#' Direction definer
+#' 
+#' New DIRECTION function to determine clockwise or counter-clockwise "interpretation" 
+#' 
+#' @param bearingT1T2 Bearing between T1 and T2
+#' @param bearingT1T3 Bearing between T1 and T3
+#' @param ThetaAdeg Direction
+#' 
+#' @return DIR - a direction in degrees
+#' 
+#' @noRd
+
 .direction <- function(bearingT1T2, bearingT1T3, ThetaAdeg){
-  #############################################################################
-  # Description:
-  #   New DIRECTION function to determine clockwise or counter-clockwise 
-  #   "interpretation" 
-  #
-  #
-  # Args:
-  #   beaaringT1T2  
-  # Returns:
-  #   DIR   a direction in degrees
-  #
-  #############################################################################
 
   T1T2 <- bearingT1T2
   T1T3 <- bearingT1T3

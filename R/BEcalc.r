@@ -1,20 +1,17 @@
-.BEcalc<-function(FUELTYPE, BUI) {
-  #############################################################################
-  # Description:
-  #   Computes the Buildup Effect on Fire Spread Rate. 
-  #
-  #   All variables names are laid out in the same manner as Forestry Canada 
-  #   Fire Danger Group (FCFDG) (1992). Development and Structure of the 
-  #   Canadian Forest Fire Behavior Prediction System." Technical Report 
-  #   ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  # Args:
-  #   FUELTYPE: The Fire Behaviour Prediction FuelType
-  #   BUI:      The Buildup Index value
-  # Returns:
-  #   BE: The Buildup Effect
-  #
-  #############################################################################
+#' Build Up Effect Calculator
+#' 
+#' Computes the Buildup Effect on Fire Spread Rate. All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). 
+#' 
+#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
+#' 
+#' @param FUELTYPE The Fire Behaviour Prediction FuelType
+#' @param BUI The Buildup Index value
+#' 
+#' @return BE: Build up effect
+#' @noRd
+
+.BEcalc <- function(FUELTYPE, BUI) {
+
   #Fuel Type String represenations
   d <- c("C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "M1", "M2", "M3",
          "M4","S1", "S2", "S3", "O1A", "O1B")

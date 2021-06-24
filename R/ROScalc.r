@@ -1,34 +1,36 @@
+#' Rate of Spread Calculation
+#' 
+#' 
+#' Computes the Rate of Spread prediction based on fuel type and FWI
+#' conditions. Equations are from listed FCFDG (1992) and Wotton et. al. 
+#' (2009), and are marked as such.
+#' 
+#' All variables names are laid out in the same manner as Forestry Canada 
+#' Fire Danger Group (FCFDG) (1992). Development and Structure of the 
+#' Canadian Forest Fire Behavior Prediction System." Technical Report 
+#' ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' 
+#' Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
+#' the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
+#' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
+#' Canada. Information Report GLC-X-10, 45p.
+#' 
+#' @param FUELTYPEThe Fire Behaviour Prediction FuelType      
+#' @param ISI         Intiial Spread Index 
+#' @param BUI         Buildup Index 
+#' @param FMC         Foliar Moisture Content 
+#' @param SFC         Surface Fuel Consumption (kg/m^2) 
+#' @param PC          Percent Conifer (%)
+#' @param PDF         Percent Dead Balsam Fir (%) 
+#' @param CC          Constant
+#' @param CBH         Crown to base height(m) 
+#' 
+#' @returns ROS - Rate of Spread (m/min) value
+#' 
+#' @noRd
+
 .ROScalc <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH){
-  #############################################################################
-  # Description:
-  #   Computes the Rate of Spread prediction based on fuel type and FWI
-  #   conditions. Equations are from listed FCFDG (1992) and Wotton et. al. 
-  #   (2009), and are marked as such.
-  #
-  #   All variables names are laid out in the same manner as Forestry Canada 
-  #   Fire Danger Group (FCFDG) (1992). Development and Structure of the 
-  #   Canadian Forest Fire Behavior Prediction System." Technical Report 
-  #   ST-X-3, Forestry Canada, Ottawa, Ontario.
-  #
-  #   Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
-  #   the 1992 Canadian forest fire behavior prediction system. Nat. Resour. 
-  #   Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario, 
-  #   Canada. Information Report GLC-X-10, 45p.
-  #
-  # Args:
-  #   FUELTYPE: The Fire Behaviour Prediction FuelType
-  #        ISI: Intiial Spread Index
-  #        BUI: Buildup Index
-  #        FMC: Foliar Moisture Content
-  #        SFC: Surface Fuel Consumption (kg/m^2)
-  #         PC: Percent Conifer (%)
-  #        PDF: Percent Dead Balsam Fir (%)
-  #         CC: Constant
-  #        CBH: Crown to base height(m)
-  # Returns:
-  #   ROS: Rate of spread (m/min)
-  #
-  #############################################################################
+
   #Set up some data vectors
   NoBUI <- rep(-1,length(ISI))
   d <- c("C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "M1", "M2", "M3", "M4",
