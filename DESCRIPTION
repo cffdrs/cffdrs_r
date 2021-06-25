@@ -9,7 +9,7 @@ Authors@R: c(
     person("Marc-André", "Parisien", email = "marc-andre.parisien@canada.ca", role = "aut"),
     person("Mike", "Wotton", email = "mike.wotton@canada.ca", role = "aut"),
     person("Kerry", "Anderson", email = "", role = "aut"),
-    person("Brett", "MOore", email = "brett.moore@canada.ca", role = "aut"),
+    person("Brett", "Moore", email = "brett.moore@canada.ca", role = "aut"),
     person("Tom", "Schiks", email = "tom.schiks@mail.utoronto.ca", role = "aut"),
     person("Mike", "Flannigan", email = "mike.flannigan@ualberta.ca", role = "aut")
     )
