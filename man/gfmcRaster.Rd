@@ -7,7 +7,7 @@
 gfmcRaster(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC")
 }
 \arguments{
-\item{input}{(raster stack)
+\item{input}{[raster stack]
 \tabular{lll}{
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
 \var{rh}   \tab (required) \tab Relative humidity (\%)\cr 
@@ -24,7 +24,7 @@ gfmcRaster(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC")
 \item{out}{Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)}
 }
 \value{
-Returns a raster stack of either MC, GMFC, All, or GFMC and MC
+Returns a raster stack of either MC, GMFC, GFMC and MC or All
 }
 \description{
 Calculation of the Grass Fuel Moisture Code. This calculates the

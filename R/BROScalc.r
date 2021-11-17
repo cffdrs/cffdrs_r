@@ -1,8 +1,11 @@
 #' Back Fire Rate of Spread Calculator
 #' 
-#' Calculate the Back Fire Spread Rate. All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). 
+#' Calculate the Back Fire Spread Rate. All variables names are laid out in the 
+#' same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). 
 #' 
-#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
+#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} 
+#' Development and Structure of the Canadian Forest Fire Behavior Prediction 
+#' System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
 #' 
 #' @param FUELTYPE    The Fire Behaviour Prediction FuelType
 #' @param FFMC        Fine Fuel Moisture Code

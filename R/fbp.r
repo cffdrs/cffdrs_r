@@ -68,19 +68,20 @@
 #' have to be named as listed below, but they are case insensitive, and do not
 #' have to be in any particular order. Fuel type is of type character; other
 #' arguments are numeric. Missing values in numeric variables could either be
-#' assigned as NA or leave as blank.\cr 
-#' \bold{Required Inputs:}\cr 
+#' assigned as NA or leave as blank.\cr\cr
+#' 
+#' 
 #' \tabular{lll}{ 
-#' \bold{Input} \tab 
-#' \bold{Description/Full name} \tab 
-#' \bold{Defaults}\cr 
-#' \var{FuelType} \tab FBP System Fuel Type including "C-1", "C-2", "C-3", "C-4",
-#'  "C-5", "C-6", "C-7", "D-1", \cr\tab "M-1", "M-2", "M-3", "M-4", "NF", S-1", "S-2", 
-#'  "S-3", "O-1a", "O-1b", and "WA", where\cr\tab "WA" and "NF" stand for "water" and 
-#'  "non-fuel", respectively. Because raster format\cr\tab data cannot hold characters, 
-#'  we have to code these fuel types in numeric codes. In\cr\tab sequence, the codes 
-#'  are c(1:19) (see below). FuelType could also be converted as\cr\tab factor and 
-#'  assigned to the raster layer, the function will still work.\cr\cr 
+#' \bold{Required Inputs:}\tab\tab\cr 
+#' \bold{Input} \tab \bold{Description/Full name} \tab \bold{Defaults}\cr 
+#' 
+#' \var{FuelType} 
+#' \tab FBP System Fuel Type including "C-1",\cr
+#' \tab"C-2", "C-3", "C-4","C-5", "C-6", "C-7",\cr
+#' \tab "D-1", "M-1", "M-2", "M-3", "M-4", "NF",\cr
+#' \tab "D-1", "S-2", "S-3", "O-1a", "O-1b", and\cr
+#' \tab  "WA", where "WA" and "NF" stand for \cr
+#' \tab "water" and "non-fuel", respectively.\cr\cr
 #'  
 #' \var{LAT} \tab Latitude [decimal degrees] \tab 55\cr 
 #' \var{LONG} \tab Longitude [decimal degrees] \tab -120\cr 
@@ -90,22 +91,24 @@
 #' \var{GS} \tab Ground Slope [percent] \tab 0\cr 
 #' \var{Dj} \tab Julian day \tab 180\cr 
 #' \var{Aspect} \tab Aspect of the slope [decimal degrees] \tab 0\cr\cr 
-#' }
 #' 
-#' \bold{Optional Inputs (1):} Variables associated with certain fuel types. 
-#' These could be skipped if relevant fuel types do not appear in the input 
-#' data.\cr 
-#' \tabular{lll}{ \bold{Input} \tab \bold{Full names of inputs} \tab 
-#' \bold{Defaults}\cr 
+#' \bold{Optional Inputs (1):}
+#' \tab Variables associated with certain fuel \cr
+#' \tab types. These could be skipped if relevant \cr
+#' \tab fuel types do not appear in the input data.\cr\cr
+#' 
+#' \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
+#' 
 #' \var{PC} \tab Percent Conifer for M1/M2 [percent] \tab 50\cr 
 #' \var{PDF} \tab Percent Dead Fir for M3/M4 [percent] \tab 35\cr
 #' \var{cc} \tab Percent Cured for O1a/O1b [percent] \tab 80\cr 
-#' \var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr } 
+#' \var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr 
 #' 
-#' \bold{Optional Inputs (2):} Variables that could be ignored without causing 
-#' major impacts to the primary outputs\cr 
-#' \tabular{lll}{ \bold{Input} \tab \bold{Full names of inputs} \tab 
-#' \bold{Defaults}\cr 
+#' \bold{Optional Inputs (2):} 
+#' \tab Variables that could be ignored without \cr
+#' \tab causing major impacts to the primary outputs\cr\cr
+#' 
+#' \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
 #' \var{CBH}   \tab Crown to Base Height [m] \tab 3\cr 
 #' \var{WD}    \tab Wind direction [decimal degrees] \tab 0\cr 
 #' \var{Accel} \tab Acceleration: 1 = point, 0 = line \tab 0\cr 
@@ -119,12 +122,14 @@
 #' \var{SH}    \tab C-6 Fuel Type Stand Height [m] \tab 0\cr 
 #' \var{SD}    \tab C-6 Fuel Type Stand Density [stems/ha] \tab 0\cr 
 #' \var{theta} \tab Elliptical direction of calculation [degrees] \tab 0\cr\cr }
+#' 
 #' @param output FBP output offers 3 options (see details in \bold{Values}
 #' section):
 #' 
-#' \tabular{lc}{ \bold{Outputs} \tab \bold{Number of outputs}\cr \var{Primary
-#' (\bold{default})} \tab 8\cr \var{Secondary} \tab 34\cr \var{All} \tab 42\cr
-#' }
+#' \tabular{lc}{ \bold{Outputs} \tab \bold{Number of outputs}\cr 
+#' \var{Primary(\bold{default})} \tab 8\cr 
+#' \var{Secondary} \tab 34\cr 
+#' \var{All} \tab 42\cr\cr}
 #' 
 #' @param m Optimal number of pixels at each iteration of computation when
 #' \code{nrow(input) >= 1000}. Default \code{m = NULL}, where the function will
@@ -142,7 +147,8 @@
 #' @return \code{fbp} returns a dataframe with primary, secondary, or all
 #' output variables, a combination of the primary and secondary outputs.
 #' 
-#' Primary FBP output includes the following 8 variables: 
+#' \bold{Primary} FBP output includes the following 8 variables: 
+#' 
 #' \item{CFB}{Crown Fraction Burned by the head fire} 
 #' \item{CFC}{Crown Fuel Consumption [kg/m^2]} 
 #' \item{FD}{Fire description (1=Surface, 2=Intermittent, 3=Crown)} 
@@ -152,9 +158,10 @@
 #' \item{SFC}{Surface Fuel Consumption [kg/m^2]} 
 #' \item{TFC}{Total Fuel Consumption [kg/m^2]}
 #' 
-#' Secondary FBP System outputs include the following 34 raster layers. In order
+#' \bold{Secondary} FBP System outputs include the following 34 raster layers. In order
 #' to calculate the reliable secondary outputs, depending on the outputs, 
 #' optional inputs may have to be provided.  
+#' 
 #' \item{BE}{BUI effect on spread rate} 
 #' \item{SF}{Slope Factor (multiplier for ROS increase upslope)} 
 #' \item{ISI}{Initial Spread Index} 

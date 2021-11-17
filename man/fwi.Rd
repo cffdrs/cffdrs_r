@@ -19,9 +19,11 @@ observations taken at noon LST. Variable names have to be the same as in the
 following list, but they are case insensitive. The order in which the input
 variables are entered is not important.
 
-\tabular{lll}{ \var{id} \tab (optional) \tab Unique identifier of a weather
-station or spatial point (no restriction on\cr\tab\tab data type); required
-when \code{batch=TRUE}\cr 
+\tabular{lll}{ 
+\var{id} \tab (optional) 
+\tab Unique identifier of a weather\cr
+\tab\tab station or spatial point (no restriction on\cr
+\tab\tab data type); required when \code{batch=TRUE}\cr 
 \var{lat} \tab (recommended) \tab Latitude (decimal degree, default=55)\cr 
 \var{long} \tab (optional) \tab Longitude (decimal degree)\cr 
 \var{yr} \tab (optional) \tab Year of observation;
@@ -40,16 +42,12 @@ function also accepts a vector if the initial or previous day FWI values is
 for only one weather station (a warning message comes up if a single set of
 initial values is used for multiple weather stations). Defaults are the
 standard initial values for FFMC, DMC, and DC defined as the following:
-\tabular{ll}{ 
-\var{ffmc} \tab Fine Fuel Moisture Code (FFMC; unitless) of the previous day.
- Default value is 85.\cr 
-\var{dmc} \tab Duff Moisture Code (DMC; unitless) of the previous day. 
-Default value is 6.\cr 
-\var{dc} \tab Drought Code (DC; unitless) of the previous day. 
-Default value is 15.\cr
-\var{lat} \tab Latitude of the weather station (optional, default=55).
-Latitude values are used to make\cr\tab day length adjustments in the
-function.\cr }}
+\tabular{lll}{ 
+\bold{Variable} \tab \bold{Description} \tab \bold{Default} \cr
+\var{ffmc} \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
+\var{dmc} \tab Previous day Duff Moisture Code (DMC; unitless)\tab 6 \cr
+\var{dc} \tab Previous Day Drought Code (DC; unitless) \tab 15\cr
+\var{lat} \tab Latitude of the weather station (\emph{Optional}) \tab 55 \cr}}
 
 \item{batch}{Whether the computation is iterative or single step, default is
 TRUE. When \code{batch=TRUE}, the function will calculate daily FWI System
@@ -76,12 +74,15 @@ this argument. Default is TRUE.}
 }
 \value{
 \code{fwi} returns a dataframe which includes both the input and the
-FWI System variables as described below: \item{Input Variables }{Including
-temp, rh, ws, and prec with id, long, lat, yr, mon, or day as optional.}
-\item{ffmc }{Fine Fuel Moisture Code} \item{dmc }{Duff Moisture Code}
-\item{dc }{Drought Code} \item{isi }{Initial Spread Index} \item{bui
-}{Buildup Index} \item{fwi }{Fire Weather Index} \item{dsr }{Daily Severity
-Rating}
+FWI System variables as described below: 
+\item{Input Variables }{Including temp, rh, ws, and prec with id, long, lat, yr, mon, or day as optional.}
+\item{ffmc }{Fine Fuel Moisture Code} 
+\item{dmc }{Duff Moisture Code}
+\item{dc }{Drought Code} 
+\item{isi }{Initial Spread Index} 
+\item{bui }{Buildup Index} 
+\item{fwi }{Fire Weather Index} 
+\item{dsr }{Daily Severity Rating}
 }
 \description{
 \code{fwi} is used to calculate the outputs of the Canadian Forest Fire

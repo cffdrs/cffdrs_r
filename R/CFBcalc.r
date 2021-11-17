@@ -1,10 +1,18 @@
 #' Crown Fraction Burned Calculator
 #' 
-#' Calculate Calculate Crown Fraction Burned. To calculate CFB, we also need to calculate Critical surface intensity (CSI), and Surface fire rate of spread (RSO). The value of each of these equations can be returned to the calling function without unecessary additional calculations.
+#' Calculate Calculate Crown Fraction Burned. To calculate CFB, we also need to 
+#' calculate Critical surface intensity (CSI), and Surface fire rate of spread 
+#' (RSO). The value of each of these equations can be returned to the calling 
+#' function without unecessary additional calculations.
 #' 
-#' All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' All variables names are laid out in the same manner as Forestry Canada Fire 
+#' Danger Group (FCFDG) (1992). Development and Structure of the Canadian Forest
+#'  Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada,
+#'   Ottawa, Ontario.
 #' 
-#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} 
+#' Development and Structure of the Canadian Forest Fire Behavior Prediction 
+#' System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
 #' 
 #' @param FUELTYPE The Fire Behaviour Prediction FuelType 
 #' @param FMC      Foliar Moisture Content 

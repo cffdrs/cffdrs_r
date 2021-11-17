@@ -1,0 +1,15 @@
+This is makeindex, version 2.15 [MiKTeX 21.10].
+Scanning input file Rd2.idx....done (128 entries accepted, 0 rejected).
+Sorting entries....done (938 comparisons).
+Generating output file Rd2.ind....
+## Warning (input = Rd2.idx, line = 32; output = Rd2.ind, line = 56):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = Rd2.idx, line = 38; output = Rd2.ind, line = 59):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+
+## Warning (input = Rd2.idx, line = 87; output = Rd2.ind, line = 104):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+done (134 lines written, 3 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.

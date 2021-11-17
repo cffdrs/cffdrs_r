@@ -1,9 +1,17 @@
 #' C-6 Conifer Plantaion Fire Spread Calculator
 #'
-#' Calculate c6 (Conifer plantation) Fire Spread. C6 is a special case, and thus has it's own function. To calculate C6 fire spread, this function   also calculates and can return ROS, CFB, RSC, or RSI by specifying in   the option parameter.
-#' All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' Calculate c6 (Conifer plantation) Fire Spread. C6 is a special case, and thus
+#'  has it's own function. To calculate C6 fire spread, this function 
+#'  also calculates and can return ROS, CFB, RSC, or RSI by specifying in 
+#'  the option parameter.
+#' All variables names are laid out in the same manner as Forestry Canada Fire 
+#' Danger Group (FCFDG) (1992). Development and Structure of the Canadian Forest
+#'  Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, 
+#'  Ottawa, Ontario.
 #' 
-#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} Development and Structure of the Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
+#' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} 
+#' Development and Structure of the Canadian Forest Fire Behavior Prediction 
+#' System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario. 
 #'
 #' @param FUELTYPE    The Fire Behaviour Prediction FuelType
 #' @param ISI         Initial Spread Index

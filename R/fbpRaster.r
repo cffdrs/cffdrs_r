@@ -58,43 +58,13 @@
 #' it is typically some angle off of the final spread rate direction since if
 #' for instance theta=RAZ (the final spread azimuth of the fire) then the rate
 #' of spread at angle theta (TROS) will be equivalent to ROS.
-
-#' @return Either Primary, Secondary, or all FBP outputs in a raster stack
 #' 
-#' @param input The input data, a RasterStack containing fuel types, fire
-#' weather component, and slope layers (see below). Each vector of inputs
-#' defines a single FBP System prediction for a single fuel type and set of
-#' weather conditions. The RasterStack can be used to evaluate the FBP System
-#' for a single fuel type and instant in time, or multiple records for a single
-#' point (e.g., one weather station, either hourly or daily for instance) or
-#' multiple points (multiple weather stations or a gridded surface). All input
-#' variables have to be named as listed below, but they are case insensitive,
-#' and do not have to be in any particular order. Fuel type is of type
-#' character; other arguments are numeric. Missing values in numeric variables
-#' could either be assigned as NA or leave as blank.
+#' Because raster format data cannot hold characters, we have to code these fuel
+#' types in numeric codes. In sequence, the codes are c(1:19). FuelType could 
+#' also be converted as factor and assigned to the raster layer, the function 
+#' will still work.
 #' 
-#' \bold{Required Inputs:}\cr 
-#' \tabular{lll}{ 
-#' \bold{Input} \tab 
-#' \bold{Description/Full name} \tab 
-#' \bold{Defaults}\cr 
-#' \var{FuelType} \tab FBP System Fuel Type including "C-1", "C-2", "C-3", "C-4",
-#'  "C-5", "C-6", "C-7", "D-1", \cr\tab "M-1", "M-2", "M-3", "M-4", "NF", S-1", "S-2", 
-#'  "S-3", "O-1a", "O-1b", and "WA", where\cr\tab "WA" and "NF" stand for "water" and 
-#'  "non-fuel", respectively. Because raster format\cr\tab data cannot hold characters, 
-#'  we have to code these fuel types in numeric codes. In\cr\tab sequence, the codes 
-#'  are c(1:19) (see below). FuelType could also be converted as\cr\tab factor and 
-#'  assigned to the raster layer, the function will still work.\cr\cr 
-#' \var{LAT} \tab Latitude [decimal degrees] \tab 55\cr 
-#' \var{LONG} \tab Longitude [decimal degrees] \tab -120\cr 
-#' \var{FFMC} \tab Fine fuel moisture code [FWI System component] \tab 90\cr 
-#' \var{BUI} \tab Buildup index [FWI System component] \tab 60\cr 
-#' \var{WS} \tab Wind speed [km/h] \tab 10\cr
-#' \var{GS} \tab Ground Slope [percent] \tab 0\cr 
-#' \var{Dj} \tab Julian day \tab 180\cr 
-#' \var{Aspect} \tab Aspect of the slope [decimal degrees] \tab 0\cr\cr }
-#'
-#' \tabular{cc}{
+#' \tabular{ll}{
 #' \bold{Fuel Type} \tab \bold{code} \cr 
 #' \verb{C-1}       \tab 1           \cr 
 #' \verb{C-2}       \tab 2           \cr 
@@ -116,17 +86,58 @@
 #' \verb{S-3}       \tab 18          \cr 
 #' \verb{WA}        \tab 19          \cr\cr}
 #' 
-#' \bold{Optional Inputs (1):} Variables associated with certain fuel types. 
-#' These could be skipped if relevant fuel types do not appear in the input data.\cr 
-#' \tabular{lll}{ \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
+#' @return Either Primary, Secondary, or all FBP outputs in a raster stack
+#' 
+#' @param input The input data, a RasterStack containing fuel types, fire
+#' weather component, and slope layers (see below). Each vector of inputs
+#' defines a single FBP System prediction for a single fuel type and set of
+#' weather conditions. The RasterStack can be used to evaluate the FBP System
+#' for a single fuel type and instant in time, or multiple records for a single
+#' point (e.g., one weather station, either hourly or daily for instance) or
+#' multiple points (multiple weather stations or a gridded surface). All input
+#' variables have to be named as listed below, but they are case insensitive,
+#' and do not have to be in any particular order. Fuel type is of type
+#' character; other arguments are numeric. Missing values in numeric variables
+#' could either be assigned as NA or leave as blank.
+#' 
+#' \tabular{lll}{ 
+#' \bold{Required Inputs:}\tab\tab\cr 
+#' \bold{Input} \tab \bold{Description/Full name} \tab \bold{Defaults}\cr 
+#' 
+#' \var{FuelType} 
+#' \tab FBP System Fuel Type including "C-1",\cr
+#' \tab"C-2", "C-3", "C-4","C-5", "C-6", "C-7",\cr
+#' \tab "D-1", "M-1", "M-2", "M-3", "M-4", "NF",\cr
+#' \tab "D-1", "S-2", "S-3", "O-1a", "O-1b", and\cr
+#' \tab  "WA", where "WA" and "NF" stand for \cr
+#' \tab "water" and "non-fuel", respectively.\cr\cr
+#'  
+#' \var{LAT} \tab Latitude [decimal degrees] \tab 55\cr 
+#' \var{LONG} \tab Longitude [decimal degrees] \tab -120\cr 
+#' \var{FFMC} \tab Fine fuel moisture code [FWI System component] \tab 90\cr 
+#' \var{BUI} \tab Buildup index [FWI System component] \tab 60\cr 
+#' \var{WS} \tab Wind speed [km/h] \tab 10\cr
+#' \var{GS} \tab Ground Slope [percent] \tab 0\cr 
+#' \var{Dj} \tab Julian day \tab 180\cr 
+#' \var{Aspect} \tab Aspect of the slope [decimal degrees] \tab 0\cr\cr 
+#' 
+#' \bold{Optional Inputs (1):}
+#' \tab Variables associated with certain fuel \cr
+#' \tab types. These could be skipped if relevant \cr
+#' \tab fuel types do not appear in the input data.\cr\cr
+#' 
+#' \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
+#' 
 #' \var{PC} \tab Percent Conifer for M1/M2 [percent] \tab 50\cr 
 #' \var{PDF} \tab Percent Dead Fir for M3/M4 [percent] \tab 35\cr
 #' \var{cc} \tab Percent Cured for O1a/O1b [percent] \tab 80\cr 
-#' \var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr } 
+#' \var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr 
 #' 
-#' \bold{Optional Inputs (2):} Variables that could be ignored without causing 
-#' major impacts to the primary outputs\cr 
-#' \tabular{lll}{ \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
+#' \bold{Optional Inputs (2):} 
+#' \tab Variables that could be ignored without \cr
+#' \tab causing major impacts to the primary outputs\cr\cr
+#' 
+#' \bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
 #' \var{CBH}   \tab Crown to Base Height [m] \tab 3\cr 
 #' \var{WD}    \tab Wind direction [decimal degrees] \tab 0\cr 
 #' \var{Accel} \tab Acceleration: 1 = point, 0 = line \tab 0\cr 
@@ -177,6 +188,7 @@
 #' Secondary FBP System outputs include the following 34 raster layers. In order 
 #' to calculate the reliable secondary outputs, depending on the outputs, 
 #' optional inputs may have to be provided.  
+#' 
 #' \item{BE}{BUI effect on spread rate} 
 #' \item{SF}{Slope Factor (multiplier for ROS increase upslope)} 
 #' \item{ISI}{Initial Spread Index} 
@@ -220,6 +232,7 @@
 #' (spread direction) of the ellipse. This formulation is similar but not
 #' identical to methods presented in Wotton et al (2009) and Tymstra et al
 #' (2009).
+#' 
 #' @author Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
 #' Anderson, and Mike Flannigan
 #' @seealso \code{\link{fbp}, \link{fwiRaster}, \link{hffmcRaster}}

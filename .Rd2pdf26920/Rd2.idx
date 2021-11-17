@@ -1,0 +1,128 @@
+\indexentry{cffdrs-package@\texttt  {cffdrs-package}|hyperpage}{2}
+\indexentry{cffdrs@\texttt  {cffdrs} \textit  {(\texttt  {cffdrs-package})}|hyperpage}{2}
+\indexentry{$*$ {\textbf  {package}}!cffdrs-package@\texttt  {cffdrs-package}|hyperpage}{2}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{3}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperindexformat{\textit}}{3}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{3}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{3}
+\indexentry{sdmc@\texttt  {sdmc}|hyperindexformat{\textit}}{3}
+\indexentry{gfmc@\texttt  {gfmc}|hyperindexformat{\textit}}{3}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{3}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{3}
+\indexentry{fbpRaster@\texttt  {fbpRaster}|hyperindexformat{\textit}}{3}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{3}
+\indexentry{pros@\texttt  {pros}|hyperindexformat{\textit}}{3}
+\indexentry{lros@\texttt  {lros}|hyperindexformat{\textit}}{3}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{4}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{4}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{4}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperindexformat{\textit}}{4}
+\indexentry{gfmc@\texttt  {gfmc}|hyperindexformat{\textit}}{4}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{4}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{4}
+\indexentry{lros@\texttt  {lros}|hyperindexformat{\textit}}{4}
+\indexentry{pros@\texttt  {pros}|hyperindexformat{\textit}}{4}
+\indexentry{sdmc@\texttt  {sdmc}|hyperindexformat{\textit}}{4}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{4}
+\indexentry{fbp@\texttt  {fbp}|hyperpage}{5}
+\indexentry{$*$ {\textbf  {methods}}!fbp@\texttt  {fbp}|hyperpage}{5}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{5}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{10}
+\indexentry{fbpRaster@\texttt  {fbpRaster}|hyperindexformat{\textit}}{10}
+\indexentry{fbpRaster@\texttt  {fbpRaster}|hyperpage}{10}
+\indexentry{$*$ {\textbf  {methods}}!fbpRaster@\texttt  {fbpRaster}|hyperpage}{10}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperindexformat{\textit}}{10}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{15}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperindexformat{\textit}}{15}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{15}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperpage}{16}
+\indexentry{$*$ {\textbf  {methods}}!fireSeason@\texttt  {fireSeason}|hyperpage}{16}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{16}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{17}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{17}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{17}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{17}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{17}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{17}
+\indexentry{fwi@\texttt  {fwi}|hyperpage}{18}
+\indexentry{$*$ {\textbf  {methods}}!fwi@\texttt  {fwi}|hyperpage}{18}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{21}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperindexformat{\textit}}{21}
+\indexentry{gfmc@\texttt  {gfmc}|hyperindexformat{\textit}}{21}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{21}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{21}
+\indexentry{sdmc@\texttt  {sdmc}|hyperindexformat{\textit}}{21}
+\indexentry{wDC@\texttt  {wDC}|hyperindexformat{\textit}}{21}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{21}
+\indexentry{fwiRaster@\texttt  {fwiRaster}|hyperpage}{22}
+\indexentry{$*$ {\textbf  {methods}}!fwiRaster@\texttt  {fwiRaster}|hyperpage}{22}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{25}
+\indexentry{fbpRaster@\texttt  {fbpRaster}|hyperindexformat{\textit}}{25}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{25}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{25}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{25}
+\indexentry{gfmc@\texttt  {gfmc}|hyperpage}{25}
+\indexentry{$*$ {\textbf  {methods}}!gfmc@\texttt  {gfmc}|hyperpage}{25}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{25}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{25}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{27}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{27}
+\indexentry{gfmcRaster@\texttt  {gfmcRaster}|hyperpage}{28}
+\indexentry{hffmc@\texttt  {hffmc}|hyperpage}{29}
+\indexentry{$*$ {\textbf  {methods}}!hffmc@\texttt  {hffmc}|hyperpage}{29}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{29}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{30}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{31}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{31}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperindexformat{\textit}}{31}
+\indexentry{hffmcRaster@\texttt  {hffmcRaster}|hyperpage}{32}
+\indexentry{$*$ {\textbf  {methods}}!hffmcRaster@\texttt  {hffmcRaster}|hyperpage}{32}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{33}
+\indexentry{fbp@\texttt  {fbp}|hyperindexformat{\textit}}{34}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{34}
+\indexentry{hffmc@\texttt  {hffmc}|hyperindexformat{\textit}}{34}
+\indexentry{lros@\texttt  {lros}|hyperpage}{34}
+\indexentry{$*$ {\textbf  {ros}}!lros@\texttt  {lros}|hyperpage}{34}
+\indexentry{pros@\texttt  {pros}|hyperindexformat{\textit}}{36}
+\indexentry{pros@\texttt  {pros}|hyperpage}{36}
+\indexentry{$*$ {\textbf  {ros}}!pros@\texttt  {pros}|hyperpage}{36}
+\indexentry{lros@\texttt  {lros}|hyperindexformat{\textit}}{38}
+\indexentry{sdmc@\texttt  {sdmc}|hyperpage}{38}
+\indexentry{$*$ {\textbf  {methods}}!sdmc@\texttt  {sdmc}|hyperpage}{38}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{40}
+\indexentry{test\_fbp@\texttt  {test\_fbp}|hyperpage}{40}
+\indexentry{$*$ {\textbf  {datasets}}!test\_fbp@\texttt  {test\_fbp}|hyperpage}{40}
+\indexentry{test\_fbpRaster@\texttt  {test\_fbpRaster}|hyperpage}{41}
+\indexentry{$*$ {\textbf  {datasets}}!test\_fbpRaster@\texttt  {test\_fbpRaster}|hyperpage}{41}
+\indexentry{test\_fwi@\texttt  {test\_fwi}|hyperpage}{41}
+\indexentry{$*$ {\textbf  {datasets}}!test\_fwi@\texttt  {test\_fwi}|hyperpage}{41}
+\indexentry{test\_gfmc@\texttt  {test\_gfmc}|hyperpage}{41}
+\indexentry{$*$ {\textbf  {datasets}}!test\_gfmc@\texttt  {test\_gfmc}|hyperpage}{41}
+\indexentry{test\_hffmc@\texttt  {test\_hffmc}|hyperpage}{42}
+\indexentry{$*$ {\textbf  {datasets}}!test\_hffmc@\texttt  {test\_hffmc}|hyperpage}{42}
+\indexentry{test\_lros@\texttt  {test\_lros}|hyperpage}{42}
+\indexentry{$*$ {\textbf  {datasets}}!test\_lros@\texttt  {test\_lros}|hyperpage}{42}
+\indexentry{$*$ {\textbf  {lros}}!test\_lros@\texttt  {test\_lros}|hyperpage}{42}
+\indexentry{$*$ {\textbf  {simard}}!test\_lros@\texttt  {test\_lros}|hyperpage}{42}
+\indexentry{test\_pros@\texttt  {test\_pros}|hyperpage}{43}
+\indexentry{$*$ {\textbf  {datasets}}!test\_pros@\texttt  {test\_pros}|hyperpage}{43}
+\indexentry{$*$ {\textbf  {lros}}!test\_pros@\texttt  {test\_pros}|hyperpage}{43}
+\indexentry{$*$ {\textbf  {simard}}!test\_pros@\texttt  {test\_pros}|hyperpage}{43}
+\indexentry{test\_rast\_day01@\texttt  {test\_rast\_day01}|hyperpage}{43}
+\indexentry{$*$ {\textbf  {datasets}}!test\_rast\_day01@\texttt  {test\_rast\_day01}|hyperpage}{43}
+\indexentry{test\_rast\_day02@\texttt  {test\_rast\_day02}|hyperpage}{43}
+\indexentry{$*$ {\textbf  {datasets}}!test\_rast\_day02@\texttt  {test\_rast\_day02}|hyperpage}{43}
+\indexentry{test\_rast\_hour01@\texttt  {test\_rast\_hour01}|hyperpage}{44}
+\indexentry{$*$ {\textbf  {datasets}}!test\_rast\_hour01@\texttt  {test\_rast\_hour01}|hyperpage}{44}
+\indexentry{test\_rast\_hour02@\texttt  {test\_rast\_hour02}|hyperpage}{44}
+\indexentry{$*$ {\textbf  {datasets}}!test\_rast\_hour02@\texttt  {test\_rast\_hour02}|hyperpage}{44}
+\indexentry{test\_sdmc@\texttt  {test\_sdmc}|hyperpage}{44}
+\indexentry{$*$ {\textbf  {datasets}}!test\_sdmc@\texttt  {test\_sdmc}|hyperpage}{44}
+\indexentry{test\_wDC@\texttt  {test\_wDC}|hyperpage}{45}
+\indexentry{$*$ {\textbf  {datasets}}!test\_wDC@\texttt  {test\_wDC}|hyperpage}{45}
+\indexentry{test\_wDC\_fs@\texttt  {test\_wDC\_fs}|hyperpage}{45}
+\indexentry{$*$ {\textbf  {datasets}}!test\_wDC\_fs@\texttt  {test\_wDC\_fs}|hyperpage}{45}
+\indexentry{wDC@\texttt  {wDC}|hyperpage}{45}
+\indexentry{$*$ {\textbf  {methods}}!wDC@\texttt  {wDC}|hyperpage}{45}
+\indexentry{fwi@\texttt  {fwi}|hyperindexformat{\textit}}{46}
+\indexentry{fireSeason@\texttt  {fireSeason}|hyperindexformat{\textit}}{46}

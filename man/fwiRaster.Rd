@@ -21,7 +21,7 @@ are entered is not important.
 
 \tabular{lll}{ 
 \var{lat} \tab (recommended) \tab Latitude (decimal degree,
-default=55)\cr 
+__default=55__)\cr 
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
 \var{rh} \tab (required) \tab Relative humidity (\%)\cr 
 \var{ws} \tab
@@ -34,16 +34,13 @@ or a stack that contains raster maps of the three moisture codes calculated
 for the previous day, which will be used for the current day's calculation.
 Defaults are the standard initial values for FFMC, DMC, and DC defined as
 the following: 
-\tabular{ll}{ 
-\var{ffmc} \tab Fine Fuel Moisture Code (FFMC; unitless) of the previous 
-day. Default value is 85.\cr 
-\var{dmc} \tab Duff Moisture Code (DMC; unitless) of the previous day. 
-Default value is 6.\cr
-\var{dc} \tab Drought Code (DC; unitless) of the previous day. Default value
-is 15.\cr 
-\var{lat} \tab Latitude of the weather station (optional, default=55). 
-Latitude values are used to make\cr\tab day length adjustments
-in the function.\cr }}
+
+\tabular{lll}{ 
+\bold{Variable} \tab \bold{Description} \tab \bold{Default} \cr
+\var{ffmc} \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
+\var{dmc} \tab Previous day Duff Moisture Code (DMC; unitless)\tab 6 \cr
+\var{dc} \tab Previous Day Drought Code (DC; unitless) \tab 15\cr
+\var{lat} \tab Latitude of the weather station (\emph{Optional})\tab 55 \cr}}
 
 \item{mon}{Month of the year (integer 1~12, default=7). Month is used in
 latitude adjustment (\code{lat.adjust}), it is therefore recommended when

@@ -27,25 +27,50 @@
 #' important.
 #' 
 #' \tabular{lll}{ 
-#' \var{T1} \tab (required) \tab Time that the fire front crossed point 1. Time 
-#' entered in fractional \cr\tab\tab format. Output ROS will depend on the level
-#'  of precision entered \cr\tab\tab (minute, second, decisecond)\cr 
-#' \var{T2} \tab (required) \tab Time that the fire front crossed point 2. Time 
-#' entered in fractional \cr\tab\tab format. Output ROS will depend on the level
-#'  of precision entered \cr\tab\tab (minute, second, decisecond)\cr 
-#' \var{T3} \tab (required) \tab Time that the fire front crossed point 3. Time 
-#' entered in fractional \cr\tab\tab format. Output ROS will depend on the level 
-#' of precision entered \cr\tab\tab (minute, second, decisecond)\cr 
-#' \var{LengthT1T2}\tab (required) \tab Length between each pair of observation 
-#' points T1 and T2 (subscripts \cr\tab\tab denote time-ordered pairs). (meters)\cr 
-#' \var{LengthT2T3}\tab (required) \tab Length between each pair of observation 
-#' points T2 and T3 (subscripts \cr\tab\tab denote time-ordered pairs). (meters)\cr 
-#' \var{LengthT1T3}\tab (required) \tab Length between each pair of observation 
-#' points T1 and T3 (subscripts \cr\tab\tab denote time-ordered pairs). (meters)\cr 
-#' \var{BearingT1T2} \tab (required) \tab Reference bearing. For reference, 
-#' North = 0, West = -90, East = 90 (degrees)\cr 
-#' \var{BearingT1T3} \tab (required) \tab Reference bearing. For reference, 
-#' North = 0, West = -90, East = 90 (degrees)\cr }
+#' \var{T1} 
+#' \tab (required) 
+#' \tab Time that the fire front crossed point 1.\cr
+#' \tab\tab Time entered in fractional format. \cr
+#' \tab\tab Output ROS will depend on the level \cr
+#' \tab\tab of precision entered \cr
+#' \tab\tab (minute, second, decisecond)\cr 
+#' \var{T2} 
+#' \tab (required) 
+#' \tab Time that the fire front crossed point 2.\cr
+#' \tab\tab Time entered in fractional format. \cr
+#' \tab\tab Output ROS will depend on the level \cr
+#' \tab\tab of precision entered \cr
+#' \tab\tab (minute, second, decisecond)\cr 
+#' \var{T3} 
+#' \tab (required) 
+#' \tab Time that the fire front crossed point 3. \cr 
+#' \tab\tab Time entered in fractional format. \cr
+#' \tab\tab Output ROS will depend on the level \cr
+#' \tab\tab of precision entered \cr
+#' \tab\tab (minute, second, decisecond)\cr 
+#' \var{LengthT1T2}
+#' \tab (required) \tab Length between each pair of\cr
+#' \tab\tab observation points T1 and T2 (subscripts \cr
+#' \tab\tab denote time-ordered pairs). (meters)\cr 
+#' \var{LengthT2T3}
+#' \tab (required) 
+#' \tab Length between each pair of\cr
+#' \tab\tab observation points T2 and T3 (subscripts \cr
+#' \tab\tab denote time-ordered pairs). (meters)\cr 
+#' \var{LengthT1T3}
+#' \tab (required) 
+#' \tab Length between each pair of\cr
+#' \tab\tab observation points T1 and T3 (subscripts \cr
+#' \tab\tab denote time-ordered pairs). (meters)\cr 
+#' \var{BearingT1T2} 
+#' \tab (required) 
+#' \tab Reference bearing. For reference,\cr
+#' \tab\tab North = 0, West = -90, East = 90 (degrees)\cr 
+#' \var{BearingT1T3} 
+#' \tab (required) 
+#' \tab Reference bearing. For reference,\cr 
+#' \tab\tab North = 0, West = -90, East = 90 (degrees)\cr 
+#' }
 #' @return \code{lros} returns a dataframe which includes the rate of spread
 #' and spread direction. Output units depend on the user’s inputs for
 #' distance (typically meters) and time (seconds or minutes).

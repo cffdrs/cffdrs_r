@@ -11,7 +11,7 @@
 #' Forest Meteorology Symposium, Kalispell, MT Oct 13-15, 2009.
 #' Paper 3-2. \url{https://ams.confex.com/ams/pdfpapers/155930.pdf}
 #' 
-#' @param input (raster stack)
+#' @param input [raster stack]
 #' \tabular{lll}{
 #' \var{temp} \tab (required) \tab Temperature (centigrade)\cr
 #' \var{rh}   \tab (required) \tab Relative humidity (\%)\cr 
@@ -23,7 +23,7 @@
 #' @param roFL       Nominal fuel load of the fine fuel layer (kg/m^2 double, default=0.3)
 #' @param out        Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)
 #' 
-#' @return Returns a raster stack of either MC, GMFC, All, or GFMC and MC
+#' @return Returns a raster stack of either MC, GMFC, GFMC and MC or All
 #' 
 #' @export gfmcRaster
 #' 

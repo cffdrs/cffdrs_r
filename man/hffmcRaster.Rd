@@ -7,7 +7,7 @@
 hffmcRaster(weatherstream, ffmc_old = 85, time.step = 1, hourlyFWI = FALSE)
 }
 \arguments{
-\item{weatherstream}{A stack or brick containing rasterized hourly weather
+\item{weatherstream}{A raster stack or brick containing hourly weather
 observations. Variable names have to be the same as in the following list,
 but they are case insensitive. The order in which the input variables are
 entered is not required.
@@ -17,8 +17,9 @@ entered is not required.
 \var{rh} \tab (required) \tab Relative humidity (\%)\cr 
 \var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
 \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
-\var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly
-FWI. It is required when \code{hourlyFWI=TRUE}.\cr }}
+\var{bui} \tab (optional) 
+\tab Daily BUI value for the computation of hourly FWI.\cr
+\tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }}
 
 \item{ffmc_old}{A single value of FFMC or a raster of FFMC for the previous
 hour which will be used for the current hour's calculation. In some

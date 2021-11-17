@@ -1,8 +1,12 @@
 #' Distance at time t calculator
 #' 
-#' Calculate the Head fire spread distance at time t. In the documentation this variable is just "D".
+#' Calculate the Head fire spread distance at time t. In the documentation this 
+#' variable is just "D".
 #' 
-#' All variables names are laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). Development and Structure of the  Canadian Forest Fire Behavior Prediction System." Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' All variables names are laid out in the same manner as Forestry Canada Fire 
+#' Danger Group (FCFDG) (1992). Development and Structure of the  Canadian 
+#' Forest Fire Behavior Prediction System." Technical Report ST-X-3, 
+#' Forestry Canada, Ottawa, Ontario.
 #' 
 #' @param FUELTYPE The Fire Behaviour Prediction FuelType
 #' @param ROSeq    The predicted equilibrium rate of spread (m/min)

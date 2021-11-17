@@ -1,9 +1,14 @@
 #' Fire Behaviour Prediction System Calculation (hidden)
 #' 
-#' Fire Behavior Prediction System calculations. This is the primary function for calculating FBP for a single timestep. Not all equations are calculated within this function, but have been broken down further.
+#' Fire Behavior Prediction System calculations. This is the primary function 
+#' for calculating FBP for a single timestep. Not all equations are calculated 
+#' within this function, but have been broken down further.
 #' 
-#' @param input  Data frame of required and optional information needed to calculate FBP function. View the arguments section of the fbp manual (fbp.Rd) under "input" for the full listing of the required and optional inputs.
-#' @param output What fbp outputs to return to the user. Options are "Primary", "Secondary" and "All". _Default:_ "Primary"
+#' @param input  Data frame of required and optional information needed to 
+#' calculate FBP function. View the arguments section of the fbp manual (fbp.Rd) 
+#' under "input" for the full listing of the required and optional inputs.
+#' @param output What fbp outputs to return to the user. Options are "Primary", 
+#' "Secondary" and "All". _Default:_ "Primary"
 #' 
 #' @return output: Either Primary, Secondary, or all FBP outputs in a data.frame
 #' 
