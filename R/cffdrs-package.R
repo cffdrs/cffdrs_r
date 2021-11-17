@@ -63,7 +63,7 @@
 #' @author Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
 #' Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 #' 
-#' Maintainer: Alan Cantin \email{Alan.Cantin@@Canada.ca}
+#' Maintainer: Alan Cantin \email{Alan.Cantin@nrcan-rncan.gc.ca}
 #' @seealso \code{\link{fbp}}, \code{\link{fireSeason}}, \code{\link{fwi}},
 #' \code{\link{fwiRaster}}, \code{\link{gfmc}}, \code{\link{hffmc}},
 #' \code{\link{hffmcRaster}}, \code{\link{lros}}, \code{\link{pros}},
