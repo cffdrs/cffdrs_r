@@ -1,14 +1,24 @@
-library(cffdrs)
-  test_that("fbp", {
+test_that("fbp", {
+  library(cffdrs)
+  library(data.table)
   data("test_fbp")
-  expect_equal(as.character(fbp(test_fbp)), as.character(read.csv(".//tests/data/fbp_01.csv")))
-  expect_equal(as.character(fbp(test_fbp,output="Primary")), as.character(read.csv(".//tests/data/fbp_02.csv")))
-  expect_equal(as.character(fbp(test_fbp,"P")), as.character(read.csv(".//tests/data/fbp_03.csv")))
-  expect_equal(as.character(fbp(test_fbp,"Secondary")), as.character(read.csv(".//tests/data/fbp_04.csv")))
-  expect_equal(as.character(fbp(test_fbp,"S")), as.character(read.csv(".//tests/data/fbp_05.csv")))
-  expect_equal(as.character(fbp(test_fbp,"All")), as.character(read.csv(".//tests/data/fbp_06.csv")))
-  expect_equal(as.character(fbp(test_fbp,"A")), as.character(read.csv(".//tests/data/fbp_07.csv")))
-  expect_equal(as.character(fbp(test_fbp[7,])), as.character(read.csv(".//tests/data/fbp_08.csv")))
-  expect_equal(as.character(fbp(test_fbp[8:13,])), as.character(read.csv(".//tests/data/fbp_09.csv")))
-  expect_equal(as.character(fbp()), as.character(read.csv(".//tests/data/fbp_10.csv")))
+  test_columns <- function(actual, expected)
+  {
+    for (n in names(actual))
+    {
+      test_that(n, {
+        expect_equal(as.character(unlist(actual[n])), as.character(unlist(expected[n])))
+      })
+    }
+  }
+  test_columns(fbp(test_fbp), read.csv("../data/fbp_01.csv"))
+  test_columns(fbp(test_fbp,output="Primary"), read.csv("../data/fbp_02.csv"))
+  test_columns(fbp(test_fbp,"P"), read.csv("../data/fbp_03.csv"))
+  test_columns(fbp(test_fbp,"Secondary"), read.csv("../data/fbp_04.csv"))
+  test_columns(fbp(test_fbp,"S"), read.csv("../data/fbp_05.csv"))
+  test_columns(fbp(test_fbp,"All"), read.csv("../data/fbp_06.csv"))
+  test_columns(fbp(test_fbp,"A"), read.csv("../data/fbp_07.csv"))
+  test_columns(fbp(test_fbp[7,]), read.csv("../data/fbp_08.csv"))
+  test_columns(fbp(test_fbp[8:13,]), read.csv("../data/fbp_09.csv"))
+  test_columns(fbp(), read.csv("../data/fbp_10.csv"))
 })
