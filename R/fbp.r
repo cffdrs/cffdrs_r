@@ -227,6 +227,12 @@
 #' and structure of Prometheus: the Canadian wildland fire growth simulation
 #' Model. Nat. Resour. Can., Can. For. Serv., North. For. Cent., Edmonton, AB.
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
+#' 
+#' @importFrom parallel makeCluster stopCluster
+#' @importFrom doParallel doParallel registerDoParallel
+#' @importFrom foreach foreach registerDoSEQ
+#' @importFrom data.table rbindlist setkey
+#' 
 #' @keywords methods
 #' @examples
 #' 
@@ -290,10 +296,10 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
     #Set up parallel processing, if # of cores is entered
     if (cores > 1){
       #create and register a set of parallel R instances for foreach
-      cl <- makeCluster(cores)
-      registerDoParallel(cl)
+      cl <- parallel::makeCluster(cores)
+      doParallel::registerDoParallel(cl)
       #process in parallel
-      ca <- foreach(i=1:n, .packages='cffdrs') %dopar% {
+      ca <- foreach::foreach(i=1:n, .packages='cffdrs') %dopar% {
         if (i==n){
           #Run FBP functions
           to.ls<-.FBPcalc(input[((i-1)*m+1):nrow(input),],output=output)
@@ -304,8 +310,8 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
         to.ls
       }
       #close the processes
-      stopCluster(cl)
-      registerDoSEQ()
+      parallel::stopCluster(cl)
+      foreach::registerDoSEQ()
     #Run only a single process
     } else {
       ca <- vector('list',n)
@@ -321,8 +327,8 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
       }    
     }
     #create a single keyed data table
-    fullList <- rbindlist(ca)
-    setkey(fullList, ID)
+    fullList <- data.table::rbindlist(ca)
+    data.table::setkey(fullList, ID)
     #convert to data frame
     fullList <- as.data.frame(fullList)
   }

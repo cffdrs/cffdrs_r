@@ -255,6 +255,10 @@
 #' and structure of Prometheus: the Canadian wildland fire growth simulation
 #' Model. Nat. Resour. Can., Can. For. Serv., North. For. Cent., Edmonton, AB.
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
+#' 
+#' @importFrom foreach registerDoSEQ
+#' @importFrom raster stack rasterToPoints
+#' 
 #' @keywords methods
 #' @examples
 #' 
@@ -330,7 +334,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   output <- toupper(output)
   if("LAT" %in% names(input)){
     #register a sequential parallel backend
-    registerDoSEQ()
+    foreach::registerDoSEQ()
     #Get the specified raster cell values
     r <- .getValuesBlock_stackfix(input, nrows=nrow(input))
     #convert to data.frame
@@ -338,7 +342,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     names(r) <- names(input)
   }else{
     #Convert the raster to points and insert into a data.frame
-    r <- as.data.frame(rasterToPoints(input))
+    r <- as.data.frame(raster::rasterToPoints(input))
     #Rename the latitude field
     names(r)[names(r) == "y"] <- "LAT"
     #Check for valid latitude
@@ -392,7 +396,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     values(out) <- FBP[,primaryNames[1]]
     for (i in 2:length(primaryNames)){
       values(out0) <- FBP[, primaryNames[i]]
-      out <- stack(out,out0)
+      out <- raster::stack(out,out0)
     }
     names(out)<-primaryNames
   #If caller specified Secondary outputs, then create raster stack that contains

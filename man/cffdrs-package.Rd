@@ -48,7 +48,7 @@ FWI System calculation, whereas two functions, \code{\link{fbp}} and
 \code{\link{fbpRaster}} are used for FBP System calculation. One function,
 \code{\link{fireSeason}} determines fire season start and end dates based on
 weather. Two functions \code{\link{pros}} and \code{\link{lros}} are rate of
-spread and direction calculations across tiangles. These functions are not
+spread and direction calculations across triangles. These functions are not
 fully independent: their inputs overlap greatly and the users will have to
 provide FWI System outputs to calculate FBP System outputs. The fwi,
 fwiRaster, and sdmc functions calculate the outputs based on daily noon
@@ -185,6 +185,6 @@ Inf. Rep. NOR-X-417.
 Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
 Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 
-Maintainer: Alan Cantin \email{Alan.Cantin@Canada.ca}
+Maintainer: Alan Cantin \email{Alan.Cantin@nrcan-rncan.gc.ca}
 }
 \keyword{package}

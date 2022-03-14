@@ -25,6 +25,8 @@
 #' 
 #' @return Returns a raster stack of either MC, GMFC, GFMC and MC or All
 #' 
+#' @importFrom raster stack
+#' 
 #' @export gfmcRaster
 #' 
 
@@ -126,13 +128,13 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
 
   #Return requested 'out' type
   if (out=="ALL"){
-    return(stack(input, GFMC, MC))
+    return(raster::stack(input, GFMC, MC))
   } else if(out == "GFMC"){
     return(GFMC)
   } else if (out == "MC"){
     return(MC)
   } else { #GFMCandMC
-    return(stack( GFMC, MC))
+    return(raster::stack( GFMC, MC))
   }
 }
 
