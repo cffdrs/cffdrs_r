@@ -229,7 +229,7 @@
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 #' 
 #' @importFrom parallel makeCluster stopCluster
-#' @importFrom doParallel doParallel registerDoParallel
+#' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach registerDoSEQ
 #' @importFrom data.table rbindlist setkey
 #' 
