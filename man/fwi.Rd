@@ -183,7 +183,7 @@ init_suite<-fwi.out1[,c("FFMC","DMC","DC","LAT")]
 fwi.out4<-fwi(test_fwi,init=init_suite,batch=FALSE)
 
 ## (3) FWI for multiple weather stations over a period of time: 
-#Assuming there are 4 weather stations in the test dataset, and they are 
+# Assuming there are 4 weather stations in the test dataset, and they are 
 # ordered by day:
 test_fwi$day<-rep(1:(nrow(test_fwi)/4),each=4)
 test_fwi$id<-rep(1:4,length(unique(test_fwi$day)))
@@ -193,7 +193,7 @@ fwi(test_fwi)
 
 ## (4) Daylength adjustment:
 # Change latitude values where the monthly daylength adjustments
-are different from the standard ones
+# are different from the standard ones
 test_fwi$lat<-22
 # With daylength adjustment
 fwi(test_fwi)[1:3,]
