@@ -1,7 +1,7 @@
 test_that("fbp_01", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp)
+  actual <- fbp(test_fbp)
   expected <- read.csv("../data/fbp_01.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -9,7 +9,7 @@ test_that("fbp_01", {
 test_that("fbp_02", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,output="Primary")
+  actual <- fbp(test_fbp,output="Primary")
   expected <- read.csv("../data/fbp_02.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -17,7 +17,7 @@ test_that("fbp_02", {
 test_that("fbp_03", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,"P")
+  actual <- fbp(test_fbp,"P")
   expected <- read.csv("../data/fbp_03.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -25,7 +25,7 @@ test_that("fbp_03", {
 test_that("fbp_04", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,"Secondary")
+  actual <- fbp(test_fbp,"Secondary")
   expected <- read.csv("../data/fbp_04.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -33,7 +33,7 @@ test_that("fbp_04", {
 test_that("fbp_05", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,"S")
+  actual <- fbp(test_fbp,"S")
   expected <- read.csv("../data/fbp_05.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -41,7 +41,7 @@ test_that("fbp_05", {
 test_that("fbp_06", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,"All")
+  actual <- fbp(test_fbp,"All")
   expected <- read.csv("../data/fbp_06.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -49,7 +49,7 @@ test_that("fbp_06", {
 test_that("fbp_07", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp,"A")
+  actual <- fbp(test_fbp,"A")
   expected <- read.csv("../data/fbp_07.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -57,7 +57,7 @@ test_that("fbp_07", {
 test_that("fbp_08", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp[7,])
+  actual <- fbp(test_fbp[7,])
   expected <- read.csv("../data/fbp_08.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -65,7 +65,7 @@ test_that("fbp_08", {
 test_that("fbp_09", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction(test_fbp[8:13,])
+  actual <- fbp(test_fbp[8:13,])
   expected <- read.csv("../data/fbp_09.csv")
   test_columns(actual, expected)
   expect_equal(actual, expected)
@@ -73,7 +73,7 @@ test_that("fbp_09", {
 test_that("fbp_10", {
   library(data.table)
   test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
-  actual <- FireBehaviourPrediction()
+  actual <- fbp()
   expected <- read.csv("../data/fbp_10.csv")
   expected$ID <- as.character(expected$ID)
   test_columns(actual, expected)

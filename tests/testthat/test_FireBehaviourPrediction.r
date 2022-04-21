@@ -7,10 +7,10 @@ test_that("FireBehaviourPrediction_test_fbp", {
   test_fbp$CBH <- as.numeric(test_fbp$CBH)
   test_fbp$CFL <- as.numeric(test_fbp$CFL)
   checkResults('FireBehaviourPrediction_test_fbp',
-               FireBehaviourPrediction(test_fbp, "A"))
+               fbp(test_fbp, "A"))
 })
 test_that("FireBehaviourPrediction", {
   checkData('FireBehaviourPrediction',
-            fctOnInput(FireBehaviourPrediction),
+            fctOnInput(fbp),
             FBP_ARGS)
 })
