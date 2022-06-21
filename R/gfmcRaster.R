@@ -78,7 +78,7 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
   MC <- NULL
   #iterate through timesteps
   #Eq. 13 - Calculate previous moisture code
-  MCold <- 147.2772 * ((101 - GFMCold) / (59.5 + GFMCold))
+  MCold <- 147.27723 * ((101 - GFMCold) / (59.5 + GFMCold))
   #Eq. 11 - Calculate the moisture content of the layer in % after rainfall
   MCr <- MCold
   MCr[prec>0] <- MCold[prec>0] + 100 * (prec[prec>0] / roFL)

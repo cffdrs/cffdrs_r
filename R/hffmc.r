@@ -52,6 +52,13 @@
 #' accurately; this code value corresponds to a moisture content of about 16\%
 #' in typical pine litter fuels.
 #' 
+#' Typically this dataframe also contains date and
+#' hour fields so outputs can be associated with a specific day and time,
+#' however these fields are not used in the calculations.  If multiple weather
+#' stations are being used, a weather station ID field is typically included as
+#' well, though this is simply for bookkeeping purposes and does not affect the
+#' calculation.
+#' 
 #' @param weatherstream A dataframe containing input variables of hourly
 #' weather observations. It is important that variable names have to be the
 #' same as in the following list, but they are case insensitive. The order in
@@ -65,12 +72,6 @@
 #' \var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr 
 #' \var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly 
 #' FWI. It is required when \code{hourlyFWI=TRUE}.\cr } 
-#' Typically this dataframe also contains date and
-#' hour fields so outputs can be associated with a specific day and time,
-#' however these fields are not used in the calculations.  If multiple weather
-#' stations are being used, a weather station ID field is typically included as
-#' well, though this is simply for bookkeeping purposes and does not affect the
-#' calculation.
 #' @param ffmc_old Initial FFMC. At the start of calculations at a particular
 #' station there is a need to provide an estimate of the FFMC in the previous
 #' timestep; this is because the FFMC is, in essence, a bookkeeping system for

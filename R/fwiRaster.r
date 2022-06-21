@@ -182,7 +182,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     lat <- input$lat
   }else {
     lat <- temp
-    values(lat) <- 55
+    raster::values(lat) <- 55
   }
   
   if (!exists("temp") | is.null(temp)) 
@@ -208,9 +208,9 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
       names(init)<-c('ffmc', 'dmc', 'dc')
     }
     ffmc_yda <- dmc_yda <- dc_yda <- temp
-    values(ffmc_yda) <- init[['ffmc']]
-    values(dmc_yda) <- init[['dmc']]
-    values(dc_yda) <- init[['dc']]
+    raster::values(ffmc_yda) <- init[['ffmc']]
+    raster::values(dmc_yda) <- init[['dmc']]
+    raster::values(dc_yda) <- init[['dc']]
   } else {
     ffmc_yda <- init$ffmc
     dmc_yda  <- init$dmc
@@ -222,7 +222,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
   #Eq. 1
-  wmo <- 147.2 * (101 - ffmc_yda)/(59.5 + ffmc_yda)
+  wmo <- 147.27723 * (101 - ffmc_yda)/(59.5 + ffmc_yda)
   #Eq. 2 Rain reduction to allow for loss in overhead canopy
   ra1 <- prec
   ra1[ra1 <= 0.5] <- NA
@@ -396,7 +396,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #Eq. 24 - Wind Effect
   fW <- exp(0.05039 * ws)
   #Eq. 10 - Moisture content
-  fm <- 147.2 * (101 - ffmc) / (59.5 + ffmc)
+  fm <- 147.27723 * (101 - ffmc) / (59.5 + ffmc)
   #Eq. 25 - Fine Fuel Moisture
   fF <- 91.9 * exp(-0.1386 * fm) * (1 + (fm^5.31) / 49300000)
   #Eq. 26 - Spread Index Equation

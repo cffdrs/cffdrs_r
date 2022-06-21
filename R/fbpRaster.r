@@ -380,10 +380,10 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #  only those outputs
   if (!is.null(select)){
     out <- out0 <- input[[1]]
-    values(out) <- FBP[, select[1]]
+    raster::values(out) <- FBP[, select[1]]
     if (length(select) > 1){
       for (i in 2:length(select)){
-        values(out0) <- FBP[,select[i]]
+        raster::values(out0) <- FBP[,select[i]]
         out <- stack(out, out0)
       }
     }
@@ -393,9 +393,9 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   }else if (output == "PRIMARY" | output == "P") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
     out <- out0 <- input[[1]]
-    values(out) <- FBP[,primaryNames[1]]
+    raster::values(out) <- FBP[,primaryNames[1]]
     for (i in 2:length(primaryNames)){
-      values(out0) <- FBP[, primaryNames[i]]
+      raster::values(out0) <- FBP[, primaryNames[i]]
       out <- raster::stack(out,out0)
     }
     names(out)<-primaryNames
@@ -403,10 +403,10 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #  only secondary outputs
   }else if(output == "SECONDARY" | output == "S") {
     out <- out0 <- input[[1]]
-    values(out) <- FBP[, secondaryNames[1]]
+    raster::values(out) <- FBP[, secondaryNames[1]]
     for (i in 2:length(secondaryNames)){
-      values(out0) <- FBP[, secondaryNames[i]]
-      out <- stack(out, out0)
+      raster::values(out0) <- FBP[, secondaryNames[i]]
+      out <- raster::stack(out, out0)
     }
     names(out)<-secondaryNames
   #If caller specified All outputs, then create a raster stack that contains
@@ -414,10 +414,10 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   }else if(output == "ALL" | output == "A") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
     out <- out0 <- input[[1]]
-    values(out) <- FBP[, allNames[1]]
+    raster::values(out) <- FBP[, allNames[1]]
     for (i in 2:length(allNames)){
-      values(out0) <- FBP[, allNames[i]]
-      out <- stack(out, out0)
+      raster::values(out0) <- FBP[, allNames[i]]
+      out <- raster::stack(out, out0)
     }
     names(out) <- allNames
   }

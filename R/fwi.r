@@ -397,8 +397,8 @@ fwi <- function(input, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55),
     ###########################################################################
     # Duff Moisture Code (DMC)
     ###########################################################################
-    dmc1 = .dmcCalc(dmc_yda, temp[k], rh[k], prec[k], lat[k], mon[k], 
-                    lat.adjust)
+    dmc1 = Vectorize(.dmcCalc(dmc_yda, temp[k], rh[k], prec[k], lat[k], mon[k], 
+                    lat.adjust))
     
     ###########################################################################
     # Drought Code (DC)

@@ -226,7 +226,7 @@ gfmc <- function(input, GFMCold = 85, batch = TRUE, time.step = 1, roFL = 0.3,
     #k is the data for all stations by time step
     k <- (n * (i - 1) + 1):(n * i)
     #Eq. 13 - Calculate previous moisture code
-    MCold <- 147.2772 * ((101 - GFMCold) / (59.5 + GFMCold))
+    MCold <- 147.27723 * ((101 - GFMCold) / (59.5 + GFMCold))
     #Eq. 11 - Calculate the moisture content of the layer in % after rainfall
     MCr <- ifelse(prec[k] > 0, MCold + 100 * (prec[k] / roFL), MCold)
     #Constrain to 250

@@ -26,13 +26,7 @@ which the input variables are entered is not important.
 \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
 \var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr 
 \var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly 
-FWI. It is required when \code{hourlyFWI=TRUE}.\cr } 
-Typically this dataframe also contains date and
-hour fields so outputs can be associated with a specific day and time,
-however these fields are not used in the calculations.  If multiple weather
-stations are being used, a weather station ID field is typically included as
-well, though this is simply for bookkeeping purposes and does not affect the
-calculation.}
+FWI. It is required when \code{hourlyFWI=TRUE}.\cr }}
 
 \item{ffmc_old}{Initial FFMC. At the start of calculations at a particular
 station there is a need to provide an estimate of the FFMC in the previous
@@ -122,6 +116,13 @@ calculations at a station this previous hours FFMC must be estimated. It is
 typical to use a value of 85 when this value cannot be estimated more
 accurately; this code value corresponds to a moisture content of about 16\%
 in typical pine litter fuels.
+
+Typically this dataframe also contains date and
+hour fields so outputs can be associated with a specific day and time,
+however these fields are not used in the calculations.  If multiple weather
+stations are being used, a weather station ID field is typically included as
+well, though this is simply for bookkeeping purposes and does not affect the
+calculation.
 }
 \examples{
 
