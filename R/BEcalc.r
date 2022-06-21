@@ -1,6 +1,6 @@
 #' Build Up Effect Calculator
 #' 
-#' Computes the Buildup Effect on Fire Spread Rate. All variables names are 
+#' @description Computes the Buildup Effect on Fire Spread Rate. All variables names are 
 #' laid out in the same manner as Forestry Canada Fire Danger Group (FCFDG) 
 #' (1992). 
 #' 

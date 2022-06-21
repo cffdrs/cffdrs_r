@@ -1,6 +1,6 @@
 #' Length-to-Breadth ratio
 #' 
-#' Computes the Length to Breadth ratio of an elliptically shaped fire. 
+#' @description Computes the Length to Breadth ratio of an elliptically shaped fire. 
 #' Equations are from listed FCFDG (1992) except for errata 80 from 
 #' Wotton et. al. (2009).
 #' 

@@ -1,6 +1,6 @@
 #' Slope Adjusted wind speed or slope direction of spread calculation
 #' 
-#'   Calculate the net effective windspeed (WSV), the net effective wind 
+#'   @description Calculate the net effective windspeed (WSV), the net effective wind 
 #'   direction (RAZ) or the wind azimuth (WAZ).
 #'
 #'   All variables names are laid out in the same manner as FCFDG (1992) and

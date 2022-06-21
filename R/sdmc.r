@@ -1,6 +1,6 @@
 #' Sheltered Duff Moisture Code
 #' 
-#' \code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et al., 2005)
+#' @description \code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et al., 2005)
 #' based on daily noon weather observations of temperature, relative humidity,
 #' wind speed, 24-hour rainfall, and a previous day's calculated or estimated
 #' value of sDMC. This function calculates sDMC for either one weather station

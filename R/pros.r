@@ -1,6 +1,6 @@
 #' Point-based input for Simard Rate of Spread and Direction
 #' 
-#' \code{pros} is used to calculate the rate of spread and direction given one
+#' @description \code{pros} is used to calculate the rate of spread and direction given one
 #' set of three point-based observations of fire arrival time. The function
 #' requires that the user specify the time that the fire crossed each point,
 #' along with the latitude and longitude of each observational point. This

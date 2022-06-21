@@ -1,6 +1,6 @@
 #' Distance at time t calculator
 #' 
-#' Calculate the Head fire spread distance at time t. In the documentation this 
+#' @description Calculate the Head fire spread distance at time t. In the documentation this 
 #' variable is just "D".
 #' 
 #' All variables names are laid out in the same manner as Forestry Canada Fire 

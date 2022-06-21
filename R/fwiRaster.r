@@ -1,6 +1,6 @@
 #' Raster-based Fire Weather Index System
 #' 
-#' \code{fwiRaster} is used to calculate the outputs of the Canadian Forest
+#' @description \code{fwiRaster} is used to calculate the outputs of the Canadian Forest
 #' Fire Weather Index (FWI) System for one day based on noon local standard
 #' time (LST) weather observations of temperature, relative humidity, wind
 #' speed, and 24-hour rainfall, as well as the previous day's fuel moisture

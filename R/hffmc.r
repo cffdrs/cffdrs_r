@@ -1,6 +1,6 @@
 #' Hourly Fine Fuel Moisture Code
 #' 
-#' \code{hffmc} is used to calculate hourly Fine Fuel Moisture Code (FFMC) and
+#' @description \code{hffmc} is used to calculate hourly Fine Fuel Moisture Code (FFMC) and
 #' is based on a calculation routine first described in detail by Van Wagner
 #' (1977) and which has been updated in minor ways by the Canadian Forest
 #' Service to have it agree with the calculation methodology for the daily FFMC
@@ -71,7 +71,8 @@
 #' \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
 #' \var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr 
 #' \var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly 
-#' FWI. It is required when \code{hourlyFWI=TRUE}.\cr } 
+#' FWI. \cr
+#' \tab\tab It is required when \code{hourlyFWI=TRUE}.\cr } 
 #' @param ffmc_old Initial FFMC. At the start of calculations at a particular
 #' station there is a need to provide an estimate of the FFMC in the previous
 #' timestep; this is because the FFMC is, in essence, a bookkeeping system for

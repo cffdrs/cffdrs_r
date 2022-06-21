@@ -1,6 +1,6 @@
 #' Length-to-Breadth ratio at time t
 #' 
-#' Computes the Length to Breadth ratio of an elliptically shaped fire at
+#' @description Computes the Length to Breadth ratio of an elliptically shaped fire at
 #' elapsed time since ignition. Equations are from listed FCFDG (1992) and
 #' Wotton et. al. (2009), and are marked as such.
 #' 

@@ -1,6 +1,6 @@
 #' Foliar Moisture Content Calculator
 #' 
-#' Calculate Foliar Moisture Content on a specified day.
+#' @description Calculate Foliar Moisture Content on a specified day.
 #' All variables names are laid out in the same manner as Forestry Canada
 #' Fire Danger Group (FCFDG) (1992). Development and Structure of the 
 #' Canadian Forest Fire Behavior Prediction System." Technical Report 

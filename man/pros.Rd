@@ -45,8 +45,7 @@ set of three point-based observations of fire arrival time. The function
 requires that the user specify the time that the fire crossed each point,
 along with the latitude and longitude of each observational point. This
 function allows quick input of a dataframe specifying one or many triangles.
-}
-\details{
+
 \code{pros} allows R users to calculate the rate of spread and direction of
 a fire across a triangle, given three time measurements and details about
 the orientation and distance between observational points. The algorithm is

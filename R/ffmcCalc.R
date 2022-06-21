@@ -1,7 +1,7 @@
 
 #' Fine Fuel Moisture Code Calculation
 #' 
-#' Fine Fuel Moisture Code Calculation. All code is based on a C code library 
+#' @description Fine Fuel Moisture Code Calculation. All code is based on a C code library 
 #' that was written by Canadian Forest Service Employees, which was originally 
 #' based on the Fortran code listed in the reference below. All equations in 
 #' this code refer to that document.

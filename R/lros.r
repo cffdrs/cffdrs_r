@@ -1,6 +1,6 @@
 #' Line-based input for Simard Rate of Spread and Direction
 #' 
-#' \code{lros} is used to calculate the rate of spread and direction given one
+#' @description \code{lros} is used to calculate the rate of spread and direction given one
 #' set of three point-based observations of fire arrival time. The function
 #' requires that the user specify the time that the fire crossed each point,
 #' along with the measured lengths between each pair of observational points,

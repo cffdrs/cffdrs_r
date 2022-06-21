@@ -47,8 +47,7 @@ wind speed, 24-hour rainfall, and a previous day's calculated or estimated
 value of sDMC. This function calculates sDMC for either one weather station
 or for multiple weather stations over the duration of the daily weather data
 set, typically over a fire season.
-}
-\details{
+
 The Duff Moisture Code (DMC) component of the Canadian Forest Fire Weather
 Index (FWI) System tracks moisture content of the forest floor away from the
 sheltering influences of overstory trees.  This sheltered Duff Moisture Code

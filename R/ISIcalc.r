@@ -1,6 +1,6 @@
 #' Initial Spread Index Calculator
 #' 
-#' Computes the Initial Spread Index From the FWI System. Equations are from
+#' @description Computes the Initial Spread Index From the FWI System. Equations are from
 #' Van Wagner (1985) as listed below, except for the modification for fbp
 #' takene from FCFDG (1992).
 #' 

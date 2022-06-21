@@ -1,6 +1,6 @@
 #' Rate of spread at time t calculation
 #' 
-#' Computes the Rate of Spread prediction based on fuel type and FWI
+#' @description Computes the Rate of Spread prediction based on fuel type and FWI
 #' conditions at elapsed time since ignition. Equations are from listed 
 #' FCFDG (1992).
 #' 

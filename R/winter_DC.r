@@ -1,6 +1,6 @@
 #' Overwintering Drought Code
 #' 
-#' \code{wDC} calculates an initial or season starting Drought Code (DC) value
+#' @description \code{wDC} calculates an initial or season starting Drought Code (DC) value
 #' based on a standard method of overwintering the Drought Code (Lawson and
 #' Armitage 2008).  This method uses the final DC value from previous year,
 #' over winter precipitation and estimates of how much over-winter

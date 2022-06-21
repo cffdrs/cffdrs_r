@@ -91,8 +91,7 @@ local standard time (LST) weather observations of temperature, relative
 humidity, wind speed, and 24-hour rainfall, as well as the previous day's
 fuel moisture conditions. This function could be used for either one weather
 station or for multiple weather stations.
-}
-\details{
+
 The Canadian Forest Fire Weather Index (FWI) System is a major subsystem of
 the Canadian Forest Fire Danger Rating System, which also includes Canadian
 Forest Fire Behavior Prediction (FBP) System. The modern FWI System was

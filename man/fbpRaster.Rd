@@ -168,8 +168,7 @@ time of the fire, and two associated outputs from the Fire Weather Index
 System, the Fine Fuel Moisture Content (FFMC) and Buildup Index (BUI).
 Raster-based FWI System components can be calculated with the sister
 function \code{\link{fwiRaster}}.
-}
-\details{
+
 The Canadian Forest Fire Behavior Prediction (FBP) System (Forestry Canada
 Fire Danger Group 1992) is a subsystem of the Canadian Forest Fire Danger
 Rating System, which also includes the Canadian Forest Fire Weather Index

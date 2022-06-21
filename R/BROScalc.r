@@ -1,6 +1,6 @@
 #' Back Fire Rate of Spread Calculator
 #' 
-#' Calculate the Back Fire Spread Rate. All variables names are laid out in the 
+#' @description Calculate the Back Fire Spread Rate. All variables names are laid out in the 
 #' same manner as Forestry Canada Fire Danger Group (FCFDG) (1992). 
 #' 
 #' @references \url{https://cfs.nrcan.gc.ca/publications/download-pdf/10068} 

@@ -27,8 +27,7 @@ Armitage 2008).  This method uses the final DC value from previous year,
 over winter precipitation and estimates of how much over-winter
 precipitation 'refills' the moisture in this fuel layer. This function could
 be used for either one weather station or for multiple weather stations.
-}
-\details{
+
 Of the three fuel moisture codes (i.e. FFMC, DMC and DC) making up the FWI
 System, only the DC needs to be considered in terms of its values carrying
 over from one fire season to the next.  In Canada both the FFMC and the DMC

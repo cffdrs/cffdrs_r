@@ -1,6 +1,6 @@
 #' Rate of spread at a point along the perimeter calculator
 #' 
-#' Computes the Rate of Spread at any point along the perimeter of an 
+#' @description Computes the Rate of Spread at any point along the perimeter of an 
 #' elliptically shaped fire. Equations are from Wotton et. al. (2009).
 #' 
 #' Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to

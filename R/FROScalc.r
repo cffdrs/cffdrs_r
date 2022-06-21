@@ -1,6 +1,6 @@
 #' Flank Fire Rate of Spread Calculator
 #' 
-#' Calculate the Flank Fire Spread Rate. 
+#' @description Calculate the Flank Fire Spread Rate. 
 #' 
 #' All variables names are laid out in the same manner as Forestry Canada 
 #' Fire Danger Group (FCFDG) (1992). Development and Structure of the 

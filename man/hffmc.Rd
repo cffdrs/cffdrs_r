@@ -26,7 +26,8 @@ which the input variables are entered is not important.
 \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
 \var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr 
 \var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly 
-FWI. It is required when \code{hourlyFWI=TRUE}.\cr }}
+FWI. \cr
+\tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }}
 
 \item{ffmc_old}{Initial FFMC. At the start of calculations at a particular
 station there is a need to provide an estimate of the FFMC in the previous
@@ -78,8 +79,7 @@ essence a bookkeeping system for moisture content and thus it needs to use
 the last time.step's value of FFMC in its calculation as well.  This
 function could be used for either one weather station or for multiple
 weather stations.
-}
-\details{
+
 The hourly FFMC is very similar in its structure and calculation to the
 Canadian Forest Fire Weather Index System's daily FFMC (\code{\link{fwi}})
 but has an altered drying and wetting rate which more realistically reflects

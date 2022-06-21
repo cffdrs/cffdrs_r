@@ -51,8 +51,7 @@ code is needed.  The FFMC is in essence a bookkeeping system for moisture
 content and thus it needs to use the last timestep's value of FFMC in its
 calculation. \code{hffmcRaster} takes rasterized inputs and generates raster
 maps as outputs.
-}
-\details{
+
 The hourly FFMC is very similar in its structure and calculation to the
 Canadian Forest Fire Weather Index System's daily FFMC (\code{\link{fwi}})
 but has an altered drying and wetting rate which more realistically reflects

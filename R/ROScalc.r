@@ -1,7 +1,7 @@
 #' Rate of Spread Calculation
 #' 
 #' 
-#' Computes the Rate of Spread prediction based on fuel type and FWI
+#' @description Computes the Rate of Spread prediction based on fuel type and FWI
 #' conditions. Equations are from listed FCFDG (1992) and Wotton et. al. 
 #' (2009), and are marked as such.
 #' 

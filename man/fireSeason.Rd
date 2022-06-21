@@ -57,8 +57,7 @@ a given weather station. The current method used in the function is based on
 three consecutive daily maximum temperature thresholds (Wotton and Flannigan
 1993, Lawson and Armitage 2008). This function process input from a single
 weather station.
-}
-\details{
+
 An important aspect to consider when calculating Fire Weather Index (FWI)
 System variables is a definition of the fire season start and end dates
 (Lawson and Armitage 2008). If a user starts calculations on a fire season

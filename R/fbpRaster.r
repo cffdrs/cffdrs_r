@@ -1,6 +1,6 @@
 #' Raster-based Fire Behavior Prediction System Calculations
 #' 
-#' \code{fbpRaster} calculates the outputs from the Canadian Forest Fire
+#' @description \code{fbpRaster} calculates the outputs from the Canadian Forest Fire
 #' Behavior Prediction (FBP) System (Forestry Canada Fire Danger Group 1992)
 #' based on raster format fire weather and fuel moisture conditions (from the
 #' Canadian Forest Fire Weather Index (FWI) System (Van Wagner 1987)), fuel

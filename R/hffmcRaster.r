@@ -1,6 +1,6 @@
 #' Raster-based Hourly Fine Fuel Moisture Code
 #' 
-#' \code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code
+#' @description \code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code
 #' (FFMC) based on hourly weather observations of screen level (~1.4 m)
 #' temperature, relative humidity, 10 m wind speed, and 1-hour rainfall. This
 #' implementation of the function includes an optional timestep input which is
@@ -60,6 +60,7 @@
 #' \var{bui} \tab (optional) 
 #' \tab Daily BUI value for the computation of hourly FWI.\cr
 #' \tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }
+#' 
 #' @param ffmc_old A single value of FFMC or a raster of FFMC for the previous
 #' hour which will be used for the current hour's calculation. In some
 #' situations, there are no previous-hourly FFMC values to calculate the

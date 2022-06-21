@@ -71,8 +71,7 @@ requires that the user specify the time that the fire crossed each point,
 along with the measured lengths between each pair of observational points,
 and a reference bearing (one specified side of the triangle). This function
 allows quick input of a dataframe specifying one or many triangles.
-}
-\details{
+
 \code{lros} Allows R users to calculate the rate of spread and direction of
 a fire across a triangle, given three time measurements and details about
 the orientation and distance between observational points. The algorithm is

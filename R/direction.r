@@ -1,6 +1,6 @@
 #' Direction definer
 #' 
-#' New DIRECTION function to determine clockwise or counter-clockwise 
+#' @description New DIRECTION function to determine clockwise or counter-clockwise 
 #' "interpretation" 
 #' 
 #' @param bearingT1T2 Bearing between T1 and T2

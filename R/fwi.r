@@ -1,6 +1,6 @@
 #' Fire Weather Index System
 #' 
-#' \code{fwi} is used to calculate the outputs of the Canadian Forest Fire
+#' @description \code{fwi} is used to calculate the outputs of the Canadian Forest Fire
 #' Weather Index (FWI) System for one day or one fire season based on noon
 #' local standard time (LST) weather observations of temperature, relative
 #' humidity, wind speed, and 24-hour rainfall, as well as the previous day's

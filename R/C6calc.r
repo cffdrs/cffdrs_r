@@ -1,6 +1,6 @@
 #' C-6 Conifer Plantaion Fire Spread Calculator
 #'
-#' Calculate c6 (Conifer plantation) Fire Spread. C6 is a special case, and thus
+#' @description Calculate c6 (Conifer plantation) Fire Spread. C6 is a special case, and thus
 #'  has it's own function. To calculate C6 fire spread, this function 
 #'  also calculates and can return ROS, CFB, RSC, or RSI by specifying in 
 #'  the option parameter.

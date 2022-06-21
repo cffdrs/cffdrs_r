@@ -1,6 +1,6 @@
 #' Grass Fuel Moisture Code
 #' 
-#' \code{gfmc} calculates both the moisture content of the surface of a fully
+#' @description \code{gfmc} calculates both the moisture content of the surface of a fully
 #' cured matted grass layer and also an equivalent Grass Fuel Moisture Code
 #' (gfmc) (Wotton, 2009) to create a parallel with the hourly ffmc (see the
 #' \code{\link{fwi}} and \code{\link{hffmc}}functions). The calculation is

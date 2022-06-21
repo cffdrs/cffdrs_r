@@ -1,6 +1,6 @@
 #' Get Values Block Stackfix
 #' 
-#' This function is originally from spatial.tools package which
+#' @description This function is originally from spatial.tools package which
 #' has been archived. We do not accept responsibility for writing
 #' this function and all IP belongs to the previous maintainers
 #' of that package. If that pacakage is revived we will revert

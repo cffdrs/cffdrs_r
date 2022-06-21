@@ -1,6 +1,6 @@
 #' Surface Fuel Consumption Calculator
 #' 
-#'   Computes the Surface Fuel Consumption by Fuel Type.
+#'   @description Computes the Surface Fuel Consumption by Fuel Type.
 #'   All variables names are laid out in the same manner as FCFDG (1992) or
 #'   Wotton et. al (2009) 
 #'   

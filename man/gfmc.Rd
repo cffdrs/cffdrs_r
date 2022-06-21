@@ -71,8 +71,7 @@ based on hourly (or sub-hourly) weather observations of temperature,
 relative humidity, wind speed, rainfall, and solar radiation. The user must
 also estimate an initial value of the gfmc for the layer. This function
 could be used for either one weather station or multiple weather stations.
-}
-\details{
+
 The Canadian Forest Fire Danger Rating System (CFFDRS) is used throughout
 Canada, and in a number of countries throughout the world, for estimating
 fire potential in wildland fuels. This new Grass Fuel Moisture Code (GFMC)

@@ -1,6 +1,6 @@
 #' Fire Behavior Prediction System function
 #' 
-#' \code{fbp} calculates the outputs from the Canadian Forest Fire Behavior
+#' @description \code{fbp} calculates the outputs from the Canadian Forest Fire Behavior
 #' Prediction (FBP) System (Forestry Canada Fire Danger Group 1992) based on
 #' given fire weather and fuel moisture conditions (from the Canadian Forest
 #' Fire Weather Index (FWI) System (Van Wagner 1987)), fuel type, date, and

@@ -1,6 +1,6 @@
 #' Crown Fraction Burned Calculator
 #' 
-#' Calculate Calculate Crown Fraction Burned. To calculate CFB, we also need to 
+#' @description Calculate Calculate Crown Fraction Burned. To calculate CFB, we also need to 
 #' calculate Critical surface intensity (CSI), and Surface fire rate of spread 
 #' (RSO). The value of each of these equations can be returned to the calling 
 #' function without unecessary additional calculations.

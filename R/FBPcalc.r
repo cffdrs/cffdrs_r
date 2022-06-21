@@ -1,6 +1,6 @@
 #' Fire Behaviour Prediction System Calculation (hidden)
 #' 
-#' Fire Behavior Prediction System calculations. This is the primary function 
+#' @description Fire Behavior Prediction System calculations. This is the primary function 
 #' for calculating FBP for a single timestep. Not all equations are calculated 
 #' within this function, but have been broken down further.
 #' 
