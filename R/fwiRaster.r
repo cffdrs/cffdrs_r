@@ -120,6 +120,7 @@
 #' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
 #' 
 #' @importFrom raster mask cover overlay stack
+#' @import rgdal
 #' 
 #' @keywords methods
 #' 
