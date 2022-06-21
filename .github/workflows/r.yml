@@ -32,7 +32,7 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install gdal & proj (MacOS)
         run: brew install gdal proj
-        if: matrix.r-version == 3.5 && matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-latest'
       - name: Install gdal (Linux)
         run: sudo apt-get install gdal-bin libgdal-dev
         if: matrix.os == 'ubuntu-18.04'
