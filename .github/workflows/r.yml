@@ -42,7 +42,7 @@ jobs:
           options(configure.args = c("rgdal" = spat_config))
           install.packages(c("rgdal"), type = "source")
         shell: Rscript {0}
-        if: matrix.r-version == 3.5 || matrix.os == 'ubuntu-18.04'
+        if: matrix.r-version == 3.5 || matrix.os == 'ubuntu-18.04' || matrix.os == 'macos-latest'
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
