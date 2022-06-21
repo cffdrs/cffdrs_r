@@ -1,17 +1,17 @@
 Package: cffdrs
 Type: Package
 Title: Canadian Forest Fire Danger Rating System
-Version: 1.8.16
+Version: 1.9.0
 Date: 2020-05-26
 Authors@R: c(
-    person("Xianli", "Wang", email = "xianli.wang@nrcan-rncan.gc.ca", role = c("cre", "aut")),
-    person("Alan", "Cantin", email = "alan.cantin@nrcan-rncan.gc.ca", role = "aut"),
-    person("Marc-André", "Parisien", email = "marc-andre.parisien@nrcan-rncan.gc.ca", role = "aut"),
-    person("Mike", "Wotton", email = "mike.wotton@nrcan-rncan.gc.ca", role = "aut"),
+    person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role = c("cre", "aut")),
+    person("Alan", "Cantin", email = "Alan.Cantin@nrcan-rncan.gc.ca", role = "aut"),
+    person("Marc-André", "Parisien", email = "Marc-Andre.Parisien@nrcan-rncan.gc.ca", role = "aut"),
+    person("Mike", "Wotton", email = "Mike.Wotton@nrcan-rncan.gc.ca", role = "aut"),
     person("Kerry", "Anderson", email = "", role = "aut"),
-    person("Brett", "Moore", email = "brett.moore@nrcan-rncan.gc.ca", role = "aut"),
-    person("Tom", "Schiks", email = "tom.schiks@mail.utoronto.ca", role = "aut"),
-    person("Mike", "Flannigan", email = "mike.flannigan@ualberta.ca", role = "aut")
+    person("Brett", "Moore", email = "Brett.Moore@nrcan-rncan.gc.ca", role = "aut"),
+    person("Tom", "Schiks", email = "Tom.Schiks@ontario.ca", role = "aut"),
+    person("Mike", "Flannigan", email = "MFlannigan@tru.ca", role = "aut")
     )
 Maintainer: Alan Cantin <Alan.Cantin@Canada.ca>
 Depends:
