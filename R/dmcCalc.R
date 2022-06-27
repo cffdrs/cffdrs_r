@@ -64,7 +64,7 @@
   }
 
   #Constrain P
-  pr <- if(prec <= 1.5) {dmc_yda} else {
+  pr <- ifelse(prec <= 1.5,dmc_yda, {
     ra <- prec
     #Eq. 11 - Net rain amount
     rw <- 0.92 * ra - 1.27
@@ -81,7 +81,7 @@
 
     #Alteration to Eq. 15 to calculate more accurately
     43.43 * (5.6348 - log(wmr - 20))
-    }
+    })
 
   pr <- ifelse(pr < 0, 0, pr)
   #Calculate final P (DMC)
