@@ -79,3 +79,17 @@ test_that("fbp_10", {
   test_columns(actual, expected)
   expect_equal(actual, expected)
 })
+test_that("fbp_11", {
+  library(data.table)
+  test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
+  non_fuel <- copy(test_fbp)
+  non_fuel$FuelType <- "NF"
+  checkResults("fbp_11", fbp(non_fuel,"All"))
+})
+test_that("fbp_12", {
+  library(data.table)
+  test_fbp <- read.csv('../../data/test_fbp.csv', sep=';')
+  water <- copy(test_fbp)
+  water$FuelType <- "WA"
+  checkResults("fbp_12", fbp(water,"All"))
+})

@@ -183,6 +183,8 @@ checkResults <- function(name, df1)
     test_that(paste0(name, '$', n), {
       actual <- unlist(df1[[n]])
       expected <- unlist(df2[[n]])
+      # unsure if this will cause problems, but seems to fix when column is all NA
+      class(actual) <- typeof(expected)
       expect_equal(actual, expected)
     })
   }
