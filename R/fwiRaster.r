@@ -127,11 +127,11 @@
 #' @examples
 #' 
 #' library(cffdrs)
-#' require(raster)
+#' require(terra)
 #' # The test data is a stack with four input variables including 
 #' # daily noon temp, rh, ws, and prec (we recommend tif format):
 #' day01src <- system.file("extdata","test_rast_day01.tif",package="cffdrs")
-#' day01 <- stack(day01src)
+#' day01 <- rast(day01src)
 #' day01 <- crop(day01,c(250,255,47,51))
 #' # assign variable names:
 #' names(day01)<-c("temp","rh","ws","prec")
@@ -140,7 +140,7 @@
 #' plot(foo)
 #' ### Additional, longer running examples ###
 #' # (2) use initial values with larger raster
-#' day01 <- stack(day01src)
+#' day01 <- rast(day01src)
 #' names(day01)<-c("temp","rh","ws","prec")
 #' \donttest{foo<-fwiRaster(day01)}
 #' plot(foo)
@@ -181,23 +181,22 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   if ("lat" %in% names(input)) {
     lat <- input$lat
   }else {
-    lat <- temp
-    raster::values(lat) <- 55
+    lat <- terra::init(temp,"y")
   }
   
   if (!exists("temp") | is.null(temp)) 
     stop("temperature (temp) is missing!")
   if (!exists("prec") | is.null(prec)) 
     stop("precipitation (prec) is missing!")
-  if (!is.null(prec[prec < 0]))
+  if (!length(prec[prec < 0]) == 0)
     stop("precipiation (prec) cannot be negative!")
   if (!exists("ws") | is.null(ws)) 
     stop("wind speed (ws) is missing!")
-  if (!is.null(ws[ws < 0]))
+  if (!legnth(ws[ws < 0]) == 0)
     stop("wind speed (ws) cannot be negative!")
   if (!exists("rh") | is.null(rh)) 
     stop("relative humidity (rh) is missing!")
-  if (!is.null(rh[rh < 0]))
+  if (!length(rh[rh < 0]) == 0)
     stop("relative humidity (rh) cannot be negative!")
 
   names(init) <- tolower(names(init))
@@ -208,9 +207,10 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
       names(init)<-c('ffmc', 'dmc', 'dc')
     }
     ffmc_yda <- dmc_yda <- dc_yda <- temp
-    raster::values(ffmc_yda) <- init[['ffmc']]
-    raster::values(dmc_yda) <- init[['dmc']]
-    raster::values(dc_yda) <- init[['dc']]
+    terra::values(ffmc_yda) <- init[['ffmc']]
+    names(ffmc_yda) <- "ffmc_yda"
+    terra::values(dmc_yda) <- init[['dmc']]
+    terra::values(dc_yda) <- init[['dc']]
   } else {
     ffmc_yda <- init$ffmc
     dmc_yda  <- init$dmc
@@ -221,212 +221,48 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
-  #Eq. 1
-  wmo <- 147.27723 * (101 - ffmc_yda)/(59.5 + ffmc_yda)
-  #Eq. 2 Rain reduction to allow for loss in overhead canopy
-  ra1 <- prec
-  ra1[ra1 <= 0.5] <- NA
-  ra1 <- ra1-0.5
-  ra2 <- prec
-  ra2[ra2 > 0.5] <- NA
-  ra <- raster::cover(ra1, ra2)
-  #masking values
-  wmo1 <- raster::mask(wmo, ra1)
-  wmo2 <- raster::mask(wmo,ra2)
-  wmo11 <- wmo1
-  wmo11[wmo11 <= 150] <- NA
-  ra11 <- ra1
-  ra11[wmo1 <= 150] <- NA
-  #Eqs. 3a & 3b
-  wmo11 <- wmo11 + 0.0015 * (wmo11 - 150) * (wmo11 - 150) * sqrt(ra11) + 42.5 * 
-           ra11 * exp(-100 / (251 - wmo11)) * (1 - exp(-6.93 / ra11))
-  wmo12 <- wmo1
-  wmo12[wmo12 > 150] <- NA
-  ra12 <- ra1
-  ra12[wmo1 > 150] <- NA
-  wmo12 <- wmo12 + 42.5 * ra12 * exp(-100 / (251 - wmo12)) * 
-          (1 - exp(-6.93 / ra12))
-  wmo1 <- raster::cover(wmo11, wmo12)
-  wmo <- raster::cover(wmo1, wmo2)
-  #The real moisture content of pine litter ranges up to about 250 percent,
-  # so we cap it at 250
-  wmo[wmo > 250] <- 250
-  #cleanup intermediate values
-  rm(ra1, ra11, ra12, ra2, wmo1, wmo2, wmo11, wmo12)
-  #Eq. 4 Equilibrium moisture content from drying
-  ed <- 0.942 * (rh^0.679) + (11 * exp((rh - 100)/10)) + 0.18 * 
-    (21.1 - temp) * (1 - 1/exp(rh * 0.115))
-  #Eq. 5 Equilibrium moisture content from wetting
-  ew <- 0.618 * (rh^0.753) + (10 * exp((rh - 100)/10)) + 0.18 * 
-    (21.1 - temp) * (1 - 1/exp(rh * 0.115))
-  #Create a new raster object based on wmo, ed, and ew
-  z0 <- raster::overlay(wmo, ed, ew, fun = function(a, b, c){ return(a < b & a < c) })
-  #Create new rasters and mask out missing values
-  z0[z0 == 0] <- NA
-  rh0 <- raster::mask(rh, z0)
-  ws0 <- raster::mask(ws, z0)
-  #Eq. 6a (ko) Log drying rate at the normal termperature of 21.1 C
-  z <- 0.424 * (1 - (((100 - rh0)/100)^1.7)) + 0.0694 * sqrt(ws0) * (1 - ((100 - rh0)/100)^8)
-  # Assigning to 0 instead of NA, as 0 makes more sense
-  z[is.na(z)] <- 0
-  # Mask missing temp values
-  z <- raster::mask(z, temp)
-  rm(rh0, ws0, z0)
-  #Eq. 6b Affect of temperature on  drying rate
-  x <- z * 0.581 * exp(0.0365 * temp)
-  #Create a new raster object based on wmo, ed, and ew
-  z0 <- raster::overlay(wmo, ed, ew, fun = function(a, b, c){ return(a < b & a < c) })
-  #Create new rasters and mask out missing values
-  z0[z0 == 0] <- NA
-  ew0 <- raster::mask(ew, z0)
-  x0 <- raster::mask(x, z0)
-  wmo0 <- raster::mask(wmo, z0)
-  #Eq. 8
-  wmo1 <- ew0 - (ew0 - wmo0) / (10^x0)
-  wmo2 <- wmo
-  wmo2[!is.na(wmo0)] <- NA
-  wm <- raster::cover(wmo1, wmo2)
-  rm(z0, ew0, x0, wmo0, wmo1, wmo2)
-  #Create a new raster object based on wmo, and ed
-  z0 <- raster::overlay(wmo, ed, fun = function(a, b){ return(a > b) }) 
-  #Create new rasters and mask out missing values
-  z0[z0 == 0] <- NA
-  rh0 <- raster::mask(rh, z0)
-  ws0 <- raster::mask(ws, z0)
-  #Eq. 7a (ko) Log wetting rate at the normal termperature of 21.1 C   
-  z0 <- 0.424 * (1 - (rh0 / 100)^1.7) + 0.0694 * sqrt(ws0) * (1 - (rh0 / 100)^8)
-  z1 <- z
-  z1[!is.na(z0)] <- NA
-  z <- raster::cover(z0, z1)
-  rm(rh0, ws0)
-  #Eq. 7b Affect of temperature on  wetting rate
-  x <- z * 0.581 * exp(0.0365 * temp)
-  ed0 <- mask(ed,z0)
-  wmo0 <- raster::mask(wmo,z0)
-  x0 <- raster::mask(x,z0)
-  #Eq. 9
-  wm0 <- ed0 + (wmo0 - ed0)/(10^x0)
-  wm1 <- raster::mask(wm, z1)
-  wm <- raster::cover(wm0, wm1)
-  rm(ed0, x0, wm0, wm1, wmo0)
-  #Eq. 10 Final FFMC calculation
-  ffmc <- (59.5 * (250 - wm))/(147.2 + wm)
-  #Constraints
-  ffmc[ffmc>101] <- 101 
-  ffmc[ffmc<0] <- 0
-
+  
+  ffmc <- lapp(x = c( ffmc_yda, input[[c("temp","rh","ws","prec")]] ), 
+               fun = Vectorize(.ffmcCalc))
   
   ###########################################################################
   #                        Duff Moisture Code (DMC)
   ###########################################################################
-  t0 <- temp
-  #constrain low end of temperature
-  t0[t0 < -1.1] <- -1.1
-  #Eq. 16 - The log drying rate
-  rk <- 1.894 * (t0 + 1.1) * (100 - rh) * ell01[mon] * 1e-04
-  #Adjust the day length  and thus the drying r, based on latitude and month
-  if (lat.adjust) {
-    rk[lat <= 30 & lat > 10] <- 1.894 * (t0[lat <= 30 & lat > 10] + 1.1) * 
-      (100 - rh[lat <= 30 & lat > 10]) * ell02[mon] * 1e-04
-    rk[lat <= -10 & lat > -30] <- 1.894 * (t0[lat <= -10 & lat > -30] + 1.1) * 
-      (100 - rh[lat <= -10 & lat > -30]) * ell03[mon] * 1e-04
-    rk[lat <= -30 & lat >= -90] <- 1.894 * (t0[lat <= -30 & lat >= -90] + 1.1) *
-      (100 - rh[lat <= -30 & lat >= -90]) * ell04[mon] * 1e-04
-    rk[lat <= 10 & lat > -10] <- 1.894 * (t0[lat <= 10 & lat > -10] + 1.1) * 
-      (100 - rh[lat <= 10 & lat > -10]) * 9 * 1e-04
-  }
-  ra <- prec
-  #Eq. 11 - Net rain amount
-  rw <- 0.92 * ra - 1.27
-  #Alteration to Eq. 12 to calculate more accurately
-  wmi <- 20 + 280 / exp(0.023 * dmc_yda)
-  #Eqs. 13a, 13b, 13c
-  b <- dmc_yda
-  b[dmc_yda <= 33] <- 100 / (0.5 + 0.3 * dmc_yda[dmc_yda <= 33])
-  if (!is.null(dmc_yda[dmc_yda > 33 & dmc_yda <= 65])){
-    b[dmc_yda > 33 & dmc_yda <= 65] <- 
-      14 - 1.3 * log(dmc_yda[dmc_yda > 33 & dmc_yda <= 65])
-  }
-  if(!is.null(dmc_yda[dmc_yda > 65])){
-    b[dmc_yda > 65] <- 
-      6.2 * log(dmc_yda[dmc_yda > 65]) - 17.2
-  }
-  #Eq. 14 - Moisture content after rain
-  wmr <- wmi + 1000 * rw / (48.77 + b * rw)
-  #Alteration to Eq. 15 to calculate more accurately
-  pr0 <- 43.43 * (5.6348 - log(wmr - 20))
+  
+  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], lat,setValues(temp,mon) ), 
+              fun = Vectorize(.dmcCalc), 
+              lat.adjust=lat.adjust)
 
-  pr<-pr0
-  #Constrain P
-  pr[prec <= 1.5] <-dmc_yda[prec <= 1.5]
-  pr[pr < 0] <- 0
-  #Calculate final P (DMC)
-  dmc <- pr + rk
-  dmc[dmc < 0] <- 0 
   ###########################################################################
   #                             Drought Code (DC)
   ###########################################################################
-  #Constrain temperature
-  t0[temp< (-2.8)] <- -2.8
-  #Eq. 22 - Potential Evapotranspiration
-  pe <- (0.36 * (t0 + 2.8) + fl01[mon])/2
-  #Daylength factor adjustment by latitude for Potential Evapotranspiration
-  if (lat.adjust) {
-    pe[lat <= -10] <- (0.36 * (t0[lat <= -10] + 2.8) + fl02[mon]) / 2
-    pe[lat > -10 & lat <= 10] <- (0.36 * (t0[lat > -10 & lat <= 10] + 2.8) + 1.4) / 2
-  }
-  ra <- prec
-  #Eq. 18 - Effective Rainfall
-  rw <- 0.83 * ra - 1.27
-  #Eq. 19
-  smi <- 800 * exp(-1 * dc_yda / 400)
-  #Alteration to Eq. 21
-  dr0 <- dc_yda - 400 * log(1 + 3.937 * rw / smi)
-  dr0[dr0 < 0] <- 0 
-  dr <- dr0
-  #if precip is less than 2.8 then use yesterday's DC
-  dr[prec <= 2.8] <- dc_yda[prec <= 2.8]
-  #Alteration to Eq. 23
-  dc <- dr + pe
-  dc[dc < 0] <- 0
+  
+  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],lat, setValues(temp,mon)),
+             fun = Vectorize(dcCalc), 
+             lat.adjust=lat.adjust)
   
   ###########################################################################
   #                    Initial Spread Index (ISI)
   ###########################################################################
-  #Eq. 24 - Wind Effect
-  fW <- exp(0.05039 * ws)
-  #Eq. 10 - Moisture content
-  fm <- 147.27723 * (101 - ffmc) / (59.5 + ffmc)
-  #Eq. 25 - Fine Fuel Moisture
-  fF <- 91.9 * exp(-0.1386 * fm) * (1 + (fm^5.31) / 49300000)
-  #Eq. 26 - Spread Index Equation
-  isi <- 0.208 * fW * fF
+  
+  isi <- lapp(x = c(ffmc, input[["ws"]]),
+              fun = Vectorize(.ISIcalc), 
+              fbpMod=F)
   
   ###########################################################################
   #                       Buildup Index (BUI)
   ###########################################################################
-  #Eq. 27a
-  bui <- 0.8 * dc * dmc/(dmc + 0.4 * dc)
-  bui[dmc == 0 & dc == 0] <- 0
-  #Eq. 27b - next 4 lines
-  p <- (dmc - bui)/dmc
-  p[dmc == 0] <- 0
-  cc <- 0.92 + ((0.0114 * dmc)^1.7)
-  bui0 <- dmc - cc * p
-  #Constraints
-  bui0[bui0 < 0] <- 0
-  bui[bui < dmc] <- bui0[bui < dmc]
+  
+  bui <- lapp(x = c(dmc, dc),
+              fun = Vectorize(.buiCalc))
   
   ###########################################################################
   #                     Fire Weather Index (FWI)
   ###########################################################################
-  #Eqs. 28b, 28a, 29
-  bb <-0.1 * isi * (0.626 * (bui^0.809) + 2)
-  bb[bui > 80] <- 0.1 * isi[bui > 80] * (1000 / (25 + 108.64 / exp(0.023 * bui[bui > 80])))
-  #Eqs. 30b, 30a
-  fwi <-exp(2.72 * ((0.434 * log(bb))^0.647))
-  #Constraint
-  fwi[bb <= 1] <- bb[bb <= 1]
+  
+  fwi <- lapp(x = c(isi, bui),
+              fun = Vectorize(.fwiCalc))
+  
   ###########################################################################
   #                   Daily Severity Rating (DSR)
   ###########################################################################
@@ -436,7 +272,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
     #Creating a raster stack of FWI variables to return
-    new_FWI <- raster::stack(ffmc, dmc, dc, isi, bui, fwi, dsr)
+    new_FWI <- terra::rast(ffmc, dmc, dc, isi, bui, fwi, dsr)
     names(new_FWI) <- c("ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
     if (uppercase){
       names(new_FWI) <- toupper(names(new_FWI))
@@ -445,7 +281,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   } else {
     if (out == "all") {
       #Create a raster stack of input and FWI variables
-      new_FWI <- raster::stack(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
+      new_FWI <- terra::rast(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
       names(new_FWI) <- c(names(input),"ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
       if (uppercase){
         names(new_FWI) <- toupper(names(new_FWI))
