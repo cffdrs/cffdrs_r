@@ -332,42 +332,53 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   }
   names(input) <- toupper(names(input))
   output <- toupper(output)
-  if("LAT" %in% names(input)){
-    #register a sequential parallel backend
-    foreach::registerDoSEQ()
-    #Get the specified raster cell values
-    r <- .getValuesBlock_stackfix(input, nrows=nrow(input))
-    #convert to data.frame
-    r <- as.data.frame(r)
-    names(r) <- names(input)
-  }else{
+  
+  
+  
+  
+  # if("LAT" %in% names(input)){
+  #   #register a sequential parallel backend
+  #   foreach::registerDoSEQ()
+  #   #Get the specified raster cell values
+  #   r <- .getValuesBlock_stackfix(input, nrows=nrow(input))
+  #   #convert to data.frame
+  #   r <- as.data.frame(r)
+  #   names(r) <- names(input)
+  # }else{
     #Convert the raster to points and insert into a data.frame
-    r <- as.data.frame(raster::rasterToPoints(input))
+    #r <- as.data.frame(raster::rasterToPoints(input))
+    r <- as.data.table(input, xy=T)
+    
     #Rename the latitude field
-    names(r)[names(r) == "y"] <- "LAT"
+    r[, LAT:=y][, LONG:=x]
+    
+    #names(r)[names(r) == "y"] <- "LAT"
     #Check for valid latitude
-    if (max(r$LAT) > 90 | min(r$LAT) < -90){
+    if (r[,max(LAT),] > 90 | r[,min(LAT),] < -90){
       warning("Input projection is not in lat/long, consider re-projection or 
               include LAT as input")
     }
-  }
+  #}
   #Unique IDs
-  r$ID <- 1:nrow(r)
+  r[,ID:=row.names(r)]
+  #r$ID <- 1:nrow(r)
   #merge fuel codes with integer values
-  fuelCross <- data.frame(FUELTYPE0 = sort(c(paste("C", 1:7, sep="-"),
+  
+  fuelCross <- data.table(FUELTYPE0 = sort(c(paste("C", 1:7, sep="-"),
                                              "D-1",
                                              paste("M", 1:4, sep="-"),
                                              paste("S", 1:3, sep="-"),
                                              "O-1a", "O-1b", "WA", "NF")),
                           code=1:19)
-  r <- merge(r, fuelCross, by.x="FUELTYPE", by.y="code", all.x=TRUE, all.y=FALSE)
-
-  r$FUELTYPE <- NULL
-  names(r)[names(r) == "FUELTYPE0"] <- "FUELTYPE"
-  r <- r[with(r, order(ID)), ]
-  names(r)[names(r) == "x"] <- "LONG"
+  r[,FUELTYPE:=fuelCross[match(r$FUELTYPE,fuelCross$code),FUELTYPE0]]
+  # r <- merge(r, fuelCross, by.x="FUELTYPE", by.y="code", all.x=TRUE, all.y=FALSE)
+  # r$FUELTYPE <- NULL
+  # names(r)[names(r) == "FUELTYPE0"] <- "FUELTYPE"
+  setorder(r,ID)
+  #r <- r[with(r, order(ID)), ]
+  #names(r)[names(r) == "x"] <- "LONG"
   #Calculate FBP through the fbp() function
-  FBP <- fbp(r, output = output, m = m, cores = cores)
+  FBP <- cbind(r[,c("x","y")],fbp(r, output = output, m = m, cores = cores))
   #If secondary output selected then we need to reassign character
   #  represenation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")){
@@ -379,47 +390,51 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #If caller specifies select outputs, then create a raster stack that contains
   #  only those outputs
   if (!is.null(select)){
-    out <- out0 <- input[[1]]
-    raster::values(out) <- FBP[, select[1]]
-    if (length(select) > 1){
-      for (i in 2:length(select)){
-        raster::values(out0) <- FBP[,select[i]]
-        out <- stack(out, out0)
-      }
-    }
-    names(out)<-select 
+    out <- rast(FBP)[[primaryNames]]
+    # out <- out0 <- input[[1]]
+    # raster::values(out) <- FBP[, select[1]]
+    # if (length(select) > 1){
+    #   for (i in 2:length(select)){
+    #     raster::values(out0) <- FBP[,select[i]]
+    #     out <- stack(out, out0)
+    #   }
+    #}
+    #names(out)<-select 
   #If caller specified Primary outputs, then create raster stack that contains
   #  only primary outputs
   }else if (output == "PRIMARY" | output == "P") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- out0 <- input[[1]]
-    raster::values(out) <- FBP[,primaryNames[1]]
-    for (i in 2:length(primaryNames)){
-      raster::values(out0) <- FBP[, primaryNames[i]]
-      out <- raster::stack(out,out0)
-    }
-    names(out)<-primaryNames
+    out <- rast(FBP)[[primaryNames]]
+    # out <- out0 <- input[[1]]
+    # raster::values(out) <- FBP[,primaryNames[1]]
+    # for (i in 2:length(primaryNames)){
+    #   raster::values(out0) <- FBP[, primaryNames[i]]
+    #   out <- raster::stack(out,out0)
+    # names(out)<-primaryNames
+    #}
   #If caller specified Secondary outputs, then create raster stack that contains
   #  only secondary outputs
   }else if(output == "SECONDARY" | output == "S") {
-    out <- out0 <- input[[1]]
-    raster::values(out) <- FBP[, secondaryNames[1]]
-    for (i in 2:length(secondaryNames)){
-      raster::values(out0) <- FBP[, secondaryNames[i]]
-      out <- raster::stack(out, out0)
-    }
-    names(out)<-secondaryNames
+    out <- rast(FBP)[[secondaryNames]]
+    # out <- out0 <- input[[1]]
+    # raster::values(out) <- FBP[, secondaryNames[1]]
+    # for (i in 2:length(secondaryNames)){
+    #   raster::values(out0) <- FBP[, secondaryNames[i]]
+    #   out <- raster::stack(out, out0)
+    #}
+    #names(out)<-secondaryNames
   #If caller specified All outputs, then create a raster stack that contains
   #  both primary and secondary outputs
   }else if(output == "ALL" | output == "A") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- out0 <- input[[1]]
-    raster::values(out) <- FBP[, allNames[1]]
-    for (i in 2:length(allNames)){
-      raster::values(out0) <- FBP[, allNames[i]]
-      out <- raster::stack(out, out0)
-    }
-    names(out) <- allNames
+    out <- rast(FBP)[[allNames]]
+    # out <- out0 <- input[[1]]
+    # raster::values(out) <- FBP[, allNames[1]]
+    # for (i in 2:length(allNames)){
+    #   raster::values(out0) <- FBP[, allNames[i]]
+    #   out <- raster::stack(out, out0)
+    #}
+    #names(out) <- allNames
   }
   #return the raster stack to the caller
   return(out)
