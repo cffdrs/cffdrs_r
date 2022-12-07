@@ -12,7 +12,7 @@
 #' 
 #' Forestry Canada  Fire Danger Group (FCFDG) (1992). Development and 
 #' Structure of the Canadian Forest Fire Behavior Prediction System."  
-#' Technical ReportST-X-3, Forestry Canada, Ottawa, Ontario.
+#' Technical Report ST-X-3, Forestry Canada, Ottawa, Ontario.
 #' 
 #' @param ffmc Fine Fuel Moisture Code
 #' @param ws Wind Speed (km/h)
