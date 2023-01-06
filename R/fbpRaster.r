@@ -257,7 +257,8 @@
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 #' 
 #' @importFrom foreach registerDoSEQ
-#' @importFrom raster stack rasterToPoints ncell values setValues
+#' @importFrom terra rast rasterToPoints ncell values setValues
+#' @importFrom sf 
 #' 
 #' @keywords methods
 #' @examples
@@ -265,7 +266,7 @@
 #' # The dataset is the standard test data for FBP system
 #' # provided by Wotton et al (2009), and randomly assigned
 #' # to a stack of raster layers
-#' test_fbpRaster <- stack(system.file("extdata", "test_fbpRaster.tif", package="cffdrs"))
+#' test_fbpRaster <- rast(system.file("extdata", "test_fbpRaster.tif", package="cffdrs"))
 #' input<-test_fbpRaster
 #' # Stack doesn't hold the raster layer names, we have to assign
 #' # them:
@@ -333,9 +334,6 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   names(input) <- toupper(names(input))
   output <- toupper(output)
   
-  
-  
-  
   # if("LAT" %in% names(input)){
   #   #register a sequential parallel backend
   #   foreach::registerDoSEQ()
@@ -351,6 +349,12 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     
     #Rename the latitude field
     r[, LAT:=y][, LONG:=x]
+    
+    coords <- st_multipoint(matrix(ncol=2,c(r[,LONG],r[,LAT])),dim = "XY") %>% st_sfc()
+    st_crs(coords) <- crs(input)
+    coords <- st_transform(coords, 4326) %>% st_coordinates
+    
+    r[, LAT:=coords[,"Y"]][, LONG:=coords[,"X"]]
     
     #names(r)[names(r) == "y"] <- "LAT"
     #Check for valid latitude
@@ -370,7 +374,9 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
                                              paste("S", 1:3, sep="-"),
                                              "O-1a", "O-1b", "WA", "NF")),
                           code=1:19)
-  r[,FUELTYPE:=fuelCross[match(r$FUELTYPE,fuelCross$code),FUELTYPE0]]
+  r[,FuelType:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
+  setindex(r, FuelType)
+  
   # r <- merge(r, fuelCross, by.x="FUELTYPE", by.y="code", all.x=TRUE, all.y=FALSE)
   # r$FUELTYPE <- NULL
   # names(r)[names(r) == "FUELTYPE0"] <- "FUELTYPE"
@@ -378,7 +384,9 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #r <- r[with(r, order(ID)), ]
   #names(r)[names(r) == "x"] <- "LONG"
   #Calculate FBP through the fbp() function
-  FBP <- cbind(r[,c("x","y")],fbp(r, output = output, m = m, cores = cores))
+  system.time(
+  FBP <- cbind(r[,c("LONG","LAT")],cffdrs::fbp(r, output = output, m = NULL, cores = 1))
+  )
   #If secondary output selected then we need to reassign character
   #  represenation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")){
