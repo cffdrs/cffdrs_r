@@ -300,6 +300,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
+
   #split up large rasters to allow calculation. This will be used in the
   #  parallel methods
   if (is.null(m)){
@@ -334,6 +335,24 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   names(input) <- toupper(names(input))
   output <- toupper(output)
   
+  
+  ## Does lat exist?
+  if(!"LAT" %in% names(test)){
+    
+    coords <- as.data.table(input[["FUEL"]],na.rm=F,xy=T)
+    
+    coords <- st_multipoint(matrix(ncol=2,c(coords[,x],coords[,y])),dim = "XY") %>% st_sfc()
+    st_crs(coords) <- crs(input)
+    coords <- st_transform(coords, 4326) %>% st_coordinates
+    
+    LAT <- mask(setValues(FUEL,coords[,"Y"]),FUEL)
+    names(LAT) <- "LAT"
+    LONG <- mask(setValues(FUEL,coords[,"X"]),FUEL)
+    names(LONG) <- "LONG"
+    
+    input <- c(input,LAT,LONG)
+  
+}
   # if("LAT" %in% names(input)){
   #   #register a sequential parallel backend
   #   foreach::registerDoSEQ()
@@ -345,26 +364,45 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   # }else{
     #Convert the raster to points and insert into a data.frame
     #r <- as.data.frame(raster::rasterToPoints(input))
-    r <- as.data.table(input, xy=T)
     
-    #Rename the latitude field
-    r[, LAT:=y][, LONG:=x]
+  prod(dim(input)[1:2],4)
+  
+  if(ncell(input[[1]]) >= 10000000){
+  
+    tiler <- input[["FUEL"]]
+  
+    res(tiler) <- 200000
     
-    coords <- st_multipoint(matrix(ncol=2,c(r[,LONG],r[,LAT])),dim = "XY") %>% st_sfc()
-    st_crs(coords) <- crs(input)
-    coords <- st_transform(coords, 4326) %>% st_coordinates
+    temp <- tempdir()
+  
+    terra::makeTiles(input,tiler,filename=paste0(temp,"\\tile_.tif"),overwrite=T)
     
-    r[, LAT:=coords[,"Y"]][, LONG:=coords[,"X"]]
+    rm(input)
     
-    #names(r)[names(r) == "y"] <- "LAT"
+    gc()
+    
+    files <- list.files(temp,full.names=T,pattern="tile")
+    
+    }
+  
+  for(i in files[13:16]){
+  
+    input <- rast(i)
+    
+    system.time({
+    r <- as.data.table(input)
+    
+    
+    
     #Check for valid latitude
-    if (r[,max(LAT),] > 90 | r[,min(LAT),] < -90){
+    if (r[,max(LAT,na.rm=T),] > 90 | r[,min(LAT,na.rm=T),] < -90){
       warning("Input projection is not in lat/long, consider re-projection or 
               include LAT as input")
     }
   #}
   #Unique IDs
-  r[,ID:=row.names(r)]
+  r[,ID:=as.numeric(row.names(r))]
+  setkey(r,ID)
   #r$ID <- 1:nrow(r)
   #merge fuel codes with integer values
   
@@ -375,18 +413,14 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
                                              "O-1a", "O-1b", "WA", "NF")),
                           code=1:19)
   r[,FuelType:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
-  setindex(r, FuelType)
+  #setindex(r, FuelType)
   
-  # r <- merge(r, fuelCross, by.x="FUELTYPE", by.y="code", all.x=TRUE, all.y=FALSE)
-  # r$FUELTYPE <- NULL
-  # names(r)[names(r) == "FUELTYPE0"] <- "FUELTYPE"
-  setorder(r,ID)
-  #r <- r[with(r, order(ID)), ]
-  #names(r)[names(r) == "x"] <- "LONG"
   #Calculate FBP through the fbp() function
-  system.time(
-  FBP <- cbind(r[,c("LONG","LAT")],cffdrs::fbp(r, output = output, m = NULL, cores = 1))
-  )
+
+  FBP <- fbp(input = r, output = "PRIMARY", m = NULL, cores = 1)
+  
+  FBP <- FBP[r]
+
   #If secondary output selected then we need to reassign character
   #  represenation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")){
@@ -412,7 +446,12 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #  only primary outputs
   }else if (output == "PRIMARY" | output == "P") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- rast(FBP)[[primaryNames]]
+    out <- c(rep(input[[1]],length(primaryNames)))
+    names(out) <- primaryNames
+    
+    for(i in primaryNames){
+      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+    }
     # out <- out0 <- input[[1]]
     # raster::values(out) <- FBP[,primaryNames[1]]
     # for (i in 2:length(primaryNames)){
@@ -423,7 +462,12 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #If caller specified Secondary outputs, then create raster stack that contains
   #  only secondary outputs
   }else if(output == "SECONDARY" | output == "S") {
-    out <- rast(FBP)[[secondaryNames]]
+    out <- c(rep(input[[1]],length(secondaryNames)))
+    names(out) <- secondaryNames
+    
+    for(i in secondaryNames){
+      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+    }
     # out <- out0 <- input[[1]]
     # raster::values(out) <- FBP[, secondaryNames[1]]
     # for (i in 2:length(secondaryNames)){
@@ -435,7 +479,11 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #  both primary and secondary outputs
   }else if(output == "ALL" | output == "A") {
     message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- rast(FBP)[[allNames]]
+    out <- c(rep(input[[1]],length(allNames)))
+    names(out) <- allNames
+    for(i in allNames){
+      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+    }
     # out <- out0 <- input[[1]]
     # raster::values(out) <- FBP[, allNames[1]]
     # for (i in 2:length(allNames)){
@@ -443,7 +491,17 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     #   out <- raster::stack(out, out0)
     #}
     #names(out) <- allNames
-  }
+  }})
+    
+    writeRaster(x = out, 
+                filename = paste0("D:\\Quarantine\\Cffdrs_data_test\\",i),
+                wopt = list(filetype = "GTiff",
+                            datatype = "INT2S",
+                            gdal = c("COMPRESS=LZW","ZLEVEL=9","PREDICTOR=2")),
+                overwrite = T, 
+                NAflag = -9999)
+    
+    }
   #return the raster stack to the caller
   return(out)
 }
