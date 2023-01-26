@@ -257,8 +257,9 @@
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 #' 
 #' @importFrom foreach registerDoSEQ
-#' @importFrom terra rast rasterToPoints ncell values setValues
+#' @importFrom terra rast ncell values setValues
 #' @importFrom sf 
+#' @importFrom data.table as.data.table
 #' 
 #' @keywords methods
 #' @examples
