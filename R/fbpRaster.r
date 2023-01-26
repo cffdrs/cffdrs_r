@@ -448,6 +448,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       for(i in primaryNames){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
+      varnames(out) <- primaryNames
     }
       
     #If caller specified Primary outputs, then create raster stack that contains
@@ -460,6 +461,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       for(i in primaryNames){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
+      varnames(out) <- primaryNames
     }
   
     #If caller specified Secondary outputs, then create raster stack that contains
@@ -471,6 +473,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       for(i in secondaryNames){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
+      varnames(out) <- secondaryNames
     }
   
     #If caller specified All outputs, then create a raster stack that contains
@@ -482,6 +485,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       for(i in allNames){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
+      varnames(out) <- allNames
     }
   }
   if( exists("files")){
