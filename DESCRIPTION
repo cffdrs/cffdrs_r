@@ -1,7 +1,7 @@
 Package: cffdrs
 Type: Package
 Title: Canadian Forest Fire Danger Rating System
-Version: 1.9.1
+Version: 1.9.1.9000
 Date: 2020-05-26
 Authors@R: c(
     person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role = c("cre", "aut")),
@@ -16,11 +16,11 @@ Authors@R: c(
 Maintainer: Alan Cantin <Alan.Cantin@Canada.ca>
 Depends:
     R(>= 3.2.2),
-    rgdal,
-    raster,
+    terra,
+    sf,
+    data.table
     foreach
 Imports:
-    data.table,
     geosphere,
     doParallel
 Description: This project provides a group of new functions to calculate the
