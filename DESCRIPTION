@@ -18,7 +18,7 @@ Depends:
     R(>= 3.2.2),
     terra,
     sf,
-    data.table
+    data.table,
     foreach
 Imports:
     geosphere,
