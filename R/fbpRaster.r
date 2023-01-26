@@ -258,7 +258,7 @@
 #' 
 #' @importFrom foreach registerDoSEQ
 #' @importFrom terra rast ncell values setValues
-#' @importFrom sf 
+#' @import sf 
 #' @importFrom data.table as.data.table
 #' 
 #' @keywords methods
@@ -423,7 +423,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
                                                paste("S", 1:3, sep="-"),
                                                "O-1a", "O-1b", "WA", "NF")),
                             code=1:19)
-    r[,FuelType:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
+    r[,FUELTYPE:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
     
     #Calculate FBP through the fbp() function
   
@@ -506,3 +506,4 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   #return the raster stack to the caller
   return(out)
 }
+
