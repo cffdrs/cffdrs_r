@@ -338,7 +338,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   
   if(ncell(input[[1]]) >= 10000000){
   
-    tiler <- input[["FUEL"]]
+    tiler <- input[[names(input)[grep("fuel",names(input),ignore.case = T)]]]
   
     res(tiler) <- 125000
     
@@ -367,7 +367,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     
     files <- list.files(temp,full.names=T,pattern="tile")
     
-    temp_out <- "C:\\Users\\bremoore\\AppData\\Local\\Temp\\Tester\\"
+    temp_out <- paste0(gsub("Rtmp.*$","",tempdir()),"\\Tester\\")
     dir.create(temp_out)
     
     }
@@ -390,7 +390,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     ## Does lat exist?
     if(!"LAT" %in% names(input)){
       
-      coords <- as.data.table(input[["FUEL"]],na.rm=F,xy=T)
+      coords <- as.data.table(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]],na.rm=F,xy=T)
       
       coords <- st_multipoint(matrix(ncol=2,c(coords[,x],coords[,y])),dim = "XY") %>% st_sfc()
       st_crs(coords) <- crs(input)
@@ -446,7 +446,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       names(out) <- primaryNames
       
       for(i in primaryNames){
-        out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
     }
       
@@ -458,7 +458,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       names(out) <- primaryNames
       
       for(i in primaryNames){
-        out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
     }
   
@@ -469,7 +469,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       names(out) <- secondaryNames
       
       for(i in secondaryNames){
-        out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
     }
   
@@ -480,19 +480,9 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
       out <- c(rep(input[[1]],length(allNames)))
       names(out) <- allNames
       for(i in allNames){
-        out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
     }
-      
-      writeRaster(x = out, 
-                  filename = paste0(temp_out,gsub(".*/","",k)),
-                  wopt = list(filetype = "GTiff",
-                              datatype = "FLT4S",
-                              gdal = c("COMPRESS=LZW","ZLEVEL=9","PREDICTOR=2")),
-                  overwrite = T, 
-                  NAflag = -9999,
-                  todisk = T)
-      
   }
   if( exists("files")){
     tiles <- list.files(temp_out,pattern="tile",full.names=T)
