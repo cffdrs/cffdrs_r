@@ -259,7 +259,7 @@
 #' @importFrom foreach registerDoSEQ
 #' @importFrom terra rast ncell values setValues
 #' @import sf 
-#' @importFrom data.table as.data.table
+#' @importFrom data.table as.data.table data.table
 #' 
 #' @keywords methods
 #' @examples
@@ -449,11 +449,11 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
       varnames(out) <- select
-    }
+    } else {
       
     #If caller specified Primary outputs, then create raster stack that contains
     #  only primary outputs
-    if (output == "PRIMARY" | output == "P") {
+     if (output == "PRIMARY" | output == "P") {
       message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
       out <- c(rep(input[[1]],length(primaryNames)))
       names(out) <- primaryNames
@@ -462,7 +462,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
       varnames(out) <- primaryNames
-    }
+    } else {
   
     #If caller specified Secondary outputs, then create raster stack that contains
     #  only secondary outputs
@@ -474,11 +474,11 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
       varnames(out) <- secondaryNames
-    }
+    } else {
   
     #If caller specified All outputs, then create a raster stack that contains
     #  both primary and secondary outputs
-    if(output == "ALL" | output == "A") {
+     if(output == "ALL" | output == "A") {
       message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
       out <- c(rep(input[[1]],length(allNames)))
       names(out) <- allNames
@@ -486,7 +486,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
       varnames(out) <- allNames
-    }
+    }}}}
   }
   if( exists("files")){
     tiles <- list.files(temp_out,pattern="tile",full.names=T)
