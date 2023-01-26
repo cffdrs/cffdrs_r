@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        r-version: [3.5, 3.6, 4.0, 4.1]
+        r-version: [4.0, 4.1, 4.2]
         os: [macos-latest, windows-latest, ubuntu-18.04]
     runs-on: ${{ matrix.os }}
     steps:
@@ -41,12 +41,6 @@ jobs:
           spat_config <- '--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/'
           options(configure.args = c("rgdal" = spat_config))
           install.packages(c("rgdal"), type = "source")
-        shell: Rscript {0}
-        if: matrix.r-version == 3.5 || matrix.os == 'ubuntu-18.04' || matrix.os == 'macos-latest'
-      - name: Install dependencies
-        run: |
-          install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
