@@ -280,7 +280,7 @@
 #' # Secondary outputs:
 #' system.time(foo<-fbpRaster(input = input,output="S"))
 #' # All outputs:
-#' #system.time(foo<-fbpRaster(input = input,output="A"))
+#' system.time(foo<-fbpRaster(input = input,output="A"))
 #' 
 #' ### Additional, longer running examples  ###
 #' # Keep only the required input layers, the other layers would be
@@ -427,7 +427,7 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     
     #Calculate FBP through the fbp() function
   
-    FBP <- fbp(input = r, output = "PRIMARY", m = NULL, cores = 1)
+    FBP <- fbp(input = r, output = output, m = NULL, cores = 1)
     
     FBP <- FBP[r]
   
@@ -442,13 +442,13 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
     #If caller specifies select outputs, then create a raster stack that contains
     #  only those outputs
     if (!is.null(select)){
-      out <- c(rep(input[[1]],length(primaryNames)))
-      names(out) <- primaryNames
+      out <- c(rep(input[[1]],length(select)))
+      names(out) <- select
       
-      for(i in primaryNames){
+      for(i in select){
         out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
       }
-      varnames(out) <- primaryNames
+      varnames(out) <- select
     }
       
     #If caller specified Primary outputs, then create raster stack that contains
