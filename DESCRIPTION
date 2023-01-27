@@ -19,7 +19,9 @@ Depends:
     terra,
     sf,
     data.table,
-    foreach
+    foreach,
+	raster,
+	rgdal
 Imports:
     geosphere,
     doParallel
