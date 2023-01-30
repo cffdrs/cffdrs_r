@@ -174,28 +174,21 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     detach(input)
   }
   names(input) <- tolower(names(input))
-  temp <- input$temp
-  prec <- input$prec
-  ws <- input$ws
-  rh <- input$rh
-  if ("lat" %in% names(input)) {
-    lat <- input$lat
-  }else {
-    lat <- terra::init(temp,"y")
+  
+  if (!"lat" %in% names(input)) {
+    input[["lat"]] <- terra::init(temp,"y")
   }
   
-  if (!exists("temp") | is.null(temp)) 
-    stop("temperature (temp) is missing!")
-  if (!exists("prec") | is.null(prec)) 
-    stop("precipitation (prec) is missing!")
+  required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity"), short = c("temp","prec","ws","rh"))
+  
+  if(nrow(required_cols[-which(names(input) %in% short)]) >0){
+    stop(paste(required_cols[-which(names(input) %in% short),full],collapse = " , ")," is missing!")
+  }
+  
   if (!length(prec[prec < 0]) == 0)
     stop("precipiation (prec) cannot be negative!")
-  if (!exists("ws") | is.null(ws)) 
-    stop("wind speed (ws) is missing!")
   if (!legnth(ws[ws < 0]) == 0)
     stop("wind speed (ws) cannot be negative!")
-  if (!exists("rh") | is.null(rh)) 
-    stop("relative humidity (rh) is missing!")
   if (!length(rh[rh < 0]) == 0)
     stop("relative humidity (rh) cannot be negative!")
 
@@ -206,7 +199,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     if (is.null(names(init))){
       names(init)<-c('ffmc', 'dmc', 'dc')
     }
-    ffmc_yda <- dmc_yda <- dc_yda <- temp
+    ffmc_yda <- dmc_yda <- dc_yda <- input[["temp"]]
     terra::values(ffmc_yda) <- init[['ffmc']]
     names(ffmc_yda) <- "ffmc_yda"
     terra::values(dmc_yda) <- init[['dmc']]
@@ -229,7 +222,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                        Duff Moisture Code (DMC)
   ###########################################################################
   
-  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], lat,setValues(temp,mon) ), 
+  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], lat,setValues(input[["temp"]],mon) ), 
               fun = Vectorize(.dmcCalc), 
               lat.adjust=lat.adjust)
 
@@ -237,7 +230,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                             Drought Code (DC)
   ###########################################################################
   
-  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],lat, setValues(temp,mon)),
+  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],lat, setValues(input[["temp"]],mon)),
              fun = Vectorize(dcCalc), 
              lat.adjust=lat.adjust)
   
