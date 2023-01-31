@@ -29,8 +29,24 @@
 #' 
 #' @export gfmcRaster
 #' 
+set.seed(5123)
+test_gfmc_r <- rast(nrows = 25,
+                    ncols = 25,
+                    crs="EPSG:3402",
+                    resolution = 100,
+                    ymin=5652012,
+                    ymax=5652012+(25*100),
+                    xmin=565550,
+                    xmax=565550+(25*100),
+                    names="temp",
+                    vals=sample(x = 19:27,size = 25*25,replace=T))
 
-
+test_gfmc_r <- c(test_gfmc_r,
+                 setValues(test_gfmc_r, sample(x = 0:3,size = 25*25,replace=T)),
+                 setValues(test_gfmc_r, sample(x = 10:20,size = 25*25,replace=T)),
+                 setValues(test_gfmc_r, sample(x = 30:70,size = 25*25,replace=T)),
+                 setValues(test_gfmc_r, sample(x = (5:950)/1000,size = 25*25,replace=T)))
+names(test_gfmc_r) <- c("temp","prec","ws","rh","isol")
 gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
                  out = "GFMCandMC") {
 
@@ -44,15 +60,23 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
     detach(input)
   }
 
-  mando_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity","insolation"), short = c("temp","prec","ws","rh","isol"))
+  required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity","insolation"), short = c("temp","prec","ws","rh","isol"))
   
-  if(nrow(mando_cols[-which(names(input) %in% short)]) >0){
-    stop(paste(mando_cols[-which(names(input) %in% short),full],collapse = ", ")," is missing!")
+  if(nrow(required_cols[-which(names(input) %in% short)]) >0){
+    stop(paste(required_cols[-which(names(input) %in% short),full],collapse = ", ")," is missing!")
   }
 
   if (is.numeric(GFMCold) & length(GFMCold) == 1){
     warning("Single GFMCold value for grid is applied to the whole grid")
-    GFMCold <- setValues(temp, GFMCold)
+    GFMCold <- setValues(input["temp"], GFMCold)
+  }
+  if (is.numeric(time.step) & length(time.step) == 1){
+    warning("Single time.step value for grid is applied to the whole grid")
+    time.step <- setValues(input["temp"], time.step)
+  }
+  if (is.numeric(roFL) & length(roFL) == 1){
+    warning("Single roFL value for grid is applied to the whole grid")
+    roFL <- setValues(input["temp"], roFL)
   }
 
   validOutTypes = c("GFMCandMC", "MC", "GFMC", "ALL")
@@ -61,6 +85,11 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
   }
 
   #get the length of the data stream
+  
+  gfmc.r <- lapp(x = c(input[[c("temp","rh","ws","prec","isol")]],GFMCold,time.step,roFL) , 
+               fun = Vectorize(gfmc),
+               out="All")
+  
 
   GFMC <- NULL
   MC <- NULL
@@ -116,13 +145,13 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
 
   #Return requested 'out' type
   if (out=="ALL"){
-    return(raster::stack(input, GFMC, MC))
+    return(terra::c(input, GFMC, MC))
   } else if(out == "GFMC"){
     return(GFMC)
   } else if (out == "MC"){
     return(MC)
   } else { #GFMCandMC
-    return(raster::stack( GFMC, MC))
+    return(terra::c( GFMC, MC))
   }
 }
 
