@@ -11,7 +11,7 @@
 #' Forest Meteorology Symposium, Kalispell, MT Oct 13-15, 2009.
 #' Paper 3-2. \url{https://ams.confex.com/ams/pdfpapers/155930.pdf}
 #' 
-#' @param input [raster stack]
+#' @param input [SpatRast stack]
 #' \tabular{lll}{
 #' \var{temp} \tab (required) \tab Temperature (centigrade)\cr
 #' \var{rh}   \tab (required) \tab Relative humidity (\%)\cr 
@@ -23,9 +23,9 @@
 #' @param roFL       Nominal fuel load of the fine fuel layer (kg/m^2 double, default=0.3)
 #' @param out        Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)
 #' 
-#' @return Returns a raster stack of either MC, GMFC, GFMC and MC or All
+#' @return Returns a spatrast stack of either MC, GFMC, GFMC and MC or All
 #' 
-#' @importFrom raster stack
+#' @importFrom terra rast
 #' 
 #' @export gfmcRaster
 #' 
@@ -43,24 +43,12 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
-  #set local scope variables
-  temp <- input$temp
-  prec <- input$prec
-  ws <- input$ws
-  rh <- input$rh
-  isol <- input$isol
 
-  #show warnings when inputs are missing
-  if (!exists("temp") | is.null(temp))
-    warning("temperature (temp) is missing!")
-  if (!exists("prec") | is.null(prec))
-    warning("precipitation (prec) is missing!")
-  if (!exists("ws") | is.null(ws))
-    warning("wind speed (ws) is missing!")
-  if (!exists("rh") | is.null(rh))
-    warning("relative humidity (rh) is missing!")
-  if (!exists("isol") | is.null(isol))
-    warning("ISOL is missing!")
+  mando_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity","insolation"), short = c("temp","prec","ws","rh","isol"))
+  
+  if(nrow(mando_cols[-which(names(input) %in% short)]) >0){
+    stop(paste(mando_cols[-which(names(input) %in% short),full],collapse = ", ")," is missing!")
+  }
 
   if (is.numeric(GFMCold) & length(GFMCold) == 1){
     warning("Single GFMCold value for grid is applied to the whole grid")
