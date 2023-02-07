@@ -187,7 +187,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   
   if (!length(prec[prec < 0]) == 0)
     stop("precipiation (prec) cannot be negative!")
-  if (!legnth(ws[ws < 0]) == 0)
+  if (!length(ws[ws < 0]) == 0)
     stop("wind speed (ws) cannot be negative!")
   if (!length(rh[rh < 0]) == 0)
     stop("relative humidity (rh) cannot be negative!")
