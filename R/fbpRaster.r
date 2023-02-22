@@ -257,8 +257,9 @@
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 #' 
 #' @importFrom foreach registerDoSEQ
-#' @importFrom terra rast rasterToPoints ncell values setValues
-#' @importFrom sf 
+#' @importFrom terra rast ncell values setValues writeRaster
+#' @import sf 
+#' @importFrom data.table as.data.table data.table
 #' 
 #' @keywords methods
 #' @examples
@@ -279,7 +280,7 @@
 #' # Secondary outputs:
 #' system.time(foo<-fbpRaster(input = input,output="S"))
 #' # All outputs:
-#' #system.time(foo<-fbpRaster(input = input,output="A"))
+#' system.time(foo<-fbpRaster(input = input,output="A"))
 #' 
 #' ### Additional, longer running examples  ###
 #' # Keep only the required input layers, the other layers would be
@@ -335,173 +336,168 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1){
   names(input) <- toupper(names(input))
   output <- toupper(output)
   
-  
-  ## Does lat exist?
-  if(!"LAT" %in% names(test)){
-    
-    coords <- as.data.table(input[["FUEL"]],na.rm=F,xy=T)
-    
-    coords <- st_multipoint(matrix(ncol=2,c(coords[,x],coords[,y])),dim = "XY") %>% st_sfc()
-    st_crs(coords) <- crs(input)
-    coords <- st_transform(coords, 4326) %>% st_coordinates
-    
-    LAT <- mask(setValues(FUEL,coords[,"Y"]),FUEL)
-    names(LAT) <- "LAT"
-    LONG <- mask(setValues(FUEL,coords[,"X"]),FUEL)
-    names(LONG) <- "LONG"
-    
-    input <- c(input,LAT,LONG)
-  
-}
-  # if("LAT" %in% names(input)){
-  #   #register a sequential parallel backend
-  #   foreach::registerDoSEQ()
-  #   #Get the specified raster cell values
-  #   r <- .getValuesBlock_stackfix(input, nrows=nrow(input))
-  #   #convert to data.frame
-  #   r <- as.data.frame(r)
-  #   names(r) <- names(input)
-  # }else{
-    #Convert the raster to points and insert into a data.frame
-    #r <- as.data.frame(raster::rasterToPoints(input))
-    
-  prod(dim(input)[1:2],4)
-  
   if(ncell(input[[1]]) >= 10000000){
   
-    tiler <- input[["FUEL"]]
+    tiler <- input[[names(input)[grep("fuel",names(input),ignore.case = T)]]]
   
-    res(tiler) <- 200000
+    res(tiler) <- 125000
     
     temp <- tempdir()
   
     terra::makeTiles(input,tiler,filename=paste0(temp,"\\tile_.tif"),overwrite=T)
     
+    
+    writeRaster(input,paste0(temp,"\\input.tif"))
+
+    
+    tif = system.file("tif/L7_ETMs.tif", package = "stars")
+    r = read_stars(paste0(temp,"\\input.tif"), proxy = TRUE)
+    tiles = st_tile(nrow(r), ncol(r), 1250, 1250)
+    system.time({
+    for (i in seq_len(nrow(tiles))) {
+      tile = read_stars(paste0(temp,"\\input.tif"), proxy = FALSE, RasterIO = tiles[i, ])
+      # write tiles to separate files
+      write_stars(tile, dsn = paste0(temp,"\\tile_",i, ".tif"), options = c("compress=lzw"))
+    }           })
+    
+               
     rm(input)
     
     gc()
     
     files <- list.files(temp,full.names=T,pattern="tile")
     
+    temp_out <- paste0(gsub("Rtmp.*$","",tempdir()),"\\Tester\\")
+    dir.create(temp_out)
+    
     }
   
-  for(i in files[13:16]){
   
-    input <- rast(i)
-    
-    system.time({
+  for(k in if(exists("files")){files}else{1}){
+  
+    if(k ==1){ input <- input
+      } else {
+        input <- rast(k)
+      }
+
     r <- as.data.table(input)
+    r <- r[rowSums(is.na(r)) < ncol(r),]
     
+    if(nrow(r) == 0 ){
+      next
+    }
     
+    ## Does lat exist?
+    if(!"LAT" %in% names(input)){
+      
+      coords <- as.data.table(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]],na.rm=F,xy=T)
+      
+      coords <- st_multipoint(matrix(ncol=2,c(coords[,x],coords[,y])),dim = "XY") %>% st_sfc()
+      st_crs(coords) <- crs(input)
+      coords <- st_transform(coords, 4326) %>% st_coordinates
+      
+      LAT <- mask(setValues(FUEL,coords[,"Y"]),FUEL)
+      names(LAT) <- "LAT"
+      LONG <- mask(setValues(FUEL,coords[,"X"]),FUEL)
+      names(LONG) <- "LONG"
+      
+      input <- c(input,LAT,LONG)
+      
+    }
     
     #Check for valid latitude
     if (r[,max(LAT,na.rm=T),] > 90 | r[,min(LAT,na.rm=T),] < -90){
       warning("Input projection is not in lat/long, consider re-projection or 
               include LAT as input")
     }
-  #}
-  #Unique IDs
-  r[,ID:=as.numeric(row.names(r))]
-  setkey(r,ID)
-  #r$ID <- 1:nrow(r)
-  #merge fuel codes with integer values
-  
-  fuelCross <- data.table(FUELTYPE0 = sort(c(paste("C", 1:7, sep="-"),
-                                             "D-1",
-                                             paste("M", 1:4, sep="-"),
-                                             paste("S", 1:3, sep="-"),
-                                             "O-1a", "O-1b", "WA", "NF")),
-                          code=1:19)
-  r[,FuelType:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
-  #setindex(r, FuelType)
-  
-  #Calculate FBP through the fbp() function
 
-  FBP <- fbp(input = r, output = "PRIMARY", m = NULL, cores = 1)
+    #Unique IDs
+    r[,ID:=as.numeric(row.names(r))]
+    setkey(r,ID)
+    
+    #merge fuel codes with integer values
+    
+    fuelCross <- data.table(FUELTYPE0 = sort(c(paste("C", 1:7, sep="-"),
+                                               "D-1",
+                                               paste("M", 1:4, sep="-"),
+                                               paste("S", 1:3, sep="-"),
+                                               "O-1a", "O-1b", "WA", "NF")),
+                            code=1:19)
+    r[,FUELTYPE:=fuelCross[match(r$FUEL,fuelCross$code),FUELTYPE0]]
+    
+    #Calculate FBP through the fbp() function
   
-  FBP <- FBP[r]
-
-  #If secondary output selected then we need to reassign character
-  #  represenation of Fire Type S/I/C to a numeric value 1/2/3
-  if (!(output == "SECONDARY" | output == "S")){
-    FBP$FD <- ifelse(FBP$FD == "I", 2, FBP$FD)
-    FBP$FD <- ifelse(FBP$FD == "C", 3, FBP$FD)
-    FBP$FD <- ifelse(FBP$FD == "S", 1, FBP$FD)
-    FBP$FD <- as.numeric(FBP$FD)
+    FBP <- fbp(input = r, output = output, m = NULL, cores = 1)
+    
+    FBP <- FBP[r]
+  
+    #If secondary output selected then we need to reassign character
+    #  representation of Fire Type S/I/C to a numeric value 1/2/3
+    if (!(output == "SECONDARY" | output == "S")){
+      FBP$FD <- ifelse(FBP$FD == "I", 2, FBP$FD)
+      FBP$FD <- ifelse(FBP$FD == "C", 3, FBP$FD)
+      FBP$FD <- ifelse(FBP$FD == "S", 1, FBP$FD)
+      FBP$FD <- as.numeric(FBP$FD)
+    }
+    #If caller specifies select outputs, then create a raster stack that contains
+    #  only those outputs
+    if (!is.null(select)){
+      out <- c(rep(input[[1]],length(select)))
+      names(out) <- select
+      
+      for(i in select){
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
+      }
+      varnames(out) <- select
+    } else {
+      
+    #If caller specified Primary outputs, then create raster stack that contains
+    #  only primary outputs
+     if (output == "PRIMARY" | output == "P") {
+      message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
+      out <- c(rep(input[[1]],length(primaryNames)))
+      names(out) <- primaryNames
+      
+      for(i in primaryNames){
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
+      }
+      varnames(out) <- primaryNames
+    } else {
+  
+    #If caller specified Secondary outputs, then create raster stack that contains
+    #  only secondary outputs
+    if(output == "SECONDARY" | output == "S") {
+      out <- c(rep(input[[1]],length(secondaryNames)))
+      names(out) <- secondaryNames
+      
+      for(i in secondaryNames){
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
+      }
+      varnames(out) <- secondaryNames
+    } else {
+  
+    #If caller specified All outputs, then create a raster stack that contains
+    #  both primary and secondary outputs
+     if(output == "ALL" | output == "A") {
+      message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
+      out <- c(rep(input[[1]],length(allNames)))
+      names(out) <- allNames
+      for(i in allNames){
+        out[[i]][which(!is.na(input[[names(input)[grep("fuel",names(input),ignore.case = T)]]][]))] <- FBP[[i]]
+      }
+      varnames(out) <- allNames
+    }}}}
   }
-  #If caller specifies select outputs, then create a raster stack that contains
-  #  only those outputs
-  if (!is.null(select)){
-    out <- rast(FBP)[[primaryNames]]
-    # out <- out0 <- input[[1]]
-    # raster::values(out) <- FBP[, select[1]]
-    # if (length(select) > 1){
-    #   for (i in 2:length(select)){
-    #     raster::values(out0) <- FBP[,select[i]]
-    #     out <- stack(out, out0)
-    #   }
-    #}
-    #names(out)<-select 
-  #If caller specified Primary outputs, then create raster stack that contains
-  #  only primary outputs
-  }else if (output == "PRIMARY" | output == "P") {
-    message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- c(rep(input[[1]],length(primaryNames)))
-    names(out) <- primaryNames
-    
-    for(i in primaryNames){
-      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
-    }
-    # out <- out0 <- input[[1]]
-    # raster::values(out) <- FBP[,primaryNames[1]]
-    # for (i in 2:length(primaryNames)){
-    #   raster::values(out0) <- FBP[, primaryNames[i]]
-    #   out <- raster::stack(out,out0)
-    # names(out)<-primaryNames
-    #}
-  #If caller specified Secondary outputs, then create raster stack that contains
-  #  only secondary outputs
-  }else if(output == "SECONDARY" | output == "S") {
-    out <- c(rep(input[[1]],length(secondaryNames)))
-    names(out) <- secondaryNames
-    
-    for(i in secondaryNames){
-      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
-    }
-    # out <- out0 <- input[[1]]
-    # raster::values(out) <- FBP[, secondaryNames[1]]
-    # for (i in 2:length(secondaryNames)){
-    #   raster::values(out0) <- FBP[, secondaryNames[i]]
-    #   out <- raster::stack(out, out0)
-    #}
-    #names(out)<-secondaryNames
-  #If caller specified All outputs, then create a raster stack that contains
-  #  both primary and secondary outputs
-  }else if(output == "ALL" | output == "A") {
-    message("FD = 1,2,3 representing Surface (S),Intermittent (I), and Crown (C) fire")
-    out <- c(rep(input[[1]],length(allNames)))
-    names(out) <- allNames
-    for(i in allNames){
-      out[[i]][which(!is.na(input[["FUEL"]][]))] <- FBP[[i]]
-    }
-    # out <- out0 <- input[[1]]
-    # raster::values(out) <- FBP[, allNames[1]]
-    # for (i in 2:length(allNames)){
-    #   raster::values(out0) <- FBP[, allNames[i]]
-    #   out <- raster::stack(out, out0)
-    #}
-    #names(out) <- allNames
-  }})
-    
-    writeRaster(x = out, 
-                filename = paste0("D:\\Quarantine\\Cffdrs_data_test\\",i),
-                wopt = list(filetype = "GTiff",
-                            datatype = "INT2S",
-                            gdal = c("COMPRESS=LZW","ZLEVEL=9","PREDICTOR=2")),
-                overwrite = T, 
-                NAflag = -9999)
-    
-    }
+  if( exists("files")){
+    tiles <- list.files(temp_out,pattern="tile",full.names=T)
+    sf::gdal_utils(util = "warp", 
+                   source = tiles,
+                   destination = paste0(temp_out,"mosaic.tif"),
+                   options = c("-co","COMPRESS=DEFLATE","-co","BIGTIFF=YES", "-co","PREDICTOR=2","-co","TILED=YES",))
+    out <- rast(paste0(temp_out,"mosaic.tif"))
+    out <- extend(out,FUEL)
+  }
   #return the raster stack to the caller
   return(out)
 }
+

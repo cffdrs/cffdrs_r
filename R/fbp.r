@@ -289,7 +289,7 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
   }
   #If input is not provided, then calculate FBP with default values
   if (is.null(input)){
-    fullList <- cffdrs:::.FBPcalc(input)
+    fullList <- .FBPcalc(input)
 
   } else {
     #determine optimal number of pixels to process at each iteration
@@ -308,10 +308,10 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
       ca <- foreach::foreach(i=1:n, .packages='cffdrs') %dopar% {
         if (i==n){
           #Run FBP functions
-          to.ls<- cffdrs:::.FBPcalc(input[((i-1)*m+1):nrow(input),],output=output)
+          to.ls<- .FBPcalc(input[((i-1)*m+1):nrow(input),],output=output)
         }else {
           #Run FBP functions
-          to.ls<- cffdrs:::.FBPcalc(input[((i-1)*m+1):(i*m),],output=output)
+          to.ls<- .FBPcalc(input[((i-1)*m+1):(i*m),],output=output)
         }
         to.ls
       }
@@ -329,7 +329,7 @@ fbp  <- function(input = NULL, output = "Primary", m = NULL, cores = 1){
           foo <- input[((i - 1) * m + 1):(i * m), ]
         }
         #Run FBP functions
-        ca[[i]] <- cffdrs:::.FBPcalc(foo, output = output)
+        ca[[i]] <- .FBPcalc(foo, output = output)
       }    
     }
     #create a single keyed data table
