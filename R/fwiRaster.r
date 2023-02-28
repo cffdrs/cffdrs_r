@@ -176,7 +176,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   names(input) <- tolower(names(input))
   
   if (!"lat" %in% names(input)) {
-    input[["lat"]] <- terra::init(temp,"y")
+    input[["lat"]] <- terra::init(input[["temp"]],"y")
   }
   
   required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity"), short = c("temp","prec","ws","rh"))
@@ -185,11 +185,11 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     stop(paste(required_cols[-which(names(input) %in% short),full],collapse = " , ")," is missing!")
   }
   
-  if (!length(prec[prec < 0]) == 0)
+  if (!length(input[["prec"]][input[["prec"]] < 0]) == 0)
     stop("precipiation (prec) cannot be negative!")
-  if (!length(ws[ws < 0]) == 0)
+  if (!length(input[["ws"]][input[["ws"]] < 0]) == 0)
     stop("wind speed (ws) cannot be negative!")
-  if (!length(rh[rh < 0]) == 0)
+  if (!length(input[["rh"]][input[["rh"]] < 0]) == 0)
     stop("relative humidity (rh) cannot be negative!")
 
   names(init) <- tolower(names(init))
@@ -210,28 +210,28 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     dc_yda   <- init$dc
   }
   #constrain relative humidity
-  rh[rh>=100]<- 99.9999
+  input[["rh"]][input[["rh"]]>=100]<- 99.9999
   ###########################################################################
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
   
   ffmc <- lapp(x = c( ffmc_yda, input[[c("temp","rh","ws","prec")]] ), 
-               fun = Vectorize(.ffmcCalc))
+               fun = Vectorize(cffdrs:::.ffmcCalc))
   
   ###########################################################################
   #                        Duff Moisture Code (DMC)
   ###########################################################################
   
-  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], lat,setValues(input[["temp"]],mon) ), 
-              fun = Vectorize(.dmcCalc), 
+  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], input[["lat"]],setValues(input[["temp"]],mon) ), 
+              fun = Vectorize(cffdrs:::.dmcCalc), 
               lat.adjust=lat.adjust)
 
   ###########################################################################
   #                             Drought Code (DC)
   ###########################################################################
   
-  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],lat, setValues(input[["temp"]],mon)),
-             fun = Vectorize(dcCalc), 
+  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],input[["lat"]], setValues(input[["temp"]],mon)),
+             fun = Vectorize(cffdrs:::.dcCalc), 
              lat.adjust=lat.adjust)
   
   ###########################################################################
@@ -239,7 +239,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   isi <- lapp(x = c(ffmc, input[["ws"]]),
-              fun = Vectorize(.ISIcalc), 
+              fun = Vectorize(cffdrs:::.ISIcalc), 
               fbpMod=F)
   
   ###########################################################################
@@ -247,14 +247,14 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   bui <- lapp(x = c(dmc, dc),
-              fun = Vectorize(.buiCalc))
+              fun = Vectorize(cffdrs:::.buiCalc))
   
   ###########################################################################
   #                     Fire Weather Index (FWI)
   ###########################################################################
   
   fwi <- lapp(x = c(isi, bui),
-              fun = Vectorize(.fwiCalc))
+              fun = Vectorize(cffdrs:::.fwiCalc))
   
   ###########################################################################
   #                   Daily Severity Rating (DSR)
@@ -265,7 +265,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
     #Creating a raster stack of FWI variables to return
-    new_FWI <- terra::rast(ffmc, dmc, dc, isi, bui, fwi, dsr)
+    new_FWI <- c(ffmc, dmc, dc, isi, bui, fwi, dsr)
     names(new_FWI) <- c("ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
     if (uppercase){
       names(new_FWI) <- toupper(names(new_FWI))
@@ -274,7 +274,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   } else {
     if (out == "all") {
       #Create a raster stack of input and FWI variables
-      new_FWI <- terra::rast(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
+      new_FWI <- c(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
       names(new_FWI) <- c(names(input),"ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
       if (uppercase){
         names(new_FWI) <- toupper(names(new_FWI))
@@ -283,4 +283,3 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   }
   return(new_FWI)
 }
-
