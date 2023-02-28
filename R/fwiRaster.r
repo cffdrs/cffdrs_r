@@ -216,14 +216,14 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   ffmc <- lapp(x = c( ffmc_yda, input[[c("temp","rh","ws","prec")]] ), 
-               fun = Vectorize(cffdrs:::.ffmcCalc))
+               fun = Vectorize(.ffmcCalc))
   
   ###########################################################################
   #                        Duff Moisture Code (DMC)
   ###########################################################################
   
   dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], input[["lat"]],setValues(input[["temp"]],mon) ), 
-              fun = Vectorize(cffdrs:::.dmcCalc), 
+              fun = Vectorize(.dmcCalc), 
               lat.adjust=lat.adjust)
 
   ###########################################################################
@@ -231,7 +231,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],input[["lat"]], setValues(input[["temp"]],mon)),
-             fun = Vectorize(cffdrs:::.dcCalc), 
+             fun = Vectorize(.dcCalc), 
              lat.adjust=lat.adjust)
   
   ###########################################################################
@@ -239,7 +239,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   isi <- lapp(x = c(ffmc, input[["ws"]]),
-              fun = Vectorize(cffdrs:::.ISIcalc), 
+              fun = Vectorize(.ISIcalc), 
               fbpMod=F)
   
   ###########################################################################
@@ -247,14 +247,14 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   ###########################################################################
   
   bui <- lapp(x = c(dmc, dc),
-              fun = Vectorize(cffdrs:::.buiCalc))
+              fun = Vectorize(.buiCalc))
   
   ###########################################################################
   #                     Fire Weather Index (FWI)
   ###########################################################################
   
   fwi <- lapp(x = c(isi, bui),
-              fun = Vectorize(cffdrs:::.fwiCalc))
+              fun = Vectorize(.fwiCalc))
   
   ###########################################################################
   #                   Daily Severity Rating (DSR)
