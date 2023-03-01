@@ -47,10 +47,10 @@ test_gfmc_r <- c(test_gfmc_r,
                  setValues(test_gfmc_r, sample(x = 30:70,size = 25*25,replace=T)),
                  setValues(test_gfmc_r, sample(x = (5:950)/1000,size = 25*25,replace=T)))
 names(test_gfmc_r) <- c("temp","prec","ws","rh","isol")
-gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
+
+gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3, batch=T,
                  out = "GFMCandMC") {
 
-  t0 <- time.step ## Currently locked at 1
   names(input) <- tolower(names(input))
   #Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn
@@ -60,7 +60,11 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
     detach(input)
   }
 
-  required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity","insolation"), short = c("temp","prec","ws","rh","isol"))
+  #show warnings when inputs are missing
+  required_cols <- data.table(full = c("temperature","precipitation",
+                                       "wind speed","relative humidity",
+                                       "insolation"), 
+                              short = c("temp","prec","ws","rh","isol"))
   
   if(nrow(required_cols[-which(names(input) %in% short)]) >0){
     stop(paste(required_cols[-which(names(input) %in% short),full],collapse = ", ")," is missing!")
@@ -68,15 +72,15 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
 
   if (is.numeric(GFMCold) & length(GFMCold) == 1){
     warning("Single GFMCold value for grid is applied to the whole grid")
-    GFMCold <- setValues(input["temp"], GFMCold)
+    #GFMCold <- setValues(input["temp"], GFMCold)
   }
   if (is.numeric(time.step) & length(time.step) == 1){
     warning("Single time.step value for grid is applied to the whole grid")
-    time.step <- setValues(input["temp"], time.step)
+    #time.step <- setValues(input["temp"], time.step)
   }
   if (is.numeric(roFL) & length(roFL) == 1){
     warning("Single roFL value for grid is applied to the whole grid")
-    roFL <- setValues(input["temp"], roFL)
+    #roFL <- setValues(input["temp"], roFL)
   }
 
   validOutTypes = c("GFMCandMC", "MC", "GFMC", "ALL")
@@ -86,72 +90,28 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3,
 
   #get the length of the data stream
   
-  gfmc.r <- lapp(x = c(input[[c("temp","rh","ws","prec","isol")]],GFMCold,time.step,roFL) , 
-               fun = Vectorize(gfmc),
-               out="All")
-  
-
-  GFMC <- NULL
-  MC <- NULL
-  #iterate through timesteps
-  #Eq. 13 - Calculate previous moisture code
-  MCold <- 147.27723 * ((101 - GFMCold) / (59.5 + GFMCold))
-  #Eq. 11 - Calculate the moisture content of the layer in % after rainfall
-  MCr <- MCold
-  MCr[prec>0] <- MCold[prec>0] + 100 * (prec[prec>0] / roFL)
-  #Constrain to 250
-  MCr[MCr > 250] <- 250
-  MCold <- MCr
-  #Eq. 2 - Calculate Fuel temperature
-  Tf <- temp + 35.07 * isol * exp(-0.06215 * ws)
-  #Eq. 3 - Calculate Saturation Vapour Pressure (Baumgartner et a. 1982)
-  eS.T <- 6.107 * 10^(7.5 * temp / (237 + temp))
-  #Eq. 3 for Fuel temperature
-  eS.Tf <- 6.107 * 10^(7.5 * Tf / (237 + Tf))
-  #Eq. 4 - Calculate Fuel Level Relative Humidity
-  RH.f <- rh * (eS.T / eS.Tf)
-  #Eq. 7 - Calculate Equilibrium Moisture Content for Drying phase
-  EMC.D <- (1.62 * RH.f^0.532 + 13.7 * exp((RH.f - 100) / 13.0)) +
-   0.27 * (26.7 - Tf) * (1 - exp(-0.115 * RH.f))
-  #Eq. 7 - Calculate Equilibrium Moisture Content for Wetting phase
-  EMC.W <- (1.42 * RH.f^0.512 + 12.0 * exp((RH.f - 100) / 18.0)) +
-   0.27 * (26.7 - Tf) * (1 - exp(-0.115 * RH.f))
-  #RH in terms of RH/100 for desorption
-  Rf <- rh
-  Rf[MCold > EMC.D] <- RH.f[MCold > EMC.D] / 100
-  #RH in terms of 1-RH/100 for absorption
-  Rf[MCold < EMC.W] <- (100 - RH.f[MCold < EMC.W]) / 100
-  #Eq. 10 - Calculate Inverse Response time of grass (hours)
-  K.GRASS <- 0.389633 * exp(0.0365 * Tf) * (0.424 * (1 - Rf^1.7) + 0.0694 *
-                                             sqrt(ws) * (1 - Rf^8))
-  #Fuel is drying, calculate Moisture Content
-  MC0 <- MCold
-  MC0[MCold > EMC.D] <- EMC.D[MCold > EMC.D] + (MCold[MCold > EMC.D] - EMC.D[MCold > EMC.D]) * exp(-1.0 * log(10.0) * K.GRASS[MCold > EMC.D] * t0)
-
-  #Fuel is wetting, calculate moisture content
-  MC0[MCold < EMC.W] <- EMC.W[MCold < EMC.W] + (MCold[MCold < EMC.W] - EMC.W[MCold < EMC.W]) * exp(-1.0 * log(10.0) * K.GRASS[MCold < EMC.W] * t0)
-
-  #Eq. 12 - Calculate GFMC
-  GFMC0 <- 59.5 * ((250 - MC0) / (147.2772 + MC0))
-  #Keep current and old GFMC
-  GFMC <- GFMC0
-  names(GFMC) <- "GFMC"
-  #Same for moisture content
-  MC <- MC0
-  names(MC) <- "MC"
-  #Reset vars
-  GFMCold <- GFMC0
-  MCold <- MC0
+  gfmc.r <- lapp(x = c(input[["temp"]],
+                       input[["rh"]],
+                       input[["ws"]],
+                       input[["prec"]],
+                       input[["isol"]]),
+                fun = Vectorize(gfmcCalc),
+                out = "ALL",
+                id = NULL,
+                GFMCold = GFMCold,
+                time.step= time.step,
+                roFL = roFL)
 
   #Return requested 'out' type
   if (out=="ALL"){
-    return(terra::c(input, GFMC, MC))
+    return(c(input, GFMC, MC))
   } else if(out == "GFMC"){
     return(GFMC)
   } else if (out == "MC"){
     return(MC)
   } else { #GFMCandMC
-    return(terra::c( GFMC, MC))
+    return(c( GFMC, MC))
   }
 }
 
+gfmcRaster(test_gfmc_r)

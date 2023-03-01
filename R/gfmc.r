@@ -78,6 +78,8 @@
 #' Petawawa Forest Experiment Station, Chalk River, Ontario. Information Report
 #' PS-X-69. \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
 #' @keywords methods
+#' @importFrom data.table data.table
+#' @export gfmc
 #' @examples
 #' 
 #' library(cffdrs)
@@ -129,16 +131,97 @@
 #' gfmc(dat0,time.step=1.5)
 #' 
 #' @export gfmc
-#' @export gfmc_real
 
-gfmcCalc <- function(temp, rh, ws, prec, isol, GFMCold = 85, batch = TRUE, time.step = 1, roFL = 0.3,
-                      out = "GFMCandMC") {
- 
+gfmc <- function(input, id = NULL,GFMCold = 85, batch = T, time.step = 1, roFL = 0.3,
+                 out = "GFMCandMC") {
+  
+  #show warnings when inputs are missing
+  required_cols <- data.table(full = c("temperature","precipitation",
+                                       "wind speed","relative humidity",
+                                       "insolation"), 
+                              short = c("temp","prec","ws","rh","isol"))
+  
+  if(nrow(required_cols[-which(required_cols$short %in% names(input))]) >0){
+    stop(paste(required_cols[-which(required_cols$short %in% names(input)),"full"],
+               collapse = " , ")," is missing!")
+  }
+  
+  #check for issues with batching the function
+  if (batch){
+    if (!is.null(input$id)) {
+      n <- length(unique(input$id))
+      if(length(unique(input$id)) != n){
+        stop("Multiple stations have to start and end at the same dates/time, 
+             and input data must be sorted by date/time and id")
+      }
+    } else {
+      n <- 1
+    }
+  } else {
+    n <- length(input$temp)
+  }
+  
+  if (length(input$temp)%%n != 0){
+    warning("Input data do not match with number of weather stations")}
+  
+  if (length(GFMCold) != n & length(GFMCold) == 1){
+    warning("One GFMCold value for multiple weather stations") 
+    GFMCold <- rep(GFMCold, n)
+  }
+  
+  if (length(GFMCold) != n & length(GFMCold) > 1){
+    stop("Number of GFMCold doesn't match number of wx stations")}
+  validOutTypes = c("GFMCandMC", "MC", "GFMC", "ALL")
+  if(!(out %in% validOutTypes)){
+    stop(paste("'",out, "' is an invalid 'out' type.", sep=""))
+  }
+  
   #get the length of the data stream
-  n0 <- length(temp)%/%n
+  n0 <- length(input$temp)%/%n
   GFMC <- NULL
   MC <- NULL
+  #iterate through timesteps
+  for (i in 1:n0){
+    #k is the data for all stations by time step
+    k <- (n * (i - 1) + 1):(n * i)
     
+    out_dat <- gfmcCalc(temp = input$temp[k],
+                        rh =  input$rh[k], 
+                        ws = input$ws[k], 
+                        prec = input$prec[k], 
+                        isol = input$isol[k], 
+                        id = if(!is.null(input$id)) input$id[k],
+                        GFMCold = GFMCold, 
+                        batch = T, 
+                        time.step = time.step, 
+                        roFL = roFL, 
+                        out = out)
+    
+    #Reset vars
+    GFMCold <- out_dat$GFMC
+    MCold <- out_dat$MC
+    GFMC <- c(GFMC,out_dat$GFMC) 
+    MC <- c(MC,out_dat$MC) 
+  }
+  
+  #Return requested 'out' type
+  if (out=="ALL"){
+    return(cbind(input,data.frame(GFMC = GFMC, MC = MC)))
+  } else if(out == "GFMC"){
+    return(data.frame(GFMC = GFMC))
+  } else if (out == "MC"){
+    return(data.frame(MC = MC))
+  } else { #GFMCandMC
+    return(data.frame(GFMC = GFMC, MC = MC))
+  }
+  
+}
+
+gfmcCalc <- function(temp, rh, ws, prec, isol, id, GFMCold, time.step, roFL,
+                      out = "GFMCandMC") {
+
+  t0 <- time.step
+  
   #Eq. 13 - Calculate previous moisture code
   MCold <- 147.27723 * ((101 - GFMCold) / (59.5 + GFMCold))
   #Eq. 11 - Calculate the moisture content of the layer in % after rainfall
@@ -186,90 +269,6 @@ gfmcCalc <- function(temp, rh, ws, prec, isol, GFMCold = 85, batch = TRUE, time.
   
   #Eq. 12 - Calculate GFMC
   GFMC0 <- 59.5 * ((250 - MC0) / (147.2772 + MC0))
-  #Keep current and old GFMC
-  GFMC <- c(GFMC, GFMC0)
-  #Same for moisture content
-  MC <- c(MC, MC0)
-  #Reset vars
-  GFMCold <- GFMC0
-  MCold <- MC0
-  
-  #Return requested 'out' type
-  if (out=="ALL"){
-    return(list(temp, rh, ws, prec, isol, GFMC, MC))
-  } else if(out == "GFMC"){
-    return(GFMC)
-  } else if (out == "MC"){
-    return(MC)
-  } else { #GFMCandMC
-    return(list(GFMC, MC))
-  }
-}
 
-gfmc <- function(input, GFMCold = 85, batch = TRUE, time.step = 1, roFL = 0.3,
-                 out = "GFMCandMC") {
-  t0 <- time.step
-
-#show warnings when inputs are missing
-  required_cols <- data.table(full = c("temperature","precipitation",
-                                       "wind speed","relative humidity",
-                                       "insolation"), 
-                              short = c("temp","prec","ws","rh","isol"))
-  
-  if(nrow(required_cols[-which(names(input) %in% required_cols$short)]) >0){
-    stop(paste(required_cols[-which(names(input) %in% required_cols$short),"full"],
-               collapse = " , ")," is missing!")
-  }
-
-#check for issues with batching the function
-if (batch){
-  if ("id" %in% names(input)) {
-    n <- length(unique(input$id))
-    if(length(unique(input[1:n, "id"])) != n){
-      stop("Multiple stations have to start and end at the same dates/time, 
-             and input data must be sorted by date/time and id")
-    }
-  } else {
-    n <- 1
-  }
-} else {n <- nrow(input)}
-
-if (length(input$temp)%%n != 0){
-  warning("Input data do not match with number of weather stations")}
-
-if (length(GFMCold) != n & length(GFMCold) == 1){
-  warning("One GFMCold value for multiple weather stations") 
-  GFMCold <- rep(GFMCold, n)
-}
-
-if (length(GFMCold) != n & length(GFMCold) > 1){
-  stop("Number of GFMCold doesn't match number of wx stations")}
-validOutTypes = c("GFMCandMC", "MC", "GFMC", "ALL")
-if(!(out %in% validOutTypes)){
-  stop(paste("'",out, "' is an invalid 'out' type.", sep=""))
-}
-
-#get the length of the data stream
-n0 <- length(input$temp)%/%n
-GFMC <- NULL
-MC <- NULL
-#iterate through timesteps
-for (i in 1:n0){
-  #k is the data for all stations by time step
-  k <- (n * (i - 1) + 1):(n * i)
-  
-  gfmcCalc(input$temp[k], input$rh[k], input$ws[k], input$prec[k], input$isol[k], GFMCold, batch, 
-           time.step, roFL, out = "GFMCandMC")
-}
-#Return requested 'out' type
-if (out=="ALL"){
-  return(data.frame(temp, rh, ws, prec, isol, GFMC, MC))
-} else if(out == "GFMC"){
-  return(data.frame(GFMC))
-} else if (out == "MC"){
-  return(data.frame(MC))
-} else { #GFMCandMC
-  return(data.frame(GFMC, MC))
-}
-  
+  return(list(GFMC=GFMC0,MC=MC0))
 }
