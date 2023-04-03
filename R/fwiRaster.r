@@ -130,8 +130,7 @@
 #' require(terra)
 #' # The test data is a stack with four input variables including 
 #' # daily noon temp, rh, ws, and prec (we recommend tif format):
-#' day01src <- system.file("extdata","test_rast_day01.tif",package="cffdrs")
-#' day01 <- rast(day01src)
+#' day01 <- rast(system.file("extdata","test_rast_day01.tif",package="cffdrs"))
 #' day01 <- crop(day01,c(250,255,47,51))
 #' # assign variable names:
 #' names(day01)<-c("temp","rh","ws","prec")
@@ -174,29 +173,22 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     detach(input)
   }
   names(input) <- tolower(names(input))
-  temp <- input$temp
-  prec <- input$prec
-  ws <- input$ws
-  rh <- input$rh
-  if ("lat" %in% names(input)) {
-    lat <- input$lat
-  }else {
-    lat <- terra::init(temp,"y")
+  
+  if (!"lat" %in% names(input)) {
+    input[["lat"]] <- terra::init(input[["temp"]],"y")
   }
   
-  if (!exists("temp") | is.null(temp)) 
-    stop("temperature (temp) is missing!")
-  if (!exists("prec") | is.null(prec)) 
-    stop("precipitation (prec) is missing!")
-  if (!length(prec[prec < 0]) == 0)
+  required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity"), short = c("temp","prec","ws","rh"))
+  
+  if(nrow(required_cols[-which(names(input) %in% short)]) >0){
+    stop(paste(required_cols[-which(names(input) %in% short),full],collapse = " , ")," is missing!")
+  }
+  
+  if (!length(input[["prec"]][input[["prec"]] < 0]) == 0)
     stop("precipiation (prec) cannot be negative!")
-  if (!exists("ws") | is.null(ws)) 
-    stop("wind speed (ws) is missing!")
-  if (!legnth(ws[ws < 0]) == 0)
+  if (!length(input[["ws"]][input[["ws"]] < 0]) == 0)
     stop("wind speed (ws) cannot be negative!")
-  if (!exists("rh") | is.null(rh)) 
-    stop("relative humidity (rh) is missing!")
-  if (!length(rh[rh < 0]) == 0)
+  if (!length(input[["rh"]][input[["rh"]] < 0]) == 0)
     stop("relative humidity (rh) cannot be negative!")
 
   names(init) <- tolower(names(init))
@@ -206,7 +198,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     if (is.null(names(init))){
       names(init)<-c('ffmc', 'dmc', 'dc')
     }
-    ffmc_yda <- dmc_yda <- dc_yda <- temp
+    ffmc_yda <- dmc_yda <- dc_yda <- input[["temp"]]
     terra::values(ffmc_yda) <- init[['ffmc']]
     names(ffmc_yda) <- "ffmc_yda"
     terra::values(dmc_yda) <- init[['dmc']]
@@ -217,7 +209,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
     dc_yda   <- init$dc
   }
   #constrain relative humidity
-  rh[rh>=100]<- 99.9999
+  input[["rh"]][input[["rh"]]>=100]<- 99.9999
   ###########################################################################
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
@@ -229,7 +221,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                        Duff Moisture Code (DMC)
   ###########################################################################
   
-  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], lat,setValues(temp,mon) ), 
+  dmc <- lapp(x = c( dmc_yda, input[[c("temp","rh","prec")]], input[["lat"]],setValues(input[["temp"]],mon) ), 
               fun = Vectorize(.dmcCalc), 
               lat.adjust=lat.adjust)
 
@@ -237,8 +229,8 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #                             Drought Code (DC)
   ###########################################################################
   
-  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],lat, setValues(temp,mon)),
-             fun = Vectorize(dcCalc), 
+  dc <- lapp(x = c(dc_yda, input[[c("temp","rh","prec")]],input[["lat"]], setValues(input[["temp"]],mon)),
+             fun = Vectorize(.dcCalc), 
              lat.adjust=lat.adjust)
   
   ###########################################################################
@@ -272,7 +264,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   #If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
     #Creating a raster stack of FWI variables to return
-    new_FWI <- terra::rast(ffmc, dmc, dc, isi, bui, fwi, dsr)
+    new_FWI <- c(ffmc, dmc, dc, isi, bui, fwi, dsr)
     names(new_FWI) <- c("ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
     if (uppercase){
       names(new_FWI) <- toupper(names(new_FWI))
@@ -281,7 +273,7 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   } else {
     if (out == "all") {
       #Create a raster stack of input and FWI variables
-      new_FWI <- terra::rast(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
+      new_FWI <- c(input, ffmc, dmc, dc, isi, bui, fwi, dsr)
       names(new_FWI) <- c(names(input),"ffmc", "dmc", "dc", "isi", "bui", "fwi", "dsr")
       if (uppercase){
         names(new_FWI) <- toupper(names(new_FWI))
@@ -290,4 +282,9 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   }
   return(new_FWI)
 }
-
+day01 <- rast(system.file("extdata","test_rast_day01.tif",package="cffdrs"))
+day01 <- crop(day01,c(250,255,47,51))
+# assign variable names:
+names(day01)<-c("temp","rh","ws","prec")
+# (1) use the initial values
+foo<-fwiRaster(day01,lat.adjust = F)
