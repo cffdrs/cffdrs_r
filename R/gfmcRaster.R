@@ -30,7 +30,7 @@
 #' 
 #' @export gfmcRaster
 #' 
-#' @example 
+#' @examples
 #'set.seed(5123)
 #'test_gfmc_r <- rast(nrows = 25,
 #'                    ncols = 25,
