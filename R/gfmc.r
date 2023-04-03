@@ -190,7 +190,6 @@ gfmc <- function(input, id = NULL,GFMCold = 85, batch = T, time.step = 1, roFL =
                  ws = input$ws[k], 
                  prec = input$prec[k], 
                  isol = input$isol[k], 
-                 id = if(!is.null(input$id)) input$id[k],
                  GFMCold = GFMCold, 
                  time.step = time.step, 
                  roFL = roFL)
