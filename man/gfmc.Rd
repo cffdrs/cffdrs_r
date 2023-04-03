@@ -6,8 +6,9 @@
 \usage{
 gfmc(
   input,
+  id = NULL,
   GFMCold = 85,
-  batch = TRUE,
+  batch = T,
   time.step = 1,
   roFL = 0.3,
   out = "GFMCandMC"

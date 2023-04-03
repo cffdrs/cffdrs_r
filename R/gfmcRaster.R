@@ -25,33 +25,44 @@
 #' 
 #' @return Returns a spatrast stack of either MC, GFMC, GFMC and MC or All
 #' 
-#' @importFrom terra rast
+#' @importFrom terra rast lapp
+#' @importFrom data.table data.table
 #' 
 #' @export gfmcRaster
 #' 
-set.seed(5123)
-test_gfmc_r <- rast(nrows = 25,
-                    ncols = 25,
-                    crs="EPSG:3402",
-                    resolution = 100,
-                    ymin=5652012,
-                    ymax=5652012+(25*100),
-                    xmin=565550,
-                    xmax=565550+(25*100),
-                    names="temp",
-                    vals=sample(x = 19:27,size = 25*25,replace=T))
+#' @example 
+#'set.seed(5123)
+#'test_gfmc_r <- rast(nrows = 25,
+#'                    ncols = 25,
+#'                    crs="EPSG:3402",
+#'                    resolution = 100,
+#'                    ymin=5652012,
+#'                    ymax=5652012+(25*100),
+#'                    xmin=565550,
+#'                    xmax=565550+(25*100),
+#'                    names="temp",
+#'                    vals=sample(x = 19:27,size = 25*25,replace=T))
+#'
+#'test_gfmc_r <- c(test_gfmc_r,
+#'                 setValues(test_gfmc_r, sample(x = 0:3,size = 25*25,replace=T)),
+#'                 setValues(test_gfmc_r, sample(x = 10:20,size = 25*25,replace=T)),
+#'                 setValues(test_gfmc_r, sample(x = 30:70,size = 25*25,replace=T)),
+#'                 setValues(test_gfmc_r, sample(x = (5:950)/1000,size = 25*25,replace=T)))
+#'names(test_gfmc_r) <- c("temp","prec","ws","rh","isol")
+#'
+#'gfmcRaster(test_gfmc_r,out = "GFMCandMC")
 
-test_gfmc_r <- c(test_gfmc_r,
-                 setValues(test_gfmc_r, sample(x = 0:3,size = 25*25,replace=T)),
-                 setValues(test_gfmc_r, sample(x = 10:20,size = 25*25,replace=T)),
-                 setValues(test_gfmc_r, sample(x = 30:70,size = 25*25,replace=T)),
-                 setValues(test_gfmc_r, sample(x = (5:950)/1000,size = 25*25,replace=T)))
-names(test_gfmc_r) <- c("temp","prec","ws","rh","isol")
-
-gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3, batch=T,
-                 out = "GFMCandMC") {
+gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC") {
 
   names(input) <- tolower(names(input))
+  out <- toupper(out)
+  
+  GFMCold <- if(typeof(GFMCold) == "double")setValues(input[[1]],GFMCold)
+  if(class(GFMCold) == "SpatRaster")  names(GFMCold) <- "GFMCold"
+    
+  roFL <- if(typeof(roFL) == "double")setValues(input[[1]],roFL)
+  if(class(roFL) == "SpatRaster")  names(roFL) <- "roFL"
+  
   #Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn
   #  the user of this case.
@@ -90,28 +101,26 @@ gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3, batch=T,
 
   #get the length of the data stream
   
-  gfmc.r <- lapp(x = c(input[["temp"]],
-                       input[["rh"]],
-                       input[["ws"]],
-                       input[["prec"]],
-                       input[["isol"]]),
-                fun = Vectorize(gfmcCalc),
-                out = "ALL",
-                id = NULL,
-                GFMCold = GFMCold,
-                time.step= time.step,
-                roFL = roFL)
-
+  mc.r <- lapp(x = c(input[[c("temp","rh","ws","prec","isol")]],
+                     GFMCold,
+                     roFL),
+                fun = Vectorize(mcCalc),
+                time.step = time.step,
+                usenames=T)
+  names(mc.r) <- "MC"
+  
+  gfmc.r <- lapp(x = mc.r,
+                 fun = Vectorize(gfmcCalc))
+  names(gfmc.r) <- "GFMC"
+  
   #Return requested 'out' type
   if (out=="ALL"){
-    return(c(input, GFMC, MC))
+    return(c(input, gfmc.r, mc.r))
   } else if(out == "GFMC"){
-    return(GFMC)
+    return(gfmc.r)
   } else if (out == "MC"){
-    return(MC)
+    return(mc.r)
   } else { #GFMCandMC
-    return(c( GFMC, MC))
+    return(c( gfmc.r, mc.r))
   }
 }
-
-gfmcRaster(test_gfmc_r)
