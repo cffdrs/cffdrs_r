@@ -88,10 +88,10 @@
 #' @examples
 #' 
 #' library(cffdrs)
-#' require(raster)
+#' require(terra)
 #' ## load the test data for the first hour, namely hour01:
 #' hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
-#' hour01 <- stack(hour01src)
+#' hour01 <- terra::rast(hour01src)
 #' # Assign names to the layers:
 #' names(hour01)<-c("temp","rh","ws","prec")
 #' # (1) Default, based on the initial value: 
@@ -101,7 +101,7 @@
 #' # (2) Based on previous day's hffmc:
 #' # load the test data for the second hour, namely hour02:
 #' hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
-#' hour02 <- stack(hour02src)
+#' hour02 <- terra::rast(hour02src)
 #' # Assign variable names to the layers:
 #' names(hour02)<-c("temp","rh","ws","prec")
 #' \donttest{foo1<-hffmcRaster(hour02,ffmc_old=foo)}
@@ -110,7 +110,7 @@
 #' # Need BUI layer, 
 #' bui<-hour02$temp
 #' values(bui)<-50
-#' hour02<-stack(hour02,bui)
+#' hour02<-c(hour02,bui)
 #' # Re-assign variable names to the layers:
 #' names(hour02)<-c("temp","rh","ws","prec","bui")
 #' # Calculate all the variables:
@@ -123,7 +123,9 @@
 #' @export hffmcRaster
 hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1, 
                         hourlyFWI = FALSE) {
- 
+  if (class(weatherstream) != "SpatRaster") {
+    weatherstream <- terra::rast(weatherstream)
+  }
   names(weatherstream) <- tolower(names(weatherstream))
   #local scope variables
   Tp <- weatherstream$temp
@@ -131,10 +133,6 @@ hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1,
   W  <- weatherstream$ws
   ro <- weatherstream$prec
   #Check that the parameters are correct
-  if (is.numeric(ffmc_old)){
-    Fo <- Tp
-    raster::values(Fo)<-ffmc_old
-  }else{Fo<-ffmc_old}
   if (!exists("Tp") | is.null(Tp)) 
     warning("temperature (temp) is missing!")
   if (!exists("ro") | is.null(ro)) 
@@ -143,97 +141,27 @@ hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1,
     warning("wind speed (ws) is missing!")
   if (!exists("H") | is.null(H)) 
     warning("relative humidity (rh) is missing!")
-  #Eq. 1 (with a more precise multiplier than the daily)
-  mo <- 147.27723 * (101 - Fo) / (59.5 + Fo)
-  
-  mr1 <- mo
-  mr1[mr1 > 150] <- NA
-  #masking values
-  rf1 <- raster::mask(ro, mr1)
-  #Eqs. 3a (Van Wagner & Pickett 1985)
-  mr1 <- mr1 + 42.5 * rf1 * exp(-100 / (251 - mr1)) * (1 - exp(-6.93 / rf1))
-  mr2 <- mo
-  mr2[mr2 <= 150] <- NA
-  rf2 <- raster::mask(ro, mr2)
-  #Eqs. 3b (Van Wagner & Pickett 1985)
-  mr2 <- mr2 + 42.5 * rf2 * exp(-100 / (251 - mr2)) *(1 - exp(-6.93 / rf2)) + 
-         0.0015 * ((mr2 - 150)^2) * (rf2^0.5)
-  mr3 <- raster::cover(mr1,mr2)
-  #The real moisture content of pine litter ranges up to about 250 percent,
-  # so we cap it at 250
-  mr3[mr3 > 250] <- 250
-  #raster manipulation to speed up processing
-  r1 <- ro
-  r1[r1 <= 0] <- NA
-  mr<- raster::mask(mr3, r1)
-  r1 <- ro
-  r1[r1 > 0] <- NA
-  mo1 <- raster::mask(mo, r1)
-  mo <- raster::cover(mo1, mr)
-  #Eq. 2a Equilibrium moisture content from drying
-  Ed <- 0.942 * (H^0.679) + 11 * exp((H - 100)/10) + 0.18 * (21.1 - Tp) * 
-        (1 - exp(-0.115 * H))
-  #Eq. 3a Log drying rate at the normal temperature of 21.1C
-  ko <- 0.424 * (1 - (H / 100)^1.7) + 0.0694 * (W^0.5) * (1 - (H / 100)^8)
-  #Eq. 3b
-  kd <- ko * 0.0579 * exp(0.0365 * Tp)
-  #Eq. 8 (Van Wagner & Pickett 1985)
-  md <- Ed + (mo - Ed) * (10^(-1*kd*time.step))
-  #Eq. 2b Equilibrium moisture content from wetting  
-  Ew <- 0.618 * (H^0.753) + 10 * exp((H - 100) / 10) + 0.18 * (21.1 - Tp) * 
-        (1 - exp(-0.115 * H))
-  #Eq. 7a Log wetting rate at the normal temperature of 21.1 C 
-  k1 <- 0.424 * (1 - ((100 - H)/100)^1.7) + 0.0694 * (W^0.5) * 
-        (1 - ((100 - H) / 100)^8)
-  #Eq. 4b
-  kw <- k1 * 0.0579 * exp(0.0365 * Tp)
-  #Eq. 8 (Van Wagner & Pickett 1985)
-  mw <- Ew - (Ew - mo) * (10^(-1*kw*time.step)) 
-  #Constraints using raster manipulation
-  m0 <- raster::overlay(mo, Ed, fun = function(a, b){ return(a > b) })
-  md[m0 == 0] <- NA
-  mw[m0 == 1] <- NA
-  m <- raster::cover(md, mw)
-
-  m1 <- raster::overlay(Ed, mo, Ew, fun = function(a, b, c) return(a >= b & b >= c))
-  mo[m1 == 0] <- NA
-  m[m1 == 1] <- NA
-  m <- raster::cover(mo, m)
-  #Eq. 6 - Final hffmc calculation (modified 3rd constant to 147.27723)
-  fo <- 59.5 * (250 - m) / (147.27723 + m)
-  fo[fo <= 0] <- 0
+  fo <- lapp(x = c(Tp, H, W, ro),
+                fun = Vectorize(hffmcCalc),
+                Fo=ffmc_old,
+                t0=time.step
+                )
   #Calculate hourly isi and fwi
   if (hourlyFWI){
     if ("bui" %in% names(weatherstream)){
       bui <- weatherstream$bui
-
       #Calculate ISI
-      fW <- exp(0.05039 * W)
-      fm <- 147.27723 * (101 - fo) / (59.5 + fo)
-      fF <- 91.9 * exp(-0.1386 * fm) * (1 + (fm^5.31) / 49300000)
-      isi <- 0.208 * fW * fF
-      
+      isi <- lapp(x = c(fo, W),
+                  fun = Vectorize(.ISIcalc),
+                  fbpMod=FALSE)
       #Calculate FWI
-      bui1 <- bui
-      bui1[bui1 <= 80] <- NA
-      bui1 <- 0.1 * isi * (1000 / (25 + 108.64 / exp(0.023 * bui1)))
-      
-      bui2 <- bui
-      bui2[bui1 > 80] <- NA
-      bui2 <- 0.1 * isi * (0.626 * (bui2^0.809) + 2)
-      bb <- raster::cover(bui1, bui2)
-      
-      bb1 <- bb
-      bb1[bb > 1] <- NA
-      
-      bb2 <- bb
-      bb2[bb <= 1] <- NA
-      bb2 <- exp(2.72 * ((0.434 * log(bb2))^0.647))
-      fwi <- raster::cover(bb1, bb2)
+      fwi <- lapp(x = c(isi, bui),
+                  fun = Vectorize(.fwiCalc)
+                  )
       #Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       #Create Raster Stack for the ouput
-      output <- raster::stack(fo, isi, fwi, dsr)
+      output <- c(fo, isi, fwi, dsr)
       names(output) <- c("hffmc", "hisi", "hfwi", "hdsr")
       return(output)
     } else {
