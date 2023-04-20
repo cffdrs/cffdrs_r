@@ -92,10 +92,10 @@ in typical pine litter fuels.
 \examples{
 
 library(cffdrs)
-require(raster)
+require(terra)
 ## load the test data for the first hour, namely hour01:
 hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
-hour01 <- stack(hour01src)
+hour01 <- terra::rast(hour01src)
 # Assign names to the layers:
 names(hour01)<-c("temp","rh","ws","prec")
 # (1) Default, based on the initial value: 
@@ -105,7 +105,7 @@ plot(foo)
 # (2) Based on previous day's hffmc:
 # load the test data for the second hour, namely hour02:
 hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
-hour02 <- stack(hour02src)
+hour02 <- terra::rast(hour02src)
 # Assign variable names to the layers:
 names(hour02)<-c("temp","rh","ws","prec")
 \donttest{foo1<-hffmcRaster(hour02,ffmc_old=foo)}
@@ -114,7 +114,7 @@ names(hour02)<-c("temp","rh","ws","prec")
 # Need BUI layer, 
 bui<-hour02$temp
 values(bui)<-50
-hour02<-stack(hour02,bui)
+hour02<-c(hour02,bui)
 # Re-assign variable names to the layers:
 names(hour02)<-c("temp","rh","ws","prec","bui")
 # Calculate all the variables:

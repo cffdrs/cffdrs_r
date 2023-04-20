@@ -257,7 +257,9 @@
 #' Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 #' 
 #' @importFrom foreach registerDoSEQ
-#' @importFrom raster stack rasterToPoints ncell values setValues
+#' @importFrom terra rast ncell values setValues writeRaster
+#' @import sf
+#' @importFrom data.table as.data.table data.table
 #' 
 #' @keywords methods
 #' @examples
@@ -278,7 +280,7 @@
 #' # Secondary outputs:
 #' system.time(foo<-fbpRaster(input = input,output="S"))
 #' # All outputs:
-#' #system.time(foo<-fbpRaster(input = input,output="A"))
+#' system.time(foo<-fbpRaster(input = input,output="A"))
 #' 
 #' ### Additional, longer running examples  ###
 #' # Keep only the required input layers, the other layers would be

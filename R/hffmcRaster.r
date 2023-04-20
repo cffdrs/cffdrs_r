@@ -118,8 +118,6 @@
 #' # Visualize the maps:
 #' \donttest{plot(foo2)}
 #' 
-#' @importFrom raster mask cover overlay stack
-#' 
 #' @export hffmcRaster
 hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1, 
                         hourlyFWI = FALSE) {
