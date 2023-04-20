@@ -90,7 +90,7 @@
 #' TRUE. When \code{batch=TRUE}, the function will calculate hourly or
 #' sub-hourly FFMC for one weather station over a period of time iteratively.
 #' If multiple weather stations are processed, an additional "id" column is
-#' required in the input input to label different stations, and the
+#' required in the input weatherstream to label different stations, and the
 #' data needs to be sorted by date/time and "id".  If \code{batch=FALSE}, the
 #' function calculates only one time step base on either the previous hourly
 #' FFMC or the initial start value.
@@ -100,7 +100,7 @@
 #' @return \code{hffmc} returns a vector of hourly or sub-hourly FFMC values,
 #' which may contain 1 or multiple elements. Optionally when
 #' \code{hourlyFWI=TRUE}, the function also output a data.frame contains input
-#' input as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
+#' weatherstream as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
 #' @author Xianli Wang, Mike Wotton, Alan Cantin, Brett Moore, and Mike
 #' Flannigan
 #' @seealso \code{\link{fbp}}, \code{\link{fwi}}, \code{\link{hffmcRaster}}
