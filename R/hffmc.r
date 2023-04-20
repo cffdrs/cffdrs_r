@@ -59,7 +59,7 @@
 #' well, though this is simply for bookkeeping purposes and does not affect the
 #' calculation.
 #' 
-#' @param weatherstream A dataframe containing input variables of hourly
+#' @param input A dataframe containing input variables of hourly
 #' weather observations. It is important that variable names have to be the
 #' same as in the following list, but they are case insensitive. The order in
 #' which the input variables are entered is not important.
@@ -90,7 +90,7 @@
 #' TRUE. When \code{batch=TRUE}, the function will calculate hourly or
 #' sub-hourly FFMC for one weather station over a period of time iteratively.
 #' If multiple weather stations are processed, an additional "id" column is
-#' required in the input weatherstream to label different stations, and the
+#' required in the input input to label different stations, and the
 #' data needs to be sorted by date/time and "id".  If \code{batch=FALSE}, the
 #' function calculates only one time step base on either the previous hourly
 #' FFMC or the initial start value.
@@ -100,7 +100,7 @@
 #' @return \code{hffmc} returns a vector of hourly or sub-hourly FFMC values,
 #' which may contain 1 or multiple elements. Optionally when
 #' \code{hourlyFWI=TRUE}, the function also output a data.frame contains input
-#' weatherstream as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
+#' input as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
 #' @author Xianli Wang, Mike Wotton, Alan Cantin, Brett Moore, and Mike
 #' Flannigan
 #' @seealso \code{\link{fbp}}, \code{\link{fwi}}, \code{\link{hffmcRaster}}
@@ -158,16 +158,16 @@
 #' hffmc(dat0,time.step=1,calc.step=TRUE)
 #' 
 #' @export hffmc
-hffmc <- function(weatherstream, ffmc_old = 85, time.step = 1, 
+hffmc <- function(input, ffmc_old = 85, time.step = 1, 
                   calc.step = FALSE, batch = TRUE, hourlyFWI = FALSE) {
 
   t0 <- time.step
-  names(weatherstream) <- tolower(names(weatherstream))
+  names(input) <- tolower(names(input))
   #set up number of stations
   if (batch){
-    if ("id" %in% names(weatherstream)) { 
-      n <- length(unique(weatherstream$id))
-      if(length(unique(weatherstream[1:n,"id"])) != n){
+    if ("id" %in% names(input)) { 
+      n <- length(unique(input$id))
+      if(length(unique(input[1:n,"id"])) != n){
         stop("Multiple stations have to start and end at the same dates/time, 
              and the data must be sorted by date/time and id")
       }
@@ -175,7 +175,7 @@ hffmc <- function(weatherstream, ffmc_old = 85, time.step = 1,
       n <- 1
     }
   }else{
-    n <- nrow(weatherstream)
+    n <- nrow(input)
   }
   
   if (length(ffmc_old) == 1 & n > 1){
@@ -184,28 +184,26 @@ hffmc <- function(weatherstream, ffmc_old = 85, time.step = 1,
     Fo <- ffmc_old
   }
   
-  #set some local scope variables
-  Tp <- weatherstream$temp
-  H  <- weatherstream$rh
-  W  <- weatherstream$ws
-  ro <- weatherstream$prec
-
   #Check that the parameters are correct
   if (calc.step){
-    hr <- weatherstream$hr
+    hr <- input$hr
     if (!exists("hr") | is.null(hr)) 
       warning("hour value is missing!")
   }
-  if (!exists("Tp") | is.null(Tp)) 
-    warning("temperature (temp) is missing!")
-  if (!exists("ro") | is.null(ro)) 
-    warning("precipitation (prec) is missing!")
-  if (!exists("W") | is.null(W)) 
-    warning("wind speed (ws) is missing!")
-  if (!exists("H") | is.null(H)) 
-    warning("relative humidity (rh) is missing!")
+  required_cols <- data.table(full = c("temperature","precipitation","wind speed","relative humidity"), short = c("temp","prec","ws","rh"))
+  
+  if(nrow(required_cols[-which(names(input) %in% short)]) >0){
+    stop(paste(required_cols[-which(names(input) %in% short),full],collapse = " , ")," is missing!")
+  }
+  
+  if (!length(input[["prec"]][input[["prec"]] < 0]) == 0)
+    stop("precipiation (prec) cannot be negative!")
+  if (!length(input[["ws"]][input[["ws"]] < 0]) == 0)
+    stop("wind speed (ws) cannot be negative!")
+  if (!length(input[["rh"]][input[["rh"]] < 0]) == 0)
+    stop("relative humidity (rh) cannot be negative!")
   if (length(H)%%n != 0)
-    warning("Weatherstream do not match with number of weather stations")
+    warning("input do not match with number of weather stations")
   #Length of weather run
   n0 <- length(H) / n
   f <- NULL
@@ -218,49 +216,22 @@ hffmc <- function(weatherstream, ffmc_old = 85, time.step = 1,
       t0 <- ifelse(t0 == -23, 1, t0)
       t0 <- ifelse(t0 < 0, -1 * t0, t0)
     }
-    #Eq. 1 (with a more precise multiplier than the daily)
-    mo <- 147.27723 * (101 - Fo)/(59.5 + Fo)
-    rf <- ro[k]
-    #Eqs. 3a & 3b (Van Wagner & Pickett 1985)
-    mr <- ifelse(mo <= 150, 
-            mo + 42.5 * rf * exp(-100 / (251 - mo)) * (1 - exp(-6.93 / rf)),
-            mo + 42.5 * rf * exp(-100 / (251 - mo)) * (1 - exp(-6.93 / rf)) + 
-              0.0015 * ((mo - 150)^2) * (rf^0.5))
-    #The real moisture content of pine litter ranges up to about 250 percent,
-    # so we cap it at 250
-    mr <- ifelse(mr > 250, 250, mr)
-    mo <- ifelse(ro[k] > 0.0, mr, mo)
-    #Eq. 2a Equilibrium moisture content from drying
-    Ed <- 0.942 * (H[k]^0.679) + 11 * exp((H[k] - 100) / 10) + 0.18 * 
-          (21.1 - Tp[k]) * (1 - exp(-0.115 * H[k]))
-    #Eq. 3a Log drying rate at the normal temperature of 21.1C
-    ko <- 0.424 * (1 - (H[k] / 100)^1.7) + 0.0694 * (W[k]^0.5) * 
-          (1 - (H[k] / 100)^8)
-    #Eq. 3b
-    kd <- ko * 0.0579 * exp(0.0365 * Tp[k])
-    #Eq. 8 (Van Wagner & Pickett 1985)
-    md <- Ed + (mo - Ed) * (10^(-kd * t0))
-    #Eq. 2b Equilibrium moisture content from wetting
-    Ew <- 0.618 * (H[k]^0.753) + 10 * exp((H[k] - 100) / 10) + 0.18 * 
-          (21.1 - Tp[k]) * (1 - exp(-0.115 * H[k]))
-    #Eq. 7a Log wetting rate at the normal temperature of 21.1 C    
-    k1 <- 0.424 * (1 - ((100 - H[k]) / 100)^1.7) + 0.0694 * 
-      (W[k]^0.5) * (1 - ((100 - H[k]) / 100)^8)
-    #Eq. 4b 
-    kw <- k1 * 0.0579 * exp(0.0365 * Tp[k])
-    #Eq. 8 (Van Wagner & Pickett 1985)
-    mw <- Ew - (Ew - mo) * (10^(-kw * t0))
-    #Constraints
-    m <- ifelse(mo > Ed, md, mw)
-    m <- ifelse(Ed >= mo & mo >= Ew, mo, m)
-    #Eq. 6 - Final hffmc calculation (modified 3rd constant to 147.27723)
-    Fo <- 59.5 * (250 - m) / (147.27723 + m)
-    Fo <- ifelse(Fo <=0, 0, Fo)
-    f <- c(f, Fo)
+    
+    f1 <- hffmcCalc(temp = input$temp[k],
+                   ws = input$ws[k],
+                   rh = input$rh[k],
+                   prec = input$prec[k],
+                   Fo = Fo,
+                   t0 = t0)
+    
+    Fo <- f1
+    
+    f <- c(f1,Fo)
   }
+  
   #Calculate hourly isi and fwi
   if (hourlyFWI){
-    bui <- weatherstream$bui
+    bui <- input$bui
     if (!exists("bui") | is.null(bui)){ 
       warning("Daily BUI is required to calculate hourly FWI")
     } else {
@@ -271,7 +242,7 @@ hffmc <- function(weatherstream, ffmc_old = 85, time.step = 1,
       #Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       #Put all data into a data.frame to return
-      output <- cbind(weatherstream, 
+      output <- cbind(input, 
                       data.frame(ffmc = f, isi = isi, fwi = fwi, dsr = dsr))
       return(output)
     }
