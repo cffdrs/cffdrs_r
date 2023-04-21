@@ -301,6 +301,9 @@ fbpRaster <- function(input, output = "Primary", select=NULL, m=NULL, cores=1) {
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
+  if (class(input) != "SpatRaster") {
+    input <- terra::rast(input)
+  }
   #split up large rasters to allow calculation. This will be used in the
   #  parallel methods
   if (is.null(m)) {

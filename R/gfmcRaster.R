@@ -53,7 +53,9 @@
 #'gfmcRaster(test_gfmc_r,out = "GFMCandMC")
 
 gfmcRaster <- function(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC") {
-
+  if (class(input) != "SpatRaster") {
+    input <- terra::rast(input)
+  }
   names(input) <- tolower(names(input))
   out <- toupper(out)
   

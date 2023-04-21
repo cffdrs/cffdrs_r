@@ -169,6 +169,9 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   if (!is.na(charmatch("input", search()))) {
     detach(input)
   }
+  if (class(input) != "SpatRaster") {
+    input <- terra::rast(input)
+  }
   names(input) <- tolower(names(input))
   
   if (!"lat" %in% names(input)) {
