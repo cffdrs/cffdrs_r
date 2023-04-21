@@ -15,9 +15,8 @@
 #'
 #' @return FMC: Foliar Moisture Content value
 #' @noRd
-#'
 
-.FMCcalc <- function(LAT, LONG, ELV, DJ, D0) {
+foliar_moisture_content <- function(LAT, LONG, ELV, DJ, D0) {
   # Initialize vectors
   FMC <- rep(-1, length(LAT))
   LATN <- rep(0, length(LAT))
@@ -60,4 +59,9 @@
     )
   )
   return(FMC)
+}
+
+.FMCcalc <- function(...) {
+  .Deprecated("foliar_moisture_content")
+  return(foliar_moisture_content(...))
 }

@@ -234,7 +234,7 @@ hffmc <- function(
       t0 <- ifelse(t0 == -23, 1, t0)
       t0 <- ifelse(t0 < 0, -1 * t0, t0)
     }
-    f1 <- hffmcCalc(
+    f1 <- hourly_fine_fuel_moisture_code(
       temp = input$temp[k],
       ws = input$ws[k],
       rh = input$rh[k],
@@ -252,9 +252,9 @@ hffmc <- function(
       warning("Daily BUI is required to calculate hourly FWI")
     } else {
       # Calculate ISI
-      isi <- .ISIcalc(f, W, FALSE)
+      isi <- initial_spread_index(f, W, FALSE)
       # Calculate FWI
-      fwi <- .fwiCalc(isi, bui)
+      fwi <- fire_weather_index(isi, bui)
       # Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       # Put all data into a data.frame to return

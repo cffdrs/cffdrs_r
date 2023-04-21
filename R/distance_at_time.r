@@ -16,7 +16,7 @@
 #' @return DISTt - Head fire spread distance at time t
 #' @noRd
 
-.DISTtcalc <- function(FUELTYPE, ROSeq, HR, CFB) {
+distance_at_time <- function(FUELTYPE, ROSeq, HR, CFB) {
   # Eq. 72 (FCFDG 1992)
   # Calculate the alpha constant for the DISTt calculation
   alpha <- ifelse(
@@ -27,4 +27,9 @@
   # Eq. 71 (FCFDG 1992) Calculate Head fire spread distance
   DISTt <- ROSeq * (HR + exp(-alpha * HR) / alpha - 1 / alpha)
   return(DISTt)
+}
+
+.DISTtcalc <- function(...) {
+  .Deprecated("distance_at_time")
+  return(distance_at_time(...))
 }

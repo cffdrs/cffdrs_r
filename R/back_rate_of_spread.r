@@ -22,7 +22,9 @@
 #' @return BROS: Back Fire Rate of Spread
 #' @noRd
 
-.BROScalc <- function(FUELTYPE, FFMC, BUI, WSV, FMC, SFC, PC, PDF, CC, CBH) {
+back_rate_of_spread <- function(
+    FUELTYPE, FFMC, BUI, WSV,
+    FMC, SFC, PC, PDF, CC, CBH) {
   # Eq. 46 (FCFDG 1992)
   # Calculate the FFMC function from the ISI equation
   m <- 147.27723 * (101 - FFMC) / (59.5 + FFMC)
@@ -36,6 +38,11 @@
   BISI <- 0.208 * BfW * fF
   # Eq. 77 (FCFDG 1992)
   # Calculate final Back fire spread rate
-  BROS <- .ROScalc(FUELTYPE, BISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
+  BROS <- rate_of_spread(FUELTYPE, BISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
   return(BROS)
+}
+
+.BROScalc <- function(...) {
+  .Deprecated("back_rate_of_spread")
+  return(back_rate_of_spread(...))
 }

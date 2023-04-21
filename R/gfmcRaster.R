@@ -131,12 +131,12 @@ gfmcRaster <- function(
       GFMCold,
       roFL
     ),
-    fun = Vectorize(mcCalc),
+    fun = Vectorize(grass_fuel_moisture),
     time.step = time.step,
     usenames = TRUE
   )
   names(mc.r) <- "MC"
-  gfmc.r <- lapp(x = mc.r, fun = Vectorize(gfmcCalc))
+  gfmc.r <- lapp(x = mc.r, fun = Vectorize(grass_fuel_moisture_code))
   names(gfmc.r) <- "GFMC"
   # Return requested 'out' type
   if (out == "ALL") {

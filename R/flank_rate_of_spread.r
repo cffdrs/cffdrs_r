@@ -15,8 +15,13 @@
 #'
 #' @noRd
 
-.FROScalc <- function(ROS, BROS, LB) {
+flank_rate_of_spread <- function(ROS, BROS, LB) {
   # Eq. 89 (FCFDG 1992)
   FROS <- (ROS + BROS) / LB / 2
   return(FROS)
+}
+
+.FROScalc <- function(...) {
+  .Deprecated("flank_rate_of_spread")
+  return(flank_rate_of_spread(...))
 }

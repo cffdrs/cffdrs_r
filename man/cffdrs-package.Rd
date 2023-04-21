@@ -43,24 +43,25 @@ major vegetation types in Canada.
 1.8.16\cr Date: \tab 2020-05-26\cr License: \tab GPL-2\cr } This package
 includes eleven functions. Seven functions, \code{\link{fwi}},
 \code{\link{fwiRaster}}, \code{\link{hffmc}}, \code{\link{hffmcRaster}},
-\code{\link{sdmc}}, \code{\link{gfmc}}, and \code{\link{wDC}} are used for
+\code{\link{sheltered_duff_moisture_code}}, \code{\link{gfmc}}, and
+\code{\link{overwinter_drought_code}} are used for
 FWI System calculation, whereas two functions, \code{\link{fbp}} and
 \code{\link{fbpRaster}} are used for FBP System calculation. One function,
-\code{\link{fireSeason}} determines fire season start and end dates based on
+\code{\link{fire_season}} determines fire season start and end dates based on
 weather. Two functions \code{\link{pros}} and \code{\link{lros}} are rate of
 spread and direction calculations across triangles. These functions are not
 fully independent: their inputs overlap greatly and the users will have to
 provide FWI System outputs to calculate FBP System outputs. The fwi,
-fwiRaster, and sdmc functions calculate the outputs based on daily noon
-local standard time (LST) weather observations of temperature, relative
-humidity, wind speed, and 24-hour rainfall, as well as the previous day's
-moisture content. The hffmc, gfmc, and hffmcRaster functions calculate the
-outputs based on hourly weather observations of temperature, relative
-humidity, wind speed, and hourly rainfall, as well as the previous hour's
-weather conditions. The fbp and fbpRaster functions calculate the outputs of
-the FBP System based on given set of information about fire weather
-conditions (weather observations and their associated FWI System
-components), fuel type, and slope (optional).
+fwiRaster, and sheltered_duff_moisture_code functions calculate the outputs
+based on daily noon local standard time (LST) weather observations of
+temperature, relative humidity, wind speed, and 24-hour rainfall, as well as
+the previous day's moisture content. The hffmc, gfmc, and hffmcRaster
+functions calculate the outputs based on hourly weather observations of
+temperature, relative humidity, wind speed, and hourly rainfall, as well as
+the previous hour's weather conditions. The fbp and fbpRaster functions
+calculate the outputs of the FBP System based on given set of information
+about fire weather conditions (weather observations and their associated FWI
+System components), fuel type, and slope (optional).
 }
 \examples{
 
@@ -70,11 +71,12 @@ components), fuel type, and slope (optional).
 # given a chronical two years daily fire weather observations from one
 # weather station.
 # In the example, we showed first how to decide fire season start and end
-# dates with fireSeason, we then made overwintering DC adjustment with wDC
-# for the second fire season, and eventually calculated the daily FWI System
-# variables over two fire seasons with fwi.  All these steps were packed up
-# into an example user's function, which could be modified by various user
-# groups. Note: the data used in this example is also the test data for wDC.
+# dates with fire_season, we then made overwintering DC adjustment with
+# overwinter_drought_code for the second fire season, and eventually
+# calculated the daily FWI System variables over two fire seasons with fwi.
+# All these steps were packed up into an example user's function, which could
+# be modified by various user groups. Note: the data used in this example is
+# also the test data for overwinter_drought_code.
 #
 # library(cffdrs)
 
@@ -90,7 +92,7 @@ fwi_fs_wDC <- function(input) {
   ))
 
   # use default fire season start and end temperature thresholds
-  fs <- fireSeason(input)
+  fs <- fire_season(input)
   # Fire season dates, ordered chronologically
   fs <- with(fs, fs[order(yr, mon, day), ])
   # Create same Date format as weather dataset for comparison
@@ -120,7 +122,9 @@ fwi_fs_wDC <- function(input) {
       curYr.owdata <- sum(input[(input$date > curYr.owd[1, "date"] &
         input$date < curYr.owd[2, "date"]), ]$prec)
       # calculate overwinter DC value
-      owDC <- wDC(DCf = tail(curYr.fwi$DC, n = 1), rw = curYr.owdata)
+      owDC <- overwinter_drought_code(
+        DCf = tail(curYr.fwi$DC, n = 1), rw = curYr.owdata
+      )
       # Initialize moisture codes
       curYr.init <- data.frame(ffmc = 80, dmc = 10, dc = owDC)
     }
@@ -134,7 +138,7 @@ fwi_fs_wDC <- function(input) {
         input$date <= curYr.fsd[2, "date"],
     ]
 
-    # run fwi on fireseason data
+    # run fwi on fire_season data
     curYr.fwi <- fwi(curYr.fsdata, init = curYr.init)
     # force column names to be uppercase for consistency
     names(curYr.fwi) <- toupper(names(curYr.fwi))
@@ -144,7 +148,8 @@ fwi_fs_wDC <- function(input) {
 }
 
 ## Usage of the custom function
-# Load the test dataset, which is also the test data for wDC:
+# Load the test dataset, which is also the test data for
+# overwinter_drought_code:
 data("test_wDC")
 # select 1 weather station
 localWX_1 <- test_wDC[test_wDC$id == 1, ]
@@ -191,10 +196,11 @@ Model. Nat. Resour. Can., Can. For. Serv., North. For. Cent., Edmonton, AB.
 Inf. Rep. NOR-X-417.
 }
 \seealso{
-\code{\link{fbp}}, \code{\link{fireSeason}}, \code{\link{fwi}},
+\code{\link{fbp}}, \code{\link{fire_season}}, \code{\link{fwi}},
 \code{\link{fwiRaster}}, \code{\link{gfmc}}, \code{\link{hffmc}},
 \code{\link{hffmcRaster}}, \code{\link{lros}}, \code{\link{pros}},
-\code{\link{sdmc}}, \code{\link{wDC}}
+\code{\link{sheltered_duff_moisture_code}},
+\code{\link{overwinter_drought_code}}
 }
 \author{
 Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry

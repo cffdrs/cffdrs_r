@@ -22,7 +22,7 @@
 #'
 #' @noRd
 
-.ISIcalc <- function(
+initial_spread_index <- function(
     ffmc,
     ws,
     fbpMod = FALSE) {
@@ -41,4 +41,9 @@
   # Eq. 26 - Spread Index Equation
   isi <- 0.208 * fW * fF
   return(isi)
+}
+
+.ISIcalc <- function(...) {
+  .Deprecated("initial_spread_index")
+  return(initial_spread_index(...))
 }

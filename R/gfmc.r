@@ -122,7 +122,11 @@
 #' # Calculate GFMC for multiple stations:
 #' dat1$gfmc01 <- gfmc(dat1, batch = TRUE)
 #' # We can provide multiple initial GFMC (GFMCold) as a vector:
-#' dat1$gfmc02 <- gfmc(dat1, GFMCold = sample(70:100, 8, replace = TRUE), batch = TRUE)
+#' dat1$gfmc02 <- gfmc(
+#'   dat1,
+#'   GFMCold = sample(70:100, 8, replace = TRUE),
+#'   batch = TRUE
+#' )
 #' # (3)output argument
 #' ## include all inputs and outputs:
 #' dat0 <- dat[with(dat, order(yr, mon, day, hr)), ]
@@ -199,7 +203,7 @@ gfmc <- function(
     # k is the data for all stations by time step
     k <- (n * (i - 1) + 1):(n * i)
 
-    MC <- mcCalc(
+    MC <- grass_fuel_moisture(
       temp = input$temp[k],
       rh = input$rh[k],
       ws = input$ws[k],
@@ -209,7 +213,7 @@ gfmc <- function(
       time.step = time.step,
       roFL = roFL
     )
-    GFMC <- gfmcCalc(MC)
+    GFMC <- grass_fuel_moisture_code(MC)
 
     # Reset vars
     GFMCold <- GFMC

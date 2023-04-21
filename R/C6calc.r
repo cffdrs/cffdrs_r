@@ -46,7 +46,7 @@
     return(RSI)
   }
   # Eq. 63 (FCFDG 1992) Surface fire spread rate (m/min)
-  RSS <- RSI * .BEcalc(FUELTYPE, BUI)
+  RSS <- RSI * buildup_effect(FUELTYPE, BUI)
   # Eq. 64 (FCFDG 1992) Crown fire spread rate (m/min)
   RSC <- 60 * (1 - exp(-0.0497 * ISI)) * FME / FMEavg
   # Return at this point, if specified by caller

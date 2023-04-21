@@ -32,8 +32,8 @@
 #' @return A single drought moisture code value
 #'
 #' @noRd
-#'
-.dmcCalc <- function(
+
+duff_moisture_code <- function(
     dmc_yda, temp, rh, prec, lat, mon,
     lat.adjust = TRUE) {
   # Reference latitude for DMC day length adjustment
@@ -104,4 +104,9 @@
   dmc1 <- pr + rk
   dmc1 <- ifelse(dmc1 < 0, 0, dmc1)
   return(dmc1)
+}
+
+.dmcCalc <- function(...) {
+  .Deprecated("duff_moisture_code")
+  return(duff_moisture_code(...))
 }

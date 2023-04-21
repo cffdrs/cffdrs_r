@@ -23,7 +23,7 @@
 #'
 #' @noRd
 
-.LBtcalc <- function(FUELTYPE, LB, HR, CFB) {
+length_to_breadth_at_time <- function(FUELTYPE, LB, HR, CFB) {
   # Eq. 72 (FCFDG 1992) - alpha constant value, dependent on fuel type
   alpha <- ifelse(
     FUELTYPE %in% c("C1", "O1A", "O1B", "S1", "S2", "S3", "D1"),
@@ -33,4 +33,9 @@
   # Eq. 81 (Wotton et.al. 2009) - LB at time since ignition
   LBt <- (LB - 1) * (1 - exp(-alpha * HR)) + 1
   return(LBt)
+}
+
+.LBtcalc <- function(...) {
+  .Deprecated("length_to_breadth_at_time")
+  return(length_to_breadth_at_time(...))
 }

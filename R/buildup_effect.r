@@ -14,7 +14,7 @@
 #' @return BE: Build up effect
 #' @noRd
 
-.BEcalc <- function(FUELTYPE, BUI) {
+buildup_effect <- function(FUELTYPE, BUI) {
   # Fuel Type String represenations
   d <- c(
     "C1", "C2", "C3", "C4", "C5", "C6", "C7",
@@ -38,4 +38,9 @@
     1
   )
   return(as.numeric(BE))
+}
+
+.BEcalc <- function(...) {
+  .Deprecated("buildup_effect")
+  return(buildup_effect(...))
 }

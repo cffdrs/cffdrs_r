@@ -21,7 +21,7 @@
 #'
 #' @noRd
 
-.LBcalc <- function(FUELTYPE, WSV) {
+length_to_breadth <- function(FUELTYPE, WSV) {
   # calculation is depending on if fuel type is grass (O1) or other fueltype
   LB <- ifelse(
     FUELTYPE %in% c("O1A", "O1B"),
@@ -31,4 +31,9 @@
     1.0 + 8.729 * (1 - exp(-0.030 * WSV))**(2.155)
   ) # Eq. 79
   return(LB)
+}
+
+.LBcalc <- function(...) {
+  .Deprecated("length_to_breadth")
+  return(length_to_breadth(...))
 }

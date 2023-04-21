@@ -20,7 +20,7 @@
 #' Forestry Technical Report 35. 35 p.
 #' @noRd
 
-.buiCalc <- function(dmc, dc) {
+buildup_index <- function(dmc, dc) {
   # Eq. 27a
   bui1 <- ifelse(dmc == 0 & dc == 0, 0, 0.8 * dc * dmc / (dmc + 0.4 * dc))
   # Eq. 27b - next 3 lines
@@ -31,4 +31,9 @@
   bui0 <- ifelse(bui0 < 0, 0, bui0)
   bui1 <- ifelse(bui1 < dmc, bui0, bui1)
   return(bui1)
+}
+
+.buiCalc <- function(...) {
+  .Deprecated("buildup_index")
+  return(buildup_index(...))
 }

@@ -23,7 +23,7 @@
 #'
 #' @noRd
 
-.SFCcalc <- function(FUELTYPE, FFMC, BUI, PC, GFL) {
+surface_fuel_consumption <- function(FUELTYPE, FFMC, BUI, PC, GFL) {
   SFC <- rep(-999, length(FFMC))
   # Eqs. 9a, 9b (Wotton et. al. 2009) - Solving the lower bound of FFMC value
   # for the C1 fuel type SFC calculation
@@ -96,4 +96,9 @@
   # Constrain SFC value
   SFC <- ifelse(SFC <= 0, 0.000001, SFC)
   return(SFC)
+}
+
+.SFCcalc <- function(...) {
+  .Deprecated("surface_fuel_consumption")
+  return(surface_fuel_consumption(...))
 }

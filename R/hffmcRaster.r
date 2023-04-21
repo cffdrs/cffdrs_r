@@ -164,7 +164,7 @@ hffmcRaster <- function(
   }
   fo <- lapp(
     x = c(Tp, H, W, ro),
-    fun = Vectorize(hffmcCalc),
+    fun = Vectorize(hourly_fine_fuel_moisture_code),
     Fo = ffmc_old,
     t0 = time.step
   )
@@ -173,9 +173,13 @@ hffmcRaster <- function(
     if ("bui" %in% names(weatherstream)) {
       bui <- weatherstream$bui
       # Calculate ISI
-      isi <- lapp(x = c(fo, W), fun = Vectorize(.ISIcalc), fbpMod = FALSE)
+      isi <- lapp(
+        x = c(fo, W),
+        fun = Vectorize(initial_spread_index),
+        fbpMod = FALSE
+      )
       # Calculate FWI
-      fwi <- lapp(x = c(isi, bui), fun = Vectorize(.fwiCalc))
+      fwi <- lapp(x = c(isi, bui), fun = Vectorize(fire_weather_index))
       # Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       # Create Raster Stack for the ouput

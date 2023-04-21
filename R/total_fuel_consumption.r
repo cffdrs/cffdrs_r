@@ -27,7 +27,7 @@
 #'
 #' @noRd
 
-.TFCcalc <- function(
+total_fuel_consumption <- function(
     FUELTYPE, CFL, CFB, SFC, PC, PDF,
     option = "TFC") {
   # Eq. 66a (Wotton 2009) - Crown Fuel Consumption (CFC)
@@ -43,4 +43,9 @@
   # Eq. 67 (FCFDG 1992) - Total Fuel Consumption
   TFC <- SFC + CFC
   return(TFC)
+}
+
+.TFCcalc <- function(...) {
+  .Deprecated("total_fuel_consumption")
+  return(total_fuel_consumption(...))
 }

@@ -24,7 +24,7 @@
 #' @return A single fine fuel moisture code value
 #' @noRd
 
-.ffmcCalc <- function(ffmc_yda, temp, rh, ws, prec) {
+fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   # Eq. 1
   wmo <- 147.27723 * (101 - ffmc_yda) / (59.5 + ffmc_yda)
   # Eq. 2 Rain reduction to allow for loss in
@@ -78,4 +78,9 @@
   ffmc1 <- ifelse(ffmc1 > 101, 101, ffmc1)
   ffmc1 <- ifelse(ffmc1 < 0, 0, ffmc1)
   return(ffmc1)
+}
+
+ffmcCalc <- function(...) {
+  .Deprecated("fine_fuel_moisture_code")
+  return(fine_fuel_moisture_code(...))
 }

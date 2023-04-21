@@ -1,4 +1,4 @@
-#' Fire Intenstiy Calculator
+#' Fire Intensity Calculator
 #'
 #' @description Calculate the Predicted Fire Intensity
 #'
@@ -13,8 +13,13 @@
 #' @return FI: Fire Intensity (kW/m)
 #' @noRd
 
-.FIcalc <- function(FC, ROS) {
+fire_intensity <- function(FC, ROS) {
   # Eq. 69 (FCFDG 1992) Fire Intensity (kW/m)
   FI <- 300 * FC * ROS
   return(FI)
+}
+
+.FIcalc <- function(...) {
+  .Deprecated("fire_intensity")
+  return(fire_intensity(...))
 }

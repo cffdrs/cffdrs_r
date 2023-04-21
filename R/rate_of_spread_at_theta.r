@@ -1,7 +1,7 @@
 #' Rate of spread at a point along the perimeter calculator
 #'
-#' @description Computes the Rate of Spread at any point along the perimeter of an
-#' elliptically shaped fire. Equations are from Wotton et. al. (2009).
+#' @description Computes the Rate of Spread at any point along the perimeter of
+#' an elliptically shaped fire. Equations are from Wotton et. al. (2009).
 #'
 #' Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions to
 #' the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
@@ -18,7 +18,7 @@
 #'
 #' @noRd
 
-.ROSthetacalc <- function(ROS, FROS, BROS, THETA) {
+rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA) {
   c1 <- cos(THETA)
   s1 <- sin(THETA)
   c1 <- ifelse(c1 == 0, cos(THETA + .001), c1)
@@ -34,4 +34,9 @@
       )
   )
   return(ROStheta)
+}
+
+.ROSthetacalc <- function(...) {
+  .Deprecated("rate_of_spread_at_theta")
+  return(rate_of_spread_at_theta(...))
 }

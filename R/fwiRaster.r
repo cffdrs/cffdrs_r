@@ -237,7 +237,7 @@ fwiRaster <- function(
 
   ffmc <- lapp(
     x = c(ffmc_yda, input[[c("temp", "rh", "ws", "prec")]]),
-    fun = Vectorize(.ffmcCalc)
+    fun = Vectorize(fine_fuel_moisture_code)
   )
 
   ###########################################################################
@@ -251,7 +251,7 @@ fwiRaster <- function(
       input[["lat"]],
       setValues(input[["temp"]], mon)
     ),
-    fun = Vectorize(.dmcCalc),
+    fun = Vectorize(duff_moisture_code),
     lat.adjust = lat.adjust
   )
 
@@ -266,7 +266,7 @@ fwiRaster <- function(
       input[["lat"]],
       setValues(input[["temp"]], mon)
     ),
-    fun = Vectorize(.dcCalc),
+    fun = Vectorize(drought_code),
     lat.adjust = lat.adjust
   )
 
@@ -276,7 +276,7 @@ fwiRaster <- function(
 
   isi <- lapp(
     x = c(ffmc, input[["ws"]]),
-    fun = Vectorize(.ISIcalc),
+    fun = Vectorize(initial_spread_index),
     fbpMod = FALSE
   )
 
@@ -284,13 +284,13 @@ fwiRaster <- function(
   #                       Buildup Index (BUI)
   ###########################################################################
 
-  bui <- lapp(x = c(dmc, dc), fun = Vectorize(.buiCalc))
+  bui <- lapp(x = c(dmc, dc), fun = Vectorize(buildup_index))
 
   ###########################################################################
   #                     Fire Weather Index (FWI)
   ###########################################################################
 
-  fwi <- lapp(x = c(isi, bui), fun = Vectorize(.fwiCalc))
+  fwi <- lapp(x = c(isi, bui), fun = Vectorize(fire_weather_index))
 
   ###########################################################################
   #                   Daily Severity Rating (DSR)

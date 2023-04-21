@@ -17,7 +17,7 @@
 #'
 #' @noRd
 
-.FBPcalc <- function(
+fire_behaviour_prediction <- function(
     input = NULL,
     output = "Primary") {
   #  Quite often users will have a data frame called "input" already attached
@@ -293,7 +293,7 @@
   CFL <- ifelse(CFL <= 0 | CFL > 2 | is.na(CFL), CFLs[FUELTYPE], CFL)
   FMC <- ifelse(
     FMC <= 0 | FMC > 120 | is.na(FMC),
-    .FMCcalc(LAT, LONG, ELV, DJ, D0),
+    foliar_moisture_content(LAT, LONG, ELV, DJ, D0),
     FMC
   )
   FMC <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, FMC)
@@ -302,7 +302,7 @@
   ############################################################################
 
   # Calculate Surface fuel consumption (SFC)
-  SFC <- .SFCcalc(FUELTYPE, FFMC, BUI, PC, GFL)
+  SFC <- surface_fuel_consumption(FUELTYPE, FFMC, BUI, PC, GFL)
   # Disable BUI Effect if necessary
   BUI <- ifelse(BUIEFF != 1, 0, BUI)
   # Calculate the net effective windspeed (WSV)
@@ -318,12 +318,12 @@
   )
   RAZ <- ifelse(GS > 0 & FFMC > 0, RAZ0, WAZ)
   # Calculate or keep Initial Spread Index (ISI)
-  ISI <- ifelse(ISI > 0, ISI, .ISIcalc(FFMC, WSV, TRUE))
+  ISI <- ifelse(ISI > 0, ISI, initial_spread_index(FFMC, WSV, TRUE))
   # Calculate the Rate of Spread (ROS), C6 has different calculations
   ROS <- ifelse(
     FUELTYPE %in% c("C6"),
     .C6calc(FUELTYPE, ISI, BUI, FMC, SFC, CBH, option = "ROS"),
-    .ROScalc(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
+    rate_of_spread(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
   )
   # Calculate Crown Fraction Burned (CFB), C6 has different calculations
   CFB <- ifelse(
@@ -332,9 +332,9 @@
     ifelse(CFL > 0, .CFBcalc(FUELTYPE, FMC, SFC, ROS, CBH), 0)
   )
   # Calculate Total Fuel Consumption (TFC)
-  TFC <- .TFCcalc(FUELTYPE, CFL, CFB, SFC, PC, PDF)
+  TFC <- total_fuel_consumption(FUELTYPE, CFL, CFB, SFC, PC, PDF)
   # Calculate Head Fire Intensity(HFI)
-  HFI <- .FIcalc(TFC, ROS)
+  HFI <- fire_intensity(TFC, ROS)
   # Adjust Crown Fraction Burned
   CFB <- ifelse(HR < 0, -CFB, CFB)
   # Adjust RAZ
@@ -345,7 +345,10 @@
   FD <- ifelse(CFB < 0.1, "S", FD)
   FD <- ifelse(CFB >= 0.9, "C", FD)
   # Calculate Crown Fuel Consumption(CFC)
-  CFC <- .TFCcalc(FUELTYPE, CFL, CFB, SFC, PC, PDF, option = "CFC")
+  CFC <- total_fuel_consumption(
+    FUELTYPE, CFL, CFB, SFC, PC, PDF,
+    option = "CFC"
+  )
   # Calculate the Secondary Outputs
   if (output %in% c("SECONDARY", "ALL", "S", "A")) {
     # Eq. 39 (FCFDG 1992) Calculate Spread Factor (GS is group slope)
@@ -355,23 +358,37 @@
     # Calculate Surface fire rate of spread (m/min)
     RSO <- .CFBcalc(FUELTYPE, FMC, SFC, ROS, CBH, option = "RSO")
     # Calculate The Buildup Effect
-    BE <- .BEcalc(FUELTYPE, BUI)
+    BE <- buildup_effect(FUELTYPE, BUI)
     # Calculate length to breadth ratio
-    LB <- .LBcalc(FUELTYPE, WSV)
-    LBt <- ifelse(ACCEL == 0, LB, .LBtcalc(FUELTYPE, LB, HR, CFB))
+    LB <- length_to_breadth(FUELTYPE, WSV)
+    LBt <- ifelse(
+      ACCEL == 0,
+      LB,
+      length_to_breadth_at_time(FUELTYPE, LB, HR, CFB)
+    )
     # Calculate Back fire rate of spread (BROS)
-    BROS <- .BROScalc(FUELTYPE, FFMC, BUI, WSV, FMC, SFC, PC, PDF, CC, CBH)
+    BROS <- back_rate_of_spread(
+      FUELTYPE, FFMC, BUI, WSV, FMC, SFC, PC, PDF, CC, CBH
+    )
     # Calculate Flank fire rate of spread (FROS)
-    FROS <- .FROScalc(ROS, BROS, LB)
+    FROS <- flank_rate_of_spread(ROS, BROS, LB)
     # Calculate the eccentricity
     E <- sqrt(1 - 1 / LB / LB)
     # Calculate the rate of spread towards angle theta (TROS)
     TROS <- ROS * (1 - E) / (1 - E * cos(THETA - RAZ))
     # Calculate rate of spread at time t for Flank, Back of fire and at angle
     # theta.
-    ROSt <- ifelse(ACCEL == 0, ROS, .ROStcalc(FUELTYPE, ROS, HR, CFB))
-    BROSt <- ifelse(ACCEL == 0, BROS, .ROStcalc(FUELTYPE, BROS, HR, CFB))
-    FROSt <- ifelse(ACCEL == 0, FROS, .FROScalc(ROSt, BROSt, LBt))
+    ROSt <- ifelse(
+      ACCEL == 0,
+      ROS,
+      rate_of_spread_at_time(FUELTYPE, ROS, HR, CFB)
+    )
+    BROSt <- ifelse(
+      ACCEL == 0,
+      BROS,
+      rate_of_spread_at_time(FUELTYPE, BROS, HR, CFB)
+    )
+    FROSt <- ifelse(ACCEL == 0, FROS, flank_rate_of_spread(ROSt, BROSt, LBt))
     # Calculate rate of spread towards angle theta at time t (TROSt)
     TROSt <- ifelse(
       ACCEL == 0,
@@ -397,13 +414,13 @@
     )
     # Calculate Total fuel consumption for the Flank fire, Back fire and at
     #  angle theta
-    FTFC <- .TFCcalc(FUELTYPE, CFL, FCFB, SFC, PC, PDF)
-    BTFC <- .TFCcalc(FUELTYPE, CFL, BCFB, SFC, PC, PDF)
-    TTFC <- .TFCcalc(FUELTYPE, CFL, TCFB, SFC, PC, PDF)
+    FTFC <- total_fuel_consumption(FUELTYPE, CFL, FCFB, SFC, PC, PDF)
+    BTFC <- total_fuel_consumption(FUELTYPE, CFL, BCFB, SFC, PC, PDF)
+    TTFC <- total_fuel_consumption(FUELTYPE, CFL, TCFB, SFC, PC, PDF)
     # Calculate the Fire Intensity at the Flank, Back and at angle theta fire
-    FFI <- .FIcalc(FTFC, FROS)
-    BFI <- .FIcalc(BTFC, BROS)
-    TFI <- .FIcalc(TTFC, TROS)
+    FFI <- fire_intensity(FTFC, FROS)
+    BFI <- fire_intensity(BTFC, BROS)
+    TFI <- fire_intensity(TTFC, TROS)
     # Calculate Rate of spread at time t for the Head, Flank, Back of fire and
     #  at angle theta.
     HROSt <- ifelse(HR < 0, -ROSt, ROSt)
@@ -424,8 +441,16 @@
     TTI <- log(ifelse(1 - RSO / TROS > 0, 1 - RSO / TROS, 1)) / (-a4)
 
     # Fire spread distance for Head, Back, and Flank of fire
-    DH <- ifelse(ACCEL == 1, .DISTtcalc(FUELTYPE, ROS, HR, CFB), ROS * HR)
-    DB <- ifelse(ACCEL == 1, .DISTtcalc(FUELTYPE, BROS, HR, CFB), BROS * HR)
+    DH <- ifelse(
+      ACCEL == 1,
+      distance_at_time(FUELTYPE, ROS, HR, CFB),
+      ROS * HR
+    )
+    DB <- ifelse(
+      ACCEL == 1,
+      distance_at_time(FUELTYPE, BROS, HR, CFB),
+      BROS * HR
+    )
     DF <- ifelse(ACCEL == 1, (DH + DB) / (LBt * 2), (DH + DB) / (LB * 2))
   }
   # Create an id field if it does not exist
@@ -480,4 +505,9 @@
     FBP[, "FD"] <- ifelse(FUELTYPE %in% c("WA", "NF"), "NA", FBP[, "FD"])
   }
   return(FBP)
+}
+
+.FBPcalc <- function(...) {
+  .Deprecated("fire_behaviour_prediction")
+  return(fire_behaviour_prediction(...))
 }

@@ -132,7 +132,7 @@
 #'
 #' @seealso \code{\link{fbp}}, \code{\link{fwiRaster}}, \code{\link{gfmc}},
 #' \code{\link{hffmc}}, \code{\link{hffmcRaster}}, \code{\link{sdmc}},
-#' \code{\link{wDC}}, \code{\link{fireSeason}}
+#' \code{\link{overwinter_drought_code}}, \code{\link{fire_season}}
 #'
 #' @references 1. Van Wagner, C.E. and T.L. Pickett. 1985. Equations and
 #' FORTRAN program for the Canadian Forest Fire Weather Index System. Can. For.
@@ -413,12 +413,12 @@ fwi <- function(
     ###########################################################################
     # Fine Fuel Moisture Code (FFMC)
     ###########################################################################
-    ffmc1 <- .ffmcCalc(ffmc_yda, temp[k], rh[k], ws[k], prec[k])
+    ffmc1 <- fine_fuel_moisture_code(ffmc_yda, temp[k], rh[k], ws[k], prec[k])
 
     ###########################################################################
     # Duff Moisture Code (DMC)
     ###########################################################################
-    dmc1 <- .dmcCalc(
+    dmc1 <- duff_moisture_code(
       dmc_yda, temp[k], rh[k], prec[k], lat[k], mon[k],
       lat.adjust
     )
@@ -426,7 +426,7 @@ fwi <- function(
     ###########################################################################
     # Drought Code (DC)
     ###########################################################################
-    dc1 <- .dcCalc(
+    dc1 <- drought_code(
       dc_yda, temp[k], rh[k], prec[k], lat[k], mon[k],
       lat.adjust
     )
@@ -434,17 +434,17 @@ fwi <- function(
     ###########################################################################
     # Initial Spread Index (ISI)
     ###########################################################################
-    isi1 <- .ISIcalc(ffmc1, ws[k], FALSE)
+    isi1 <- initial_spread_index(ffmc1, ws[k], FALSE)
 
     ###########################################################################
     # Buildup Index (BUI)
     ###########################################################################
-    bui1 <- .buiCalc(dmc1, dc1)
+    bui1 <- buildup_index(dmc1, dc1)
 
     ###########################################################################
     # Fire Weather Index (FWI)
     ###########################################################################
-    fwi1 <- .fwiCalc(isi1, bui1)
+    fwi1 <- fire_weather_index(isi1, bui1)
     ###########################################################################
     #                   Daily Severity Rating (DSR)
     ###########################################################################

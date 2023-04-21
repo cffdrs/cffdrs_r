@@ -1,6 +1,6 @@
 #' Moisture content Calculation
 #'
-#' @description Calculation of moisture content for use int he GFMC calculation
+#' @description Calculation of moisture content for use in the GFMC calculation
 #'
 #' @param temp Temperature
 #' @param rh Relative Humidity
@@ -14,7 +14,9 @@
 #'
 #' @seealso \code{gfmc}
 
-mcCalc <- function(temp, rh, ws, prec, isol, GFMCold, roFL, time.step) {
+grass_fuel_moisture <- function(
+    temp, rh, ws, prec,
+    isol, GFMCold, roFL, time.step) {
   # Eq. 13 - Calculate previous moisture code
   MCold <- 147.27723 * ((101 - GFMCold) / (59.5 + GFMCold))
   # Eq. 11 - Calculate the moisture content of the layer in % after rainfall
@@ -56,4 +58,9 @@ mcCalc <- function(temp, rh, ws, prec, isol, GFMCold, roFL, time.step) {
     MC0
   )
   return(MC0)
+}
+
+mcCalc <- function(...) {
+  .Deprecated("grass_fuel_moisture")
+  return(grass_fuel_moisture(...))
 }

@@ -18,7 +18,7 @@
 #'
 #' @noRd
 
-.ROStcalc <- function(FUELTYPE, ROSeq, HR, CFB) {
+rate_of_spread_at_time <- function(FUELTYPE, ROSeq, HR, CFB) {
   # Eq. 72 - alpha constant value, dependent on fuel type
   alpha <- ifelse(
     FUELTYPE %in% c("C1", "O1A", "O1B", "S1", "S2", "S3", "D1"),
@@ -28,4 +28,9 @@
   # Eq. 70 - Rate of Spread at time since ignition
   ROSt <- ROSeq * (1 - exp(-alpha * HR))
   return(ROSt)
+}
+
+.ROStcalc <- function(...) {
+  .Deprecated("rate_of_spread_at_time")
+  return(rate_of_spread_at_time(...))
 }

@@ -225,7 +225,7 @@ For. Cent., Edmonton, AB.
 \seealso{
 \code{\link{fbp}}, \code{\link{fwiRaster}}, \code{\link{gfmc}},
 \code{\link{hffmc}}, \code{\link{hffmcRaster}}, \code{\link{sdmc}},
-\code{\link{wDC}}, \code{\link{fireSeason}}
+\code{\link{overwinter_drought_code}}, \code{\link{fire_season}}
 }
 \author{
 Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry

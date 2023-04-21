@@ -29,7 +29,7 @@
 #'
 #' @noRd
 
-.ROScalc <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
+rate_of_spread <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
   # Set up some data vectors
   NoBUI <- rep(-1, length(ISI))
   d <- c(
@@ -62,12 +62,12 @@
   RSI <- ifelse(
     FUELTYPE %in% c("M1"),
     (PC / 100
-      * .ROScalc(
+      * rate_of_spread(
         rep("C2", length(ISI)),
         ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
       )
       + (100 - PC) / 100
-        * .ROScalc(
+        * rate_of_spread(
           rep("D1", length(ISI)),
           ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
         )),
@@ -77,12 +77,12 @@
   RSI <- ifelse(
     FUELTYPE %in% c("M2"),
     (PC / 100 *
-      .ROScalc(
+      rate_of_spread(
         rep("C2", length(ISI)),
         ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
       )
       + 0.2 * (100 - PC) / 100 *
-        .ROScalc(
+        rate_of_spread(
           rep("D1", length(ISI)),
           ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
         )),
@@ -101,7 +101,7 @@
     FUELTYPE %in% c("M3"),
     (PDF / 100 * RSI_m3
       + (1 - PDF / 100) *
-        .ROScalc(
+        rate_of_spread(
           rep("D1", length(ISI)),
           ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
         )),
@@ -119,7 +119,7 @@
     FUELTYPE %in% c("M4"),
     (PDF / 100 * RSI_m4
       + 0.2 * (1 - PDF / 100) *
-        .ROScalc(
+        rate_of_spread(
           rep("D1", length(ISI)),
           ISI, NoBUI, FMC, SFC, PC, PDF, CC, CBH
         )),
@@ -146,9 +146,14 @@
   ROS <- ifelse(
     FUELTYPE %in% c("C6"),
     .C6calc(FUELTYPE, ISI, BUI, FMC, SFC, CBH, option = "ROS"),
-    .BEcalc(FUELTYPE, BUI) * RSI
+    buildup_effect(FUELTYPE, BUI) * RSI
   )
   # add a constraint
   ROS <- ifelse(ROS <= 0, 0.000001, ROS)
   return(ROS)
+}
+
+.ROScalc <- function(...) {
+  .Deprecated("rate_of_spread")
+  return(rate_of_spread(...))
 }

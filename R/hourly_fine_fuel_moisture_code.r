@@ -161,8 +161,9 @@
 #' # only the first record, the rests would be calculated:
 #' hffmc(dat0, time.step = 1, calc.step = TRUE)
 #'
-#' @export hffmc
-hffmcCalc <- function(temp, rh, ws, prec, Fo, t0) {
+#' @noRd
+
+hourly_fine_fuel_moisture_code <- function(temp, rh, ws, prec, Fo, t0) {
   # Eq. 1 (with a more precise multiplier than the daily)
   mo <- 147.27723 * (101 - Fo) / (59.5 + Fo)
   rf <- prec
@@ -204,4 +205,9 @@ hffmcCalc <- function(temp, rh, ws, prec, Fo, t0) {
   Fo <- 59.5 * (250 - m) / (147.27723 + m)
   Fo <- ifelse(Fo <= 0, 0, Fo)
   return(Fo)
+}
+
+hffmcCalc <- function(...) {
+  .Deprecated("hourly_fine_fuel_moisture_code")
+  return(hourly_fine_fuel_moisture_code(...))
 }

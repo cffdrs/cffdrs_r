@@ -296,7 +296,7 @@ fbp <- function(
   }
   # If input is not provided, then calculate FBP with default values
   if (is.null(input)) {
-    fullList <- .FBPcalc(input)
+    fullList <- fire_behaviour_prediction(input)
   } else {
     # determine optimal number of pixels to process at each iteration
     if (is.null(m)) {
@@ -314,13 +314,16 @@ fbp <- function(
       ca <- foreach::foreach(i = 1:n, .packages = "cffdrs") %dopar% {
         if (i == n) {
           # Run FBP functions
-          to.ls <- .FBPcalc(
+          to.ls <- fire_behaviour_prediction(
             input[((i - 1) * m + 1):nrow(input), ],
             output = output
           )
         } else {
           # Run FBP functions
-          to.ls <- .FBPcalc(input[((i - 1) * m + 1):(i * m), ], output = output)
+          to.ls <- fire_behaviour_prediction(
+            input[((i - 1) * m + 1):(i * m), ],
+            output = output
+          )
         }
         to.ls
       }
@@ -337,7 +340,7 @@ fbp <- function(
           foo <- input[((i - 1) * m + 1):(i * m), ]
         }
         # Run FBP functions
-        ca[[i]] <- .FBPcalc(foo, output = output)
+        ca[[i]] <- fire_behaviour_prediction(foo, output = output)
       }
     }
     # create a single keyed data table

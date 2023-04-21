@@ -55,9 +55,9 @@
   # Eq. 39 (FCFDG 1992) - Calculate Spread Factor
   SF <- ifelse(GS >= 70, 10, exp(3.533 * (GS / 100)^1.2))
   # ISI with 0 wind on level grounds
-  ISZ <- .ISIcalc(FFMC, 0)
+  ISZ <- initial_spread_index(FFMC, 0)
   # Surface spread rate with 0 wind on level ground
-  RSZ <- .ROScalc(FUELTYPE, ISZ, BUI = NoBUI, FMC, SFC, PC, PDF, CC, CBH)
+  RSZ <- rate_of_spread(FUELTYPE, ISZ, BUI = NoBUI, FMC, SFC, PC, PDF, CC, CBH)
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope
   RSF <- RSZ * SF
   # setup some reference vectors
@@ -109,14 +109,20 @@
   # Surface spread rate with 0 wind on level ground
   RSZ <- ifelse(
     FUELTYPE %in% c("M1", "M2"),
-    .ROScalc(rep("C2", length(ISZ)), ISZ, NoBUI, FMC, SFC, PC, PDF, CC, CBH),
+    rate_of_spread(
+      rep("C2", length(ISZ)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for C2
   RSF_C2 <- ifelse(FUELTYPE %in% c("M1", "M2"), RSZ * SF, RSF_C2)
   RSZ <- ifelse(
     FUELTYPE %in% c("M1", "M2"),
-    .ROScalc(rep("D1", length(ISZ)), ISZ, NoBUI, FMC, SFC, PC, PDF, CC, CBH),
+    rate_of_spread(
+      rep("D1", length(ISZ)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for D1
@@ -159,7 +165,10 @@
   # Surface spread rate with 0 wind on level ground
   RSZ <- ifelse(
     FUELTYPE %in% c("M3"),
-    .ROScalc(rep("M3", length(FMC)), ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH),
+    rate_of_spread(
+      rep("M3", length(FMC)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for M3
@@ -167,7 +176,10 @@
   # Surface spread rate with 0 wind on level ground, using D1
   RSZ <- ifelse(
     FUELTYPE %in% c("M3"),
-    .ROScalc(rep("D1", length(ISZ)), ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH),
+    .rate_of_spread(
+      rep("D1", length(ISZ)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for M3
@@ -208,7 +220,10 @@
   # Surface spread rate with 0 wind on level ground, using M4
   RSZ <- ifelse(
     FUELTYPE %in% c("M4"),
-    .ROScalc(rep("M4", length(FMC)), ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH),
+    rate_of_spread(
+      rep("M4", length(FMC)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for M4
@@ -216,7 +231,10 @@
   # Surface spread rate with 0 wind on level ground, using M4
   RSZ <- ifelse(
     FUELTYPE %in% c("M4"),
-    .ROScalc(rep("D1", length(ISZ)), ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH),
+    rate_of_spread(
+      rep("D1", length(ISZ)),
+      ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH
+    ),
     RSZ
   )
   # Eq. 40 (FCFDG 1992) - Surface spread rate with 0 wind upslope for D1

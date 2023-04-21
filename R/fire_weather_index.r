@@ -25,7 +25,7 @@
 #'
 #' @noRd
 
-.fwiCalc <- function(isi, bui) {
+fire_weather_index <- function(isi, bui) {
   # Eqs. 28b, 28a, 29
   bb <- ifelse(
     bui > 80,
@@ -35,4 +35,9 @@
   # Eqs. 30b, 30a
   fwi <- ifelse(bb <= 1, bb, exp(2.72 * ((0.434 * log(bb))^0.647)))
   return(fwi)
+}
+
+.fwiCalc <- function(...) {
+  .Deprecated("fire_weather_index")
+  return(fire_weather_index(...))
 }

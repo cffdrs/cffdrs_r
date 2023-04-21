@@ -26,7 +26,7 @@
 #' @return A single drought code value
 #' @noRd
 
-.dcCalc <- function(
+drought_code <- function(
     dc_yda, temp, rh, prec, lat, mon,
     lat.adjust = TRUE) {
   # Day length factor for DC Calculations

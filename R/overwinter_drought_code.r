@@ -1,9 +1,9 @@
 #' Overwintering Drought Code
 #'
-#' @description \code{wDC} calculates an initial or season starting Drought Code
-#' (DC) value based on a standard method of overwintering the Drought Code
-#' (Lawson and Armitage 2008).  This method uses the final DC value from
-#' previous year, over winter precipitation and estimates of how much
+#' @description \code{overwinter_drought_code} calculates an initial or season
+#' starting Drought Code (DC) value based on a standard method of overwintering
+#' the Drought Code (Lawson and Armitage 2008).  This method uses the final DC
+#' value from previous year, over winter precipitation and estimates of how much
 #' over-winter precipitation 'refills' the moisture in this fuel layer. This
 #' function could be used for either one weather station or for multiple weather
 #' stations.
@@ -30,9 +30,10 @@
 #' below)
 #' @param b User selected values accountain for wetting efficiency fraction
 #' (view table below)
-#' @return \code{wDC} returns either a single value or a vector of wDC values.
+#' @return \code{overwinter_drought_code} returns either a single value or a
+#'    vector of wDC values.
 #' @author Xianli Wang, Mike Wotton, Alan Cantin, and Mike Flannigan
-#' @seealso \code{\link{fwi}}, \code{\link{fireSeason}}
+#' @seealso \code{\link{fwi}}, \code{\link{fire_season}}
 #' @references Lawson B.D. and Armitage O.B. 2008. Weather Guide for the
 #' Canadian Forest Fire Danger Rating System. Natural Resources Canada,
 #' Canadian Forest Service, Northern Forestry Centre, Edmonton, Alberta. 84 p.
@@ -50,14 +51,14 @@
 #' data("test_wDC")
 #' # (1) Simple case previous fall's DC was 300, overwinter
 #' # rain 110mm
-#' winter_DC <- wDC(DCf = 300, rw = 110)
+#' winter_DC <- overwinter_drought_code(DCf = 300, rw = 110)
 #' winter_DC
 #' # (2) modified a and b parameters. Find table values in listed
 #' # reference for Lawson and Armitage, 2008.
-#' winter_DC <- wDC(DCf = 300, rw = 110, a = 1.0, b = 0.9)
+#' winter_DC <- overwinter_drought_code(DCf = 300, rw = 110, a = 1.0, b = 0.9)
 #' winter_DC
 #' # (3)with multiple inputs:
-#' winter_DC <- wDC(
+#' winter_DC <- overwinter_drought_code(
 #'   DCf = c(400, 300, 250), rw = c(99, 110, 200),
 #'   a = c(0.75, 1.0, 0.75), b = c(0.75, 0.9, 0.75)
 #' )
@@ -93,16 +94,16 @@
 #' # Assign a fall DC value
 #' fallDC <- 500
 #' # calculate winter DC
-#' winter_DC <- wDC(DCf = fallDC, rw = curYr.prec)
+#' winter_DC <- overwinter_drought_code(DCf = fallDC, rw = curYr.prec)
 #' winter_DC
 #' # Assign a different fall DC value
 #' fallDC <- 250
 #' # calculate winter DC
-#' winter_DC <- wDC(DCf = fallDC, rw = curYr.prec, a = 1.0)
+#' winter_DC <- overwinter_drought_code(DCf = fallDC, rw = curYr.prec, a = 1.0)
 #' winter_DC
 #'
-#' @export wDC
-wDC <- function(
+#' @export overwinter_drought_code
+overwinter_drought_code <- function(
     DCf = 100,
     rw = 200,
     a = 0.75,
@@ -136,4 +137,9 @@ wDC <- function(
   # Constrain DC
   DCs <- ifelse(DCs < 15, 15, DCs)
   return(DCs)
+}
+
+wDC <- function(...) {
+  .Deprecated("overwinter_drought_code")
+  return(overwinter_drought_code(...))
 }

@@ -8,10 +8,15 @@
 #'
 #' @return \code{gfmc}
 #'
-#' @export gfmcCalc
+#' @export grass_fuel_moisture_code
 
-gfmcCalc <- function(MC0) {
+grass_fuel_moisture_code <- function(MC0) {
   # Eq. 12 - Calculate GFMC
   GFMC0 <- 59.5 * ((250 - MC0) / (147.2772 + MC0))
   return(GFMC0)
+}
+
+gfmcCalc <- function(...) {
+  .Deprecated("gfmcCalc")
+  return(grass_fuel_moisture_code(...))
 }
