@@ -19,13 +19,13 @@ weather observations. It is important that variable names have to be the
 same as in the following list, but they are case insensitive. The order in
 which the input variables are entered is not important.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-\var{rh} \tab (required) \tab Relative humidity (\%)\cr 
-\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
-\var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
-\var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr 
-\var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly 
+\var{rh} \tab (required) \tab Relative humidity (\%)\cr
+\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
+\var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
+\var{hr} \tab (optional) \tab Hourly value to calculate sub-hourly ffmc \cr
+\var{bui} \tab (optional) \tab Daily BUI value for the computation of hourly
 FWI. \cr
 \tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }}
 
@@ -65,9 +65,9 @@ which may contain 1 or multiple elements. Optionally when
 weatherstream as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
 }
 \description{
-\code{hffmc} is used to calculate hourly Fine Fuel Moisture Code (FFMC) and
-is based on a calculation routine first described in detail by Van Wagner
-(1977) and which has been updated in minor ways by the Canadian Forest
+\code{hffmc} is used to calculate hourly Fine Fuel Moisture Code
+(FFMC) and is based on a calculation routine first described in detail by Van
+Wagner (1977) and which has been updated in minor ways by the Canadian Forest
 Service to have it agree with the calculation methodology for the daily FFMC
 (see \code{\link{fwi}}).  In its simplest typical use this current routine
 calculates a value of FFMC based on a series of uninterrupted hourly weather
@@ -130,46 +130,50 @@ library(cffdrs)
 data("test_hffmc")
 # show the data format:
 head(test_hffmc)
-# (1)hffmc default: 
+# (1)hffmc default:
 # Re-order the data by year, month, day, and hour:
-test_hffmc<-test_hffmc[with(test_hffmc, order(yr,mon,day,hr)),]
-# Because the test data has 24 hours input variables 
-# it is possible to calculate the hourly FFMC chronically 
+test_hffmc <- test_hffmc[with(test_hffmc, order(yr, mon, day, hr)), ]
+# Because the test data has 24 hours input variables
+# it is possible to calculate the hourly FFMC chronically
 # through multiple days(with the default initial ffmc_old=85):
-test_hffmc$ffmc_default<-hffmc(test_hffmc) 
+test_hffmc$ffmc_default <- hffmc(test_hffmc)
 # (2) Calculate FFMC for multiple stations:
-# Calculate hourly FFMC with only one initial 
-# value (ffmc_old=85), but multiple weather stations. 
+# Calculate hourly FFMC with only one initial
+# value (ffmc_old=85), but multiple weather stations.
 # Sort the input by date/time and the station id:
-test_hffmc<-test_hffmc[with(test_hffmc,order(yr,mon,hr)),]
+test_hffmc <- test_hffmc[with(test_hffmc, order(yr, mon, hr)), ]
 # Add weather station id:
-test_hffmc$id<-rep(1:10,nrow(test_hffmc)/10)
-#check the data:
+test_hffmc$id <- rep(1:10, nrow(test_hffmc) / 10)
+# check the data:
 head(test_hffmc)
-test_hffmc$ffmc01<-hffmc(test_hffmc,batch=TRUE)
-# With multiple initial FFMC (ffmc_old) as a vector: 
-test_hffmc$ffmc02<- hffmc(test_hffmc,ffmc_old = sample(70:100,10, replace=TRUE),batch=TRUE)
-# One time step assuming all records are from different 
-# weather stations: 
-     foo<-hffmc(test_hffmc,batch=FALSE)
+test_hffmc$ffmc01 <- hffmc(test_hffmc, batch = TRUE)
+# With multiple initial FFMC (ffmc_old) as a vector:
+test_hffmc$ffmc02 <- hffmc(
+  test_hffmc,
+  ffmc_old = sample(70:100, 10, replace = TRUE),
+  batch = TRUE
+)
+# One time step assuming all records are from different
+# weather stations:
+foo <- hffmc(test_hffmc, batch = FALSE)
 # (3) output all hourly FWI System variables:
-test_hffmc$id<-NULL
-test_hffmc<-test_hffmc[with(test_hffmc,    order(yr,mon,day,hr)),]
-foo<-hffmc(test_hffmc,hourlyFWI=TRUE)
+test_hffmc$id <- NULL
+test_hffmc <- test_hffmc[with(test_hffmc, order(yr, mon, day, hr)), ]
+foo <- hffmc(test_hffmc, hourlyFWI = TRUE)
 # this will not run: warning message requesting for daily BUI
-test_hffmc$bui<-100
-foo<-hffmc(test_hffmc,hourlyFWI=TRUE)
-# (4) Calculate time steps in case the time intervals are 
+test_hffmc$bui <- 100
+foo <- hffmc(test_hffmc, hourlyFWI = TRUE)
+# (4) Calculate time steps in case the time intervals are
 # not uniform:
-dat0<-test_hffmc[sample(1:30,20),]
-dat0<-dat0[with(dat0,order(yr,mon,day,hr)),]
+dat0 <- test_hffmc[sample(1:30, 20), ]
+dat0 <- dat0[with(dat0, order(yr, mon, day, hr)), ]
 # with or without calc.step, hffmc is going to generate
 # different FFMC values.
 # without calculating time step (default):
-hffmc(dat0,time.step=1)
-# with calc.step=TRUE, time.step=1 is applied to 
+hffmc(dat0, time.step = 1)
+# with calc.step=TRUE, time.step=1 is applied to
 # only the first record, the rests would be calculated:
-hffmc(dat0,time.step=1,calc.step=TRUE)
+hffmc(dat0, time.step = 1, calc.step = TRUE)
 
 }
 \references{

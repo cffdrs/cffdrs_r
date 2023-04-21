@@ -12,12 +12,12 @@ observations. Variable names have to be the same as in the following list,
 but they are case insensitive. The order in which the input variables are
 entered is not required.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-\var{rh} \tab (required) \tab Relative humidity (\%)\cr 
-\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
-\var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
-\var{bui} \tab (optional) 
+\var{rh} \tab (required) \tab Relative humidity (\%)\cr
+\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
+\var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
+\var{bui} \tab (optional)
 \tab Daily BUI value for the computation of hourly FWI.\cr
 \tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }}
 
@@ -42,15 +42,15 @@ values, which may contain 1 or multiple elements. Optionally when
 weatherstream as well as the hourly or sub-hourly FFMC, ISI, FWI, and DSR.
 }
 \description{
-\code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code
-(FFMC) based on hourly weather observations of screen level (~1.4 m)
-temperature, relative humidity, 10 m wind speed, and 1-hour rainfall. This
-implementation of the function includes an optional timestep input which is
-defaulted to one hour, but can be reduced if sub-hourly calculation of the
-code is needed.  The FFMC is in essence a bookkeeping system for moisture
-content and thus it needs to use the last timestep's value of FFMC in its
-calculation. \code{hffmcRaster} takes rasterized inputs and generates raster
-maps as outputs.
+\code{hffmcRaster} is used to calculate hourly Fine Fuel
+Moisture Code (FFMC) based on hourly weather observations of screen level
+(~1.4 m) temperature, relative humidity, 10 m wind speed, and 1-hour
+rainfall. This implementation of the function includes an optional timestep
+input which is defaulted to one hour, but can be reduced if sub-hourly
+calculation of the code is needed.  The FFMC is in essence a bookkeeping
+system for moisture content and thus it needs to use the last timestep's
+value of FFMC in its calculation. \code{hffmcRaster} takes rasterized inputs
+and generates raster maps as outputs.
 
 The hourly FFMC is very similar in its structure and calculation to the
 Canadian Forest Fire Weather Index System's daily FFMC (\code{\link{fwi}})
@@ -94,33 +94,49 @@ in typical pine litter fuels.
 library(cffdrs)
 require(terra)
 ## load the test data for the first hour, namely hour01:
-hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
+hour01src <- system.file(
+  "extdata",
+  "test_rast_hour01.tif",
+  package = "cffdrs"
+)
 hour01 <- terra::rast(hour01src)
 # Assign names to the layers:
-names(hour01)<-c("temp","rh","ws","prec")
-# (1) Default, based on the initial value: 
-foo<-hffmcRaster(hour01)
+names(hour01) <- c("temp", "rh", "ws", "prec")
+# (1) Default, based on the initial value:
+foo <- hffmcRaster(hour01)
 plot(foo)
 ### Additional, longer running examples ###
 # (2) Based on previous day's hffmc:
 # load the test data for the second hour, namely hour02:
-hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
+hour02src <- system.file(
+  "extdata",
+  "test_rast_hour02.tif",
+  package = "cffdrs"
+)
 hour02 <- terra::rast(hour02src)
 # Assign variable names to the layers:
-names(hour02)<-c("temp","rh","ws","prec")
-\donttest{foo1<-hffmcRaster(hour02,ffmc_old=foo)}
-\donttest{plot(foo1)}
+names(hour02) <- c("temp", "rh", "ws", "prec")
+\donttest{
+foo1 <- hffmcRaster(hour02, ffmc_old = foo)
+}
+\donttest{
+plot(foo1)
+}
 # (3) Calculate other hourly FWI components (ISI, FWI, and DSR):
-# Need BUI layer, 
-bui<-hour02$temp
-values(bui)<-50
-hour02<-c(hour02,bui)
+# Need BUI layer,
+bui <- hour02$temp
+values(bui) <- 50
+hour02 <- c(hour02, bui)
 # Re-assign variable names to the layers:
-names(hour02)<-c("temp","rh","ws","prec","bui")
+names(hour02) <- c("temp", "rh", "ws", "prec", "bui")
 # Calculate all the variables:
-\donttest{foo2<-hffmcRaster(hour02,ffmc_old=foo,hourlyFWI=TRUE)}
+\donttest{
+foo2 <- hffmcRaster(hour02, ffmc_old = foo, hourlyFWI = TRUE)
+}
 # Visualize the maps:
-\donttest{plot(foo2)}
+\donttest{
+plot(foo2)
+}
 
 }
 \references{

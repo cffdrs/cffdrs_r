@@ -19,13 +19,13 @@ observations taken at noon LST. Variable names have to be the same as in the
 following list, but they are case insensitive. The order in which the inputs
 are entered is not important.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{lat} \tab (recommended) \tab Latitude (decimal degree,
-__default=55__)\cr 
+__default=55__)\cr
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-\var{rh} \tab (required) \tab Relative humidity (\%)\cr 
+\var{rh} \tab (required) \tab Relative humidity (\%)\cr
 \var{ws} \tab
-(required) \tab 10-m height wind speed (km/h)\cr 
+(required) \tab 10-m height wind speed (km/h)\cr
 \var{prec} \tab (required)
 \tab 24-hour rainfall (mm)\cr }}
 
@@ -33,11 +33,12 @@ __default=55__)\cr
 or a stack that contains raster maps of the three moisture codes calculated
 for the previous day, which will be used for the current day's calculation.
 Defaults are the standard initial values for FFMC, DMC, and DC defined as
-the following: 
+the following:
 
-\tabular{lll}{ 
+\tabular{lll}{
 \bold{Variable} \tab \bold{Description} \tab \bold{Default} \cr
-\var{ffmc} \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
+\var{ffmc}
+   \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
 \var{dmc} \tab Previous day Duff Moisture Code (DMC; unitless)\tab 6 \cr
 \var{dc} \tab Previous Day Drought Code (DC; unitless) \tab 15\cr
 \var{lat} \tab Latitude of the weather station (\emph{Optional})\tab 55 \cr}}
@@ -67,12 +68,12 @@ Index} \item{bui }{Buildup Index} \item{fwi }{Fire Weather Index} \item{dsr
 }{Daily Severity Rating}
 }
 \description{
-\code{fwiRaster} is used to calculate the outputs of the Canadian Forest
-Fire Weather Index (FWI) System for one day based on noon local standard
-time (LST) weather observations of temperature, relative humidity, wind
-speed, and 24-hour rainfall, as well as the previous day's fuel moisture
-conditions. This function takes rasterized input and generates raster maps
-as outputs.
+\code{fwiRaster} is used to calculate the outputs of the
+Canadian Forest Fire Weather Index (FWI) System for one day based on noon
+local standard time (LST) weather observations of temperature, relative
+humidity, wind speed, and 24-hour rainfall, as well as the previous day's
+fuel moisture conditions. This function takes rasterized input and generates
+raster maps as outputs.
 
 The Canadian Forest Fire Weather Index (FWI) System is a major subsystem of
 the Canadian Forest Fire Danger Rating System, which also includes Canadian
@@ -124,20 +125,24 @@ different parts of the world.
 
 library(cffdrs)
 require(terra)
-# The test data is a stack with four input variables including 
+# The test data is a stack with four input variables including
 # daily noon temp, rh, ws, and prec (we recommend tif format):
-day01 <- rast(system.file("extdata","test_rast_day01.tif",package="cffdrs"))
-day01 <- crop(day01,c(250,255,47,51))
+day01 <- rast(
+  system.file("extdata", "test_rast_day01.tif", package = "cffdrs")
+)
+day01 <- crop(day01, c(250, 255, 47, 51))
 # assign variable names:
-names(day01)<-c("temp","rh","ws","prec")
+names(day01) <- c("temp", "rh", "ws", "prec")
 # (1) use the initial values
-foo<-fwiRaster(day01)
+foo <- fwiRaster(day01)
 plot(foo)
 ### Additional, longer running examples ###
 # (2) use initial values with larger raster
 day01 <- rast(day01src)
-names(day01)<-c("temp","rh","ws","prec")
-\donttest{foo<-fwiRaster(day01)}
+names(day01) <- c("temp", "rh", "ws", "prec")
+\donttest{
+foo <- fwiRaster(day01)
+}
 plot(foo)
 
 }

@@ -1,15 +1,15 @@
 #' Raster-based Hourly Fine Fuel Moisture Code
-#' 
-#' @description \code{hffmcRaster} is used to calculate hourly Fine Fuel Moisture Code
-#' (FFMC) based on hourly weather observations of screen level (~1.4 m)
-#' temperature, relative humidity, 10 m wind speed, and 1-hour rainfall. This
-#' implementation of the function includes an optional timestep input which is
-#' defaulted to one hour, but can be reduced if sub-hourly calculation of the
-#' code is needed.  The FFMC is in essence a bookkeeping system for moisture
-#' content and thus it needs to use the last timestep's value of FFMC in its
-#' calculation. \code{hffmcRaster} takes rasterized inputs and generates raster
-#' maps as outputs.
-#' 
+#'
+#' @description \code{hffmcRaster} is used to calculate hourly Fine Fuel
+#' Moisture Code (FFMC) based on hourly weather observations of screen level
+#' (~1.4 m) temperature, relative humidity, 10 m wind speed, and 1-hour
+#' rainfall. This implementation of the function includes an optional timestep
+#' input which is defaulted to one hour, but can be reduced if sub-hourly
+#' calculation of the code is needed.  The FFMC is in essence a bookkeeping
+#' system for moisture content and thus it needs to use the last timestep's
+#' value of FFMC in its calculation. \code{hffmcRaster} takes rasterized inputs
+#' and generates raster maps as outputs.
+#'
 #' The hourly FFMC is very similar in its structure and calculation to the
 #' Canadian Forest Fire Weather Index System's daily FFMC (\code{\link{fwi}})
 #' but has an altered drying and wetting rate which more realistically reflects
@@ -25,7 +25,7 @@
 #' assumption for an hour; however it can become problematic for longer
 #' periods.  For brevity we have referred to this routine throughout this
 #' description as the hourly FFMC.
-#' 
+#'
 #' Because of the shortened timestep, which can lead to more frequent
 #' calculations and conversion between moisture content and the code value
 #' itself, we have increased the precision of one of the constants in the
@@ -35,7 +35,7 @@
 #' this constant is used in the equation and is not a change to the standard
 #' FFMC conversion between moisture and code value (which is referred to as the
 #' FF-scale).
-#' 
+#'
 #' The calculation requires the previous hour's FFMC as an input to the
 #' calculation of the current hour's FFMC; this is because the routine can be
 #' thought of as a bookkeeping system and needs to know the amount of moisture
@@ -46,21 +46,21 @@
 #' typical to use a value of 85 when this value cannot be estimated more
 #' accurately; this code value corresponds to a moisture content of about 16\%
 #' in typical pine litter fuels.
-#' 
+#'
 #' @param weatherstream A raster stack or brick containing hourly weather
 #' observations. Variable names have to be the same as in the following list,
 #' but they are case insensitive. The order in which the input variables are
 #' entered is not required.
-#' 
-#' \tabular{lll}{ 
+#'
+#' \tabular{lll}{
 #' \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-#' \var{rh} \tab (required) \tab Relative humidity (\%)\cr 
-#' \var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
-#' \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr 
-#' \var{bui} \tab (optional) 
+#' \var{rh} \tab (required) \tab Relative humidity (\%)\cr
+#' \var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
+#' \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
+#' \var{bui} \tab (optional)
 #' \tab Daily BUI value for the computation of hourly FWI.\cr
 #' \tab\tab It is required when \code{hourlyFWI=TRUE}.\cr }
-#' 
+#'
 #' @param ffmc_old A single value of FFMC or a raster of FFMC for the previous
 #' hour which will be used for the current hour's calculation. In some
 #' situations, there are no previous-hourly FFMC values to calculate the
@@ -86,79 +86,99 @@
 #' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
 #' @keywords methods
 #' @examples
-#' 
+#'
 #' library(cffdrs)
 #' require(terra)
 #' ## load the test data for the first hour, namely hour01:
-#' hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
+#' hour01src <- system.file(
+#'   "extdata",
+#'   "test_rast_hour01.tif",
+#'   package = "cffdrs"
+#' )
 #' hour01 <- terra::rast(hour01src)
 #' # Assign names to the layers:
-#' names(hour01)<-c("temp","rh","ws","prec")
-#' # (1) Default, based on the initial value: 
-#' foo<-hffmcRaster(hour01)
+#' names(hour01) <- c("temp", "rh", "ws", "prec")
+#' # (1) Default, based on the initial value:
+#' foo <- hffmcRaster(hour01)
 #' plot(foo)
 #' ### Additional, longer running examples ###
 #' # (2) Based on previous day's hffmc:
 #' # load the test data for the second hour, namely hour02:
-#' hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
+#' hour02src <- system.file(
+#'   "extdata",
+#'   "test_rast_hour02.tif",
+#'   package = "cffdrs"
+#' )
 #' hour02 <- terra::rast(hour02src)
 #' # Assign variable names to the layers:
-#' names(hour02)<-c("temp","rh","ws","prec")
-#' \donttest{foo1<-hffmcRaster(hour02,ffmc_old=foo)}
-#' \donttest{plot(foo1)}
+#' names(hour02) <- c("temp", "rh", "ws", "prec")
+#' \donttest{
+#' foo1 <- hffmcRaster(hour02, ffmc_old = foo)
+#' }
+#' \donttest{
+#' plot(foo1)
+#' }
 #' # (3) Calculate other hourly FWI components (ISI, FWI, and DSR):
-#' # Need BUI layer, 
-#' bui<-hour02$temp
-#' values(bui)<-50
-#' hour02<-c(hour02,bui)
+#' # Need BUI layer,
+#' bui <- hour02$temp
+#' values(bui) <- 50
+#' hour02 <- c(hour02, bui)
 #' # Re-assign variable names to the layers:
-#' names(hour02)<-c("temp","rh","ws","prec","bui")
+#' names(hour02) <- c("temp", "rh", "ws", "prec", "bui")
 #' # Calculate all the variables:
-#' \donttest{foo2<-hffmcRaster(hour02,ffmc_old=foo,hourlyFWI=TRUE)}
+#' \donttest{
+#' foo2 <- hffmcRaster(hour02, ffmc_old = foo, hourlyFWI = TRUE)
+#' }
 #' # Visualize the maps:
-#' \donttest{plot(foo2)}
-#' 
+#' \donttest{
+#' plot(foo2)
+#' }
+#'
 #' @export hffmcRaster
-hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1, 
-                        hourlyFWI = FALSE) {
+hffmcRaster <- function(
+    weatherstream,
+    ffmc_old = 85,
+    time.step = 1,
+    hourlyFWI = FALSE) {
   if (class(weatherstream) != "SpatRaster") {
     weatherstream <- terra::rast(weatherstream)
   }
   names(weatherstream) <- tolower(names(weatherstream))
-  #local scope variables
+  # local scope variables
   Tp <- weatherstream$temp
-  H  <- weatherstream$rh
-  W  <- weatherstream$ws
+  H <- weatherstream$rh
+  W <- weatherstream$ws
   ro <- weatherstream$prec
-  #Check that the parameters are correct
-  if (!exists("Tp") | is.null(Tp)) 
+  # Check that the parameters are correct
+  if (!exists("Tp") | is.null(Tp)) {
     warning("temperature (temp) is missing!")
-  if (!exists("ro") | is.null(ro)) 
+  }
+  if (!exists("ro") | is.null(ro)) {
     warning("precipitation (prec) is missing!")
-  if (!exists("W") | is.null(W)) 
+  }
+  if (!exists("W") | is.null(W)) {
     warning("wind speed (ws) is missing!")
-  if (!exists("H") | is.null(H)) 
+  }
+  if (!exists("H") | is.null(H)) {
     warning("relative humidity (rh) is missing!")
-  fo <- lapp(x = c(Tp, H, W, ro),
-                fun = Vectorize(hffmcCalc),
-                Fo=ffmc_old,
-                t0=time.step
-                )
-  #Calculate hourly isi and fwi
-  if (hourlyFWI){
-    if ("bui" %in% names(weatherstream)){
+  }
+  fo <- lapp(
+    x = c(Tp, H, W, ro),
+    fun = Vectorize(hffmcCalc),
+    Fo = ffmc_old,
+    t0 = time.step
+  )
+  # Calculate hourly isi and fwi
+  if (hourlyFWI) {
+    if ("bui" %in% names(weatherstream)) {
       bui <- weatherstream$bui
-      #Calculate ISI
-      isi <- lapp(x = c(fo, W),
-                  fun = Vectorize(.ISIcalc),
-                  fbpMod=FALSE)
-      #Calculate FWI
-      fwi <- lapp(x = c(isi, bui),
-                  fun = Vectorize(.fwiCalc)
-                  )
-      #Calculate DSR
+      # Calculate ISI
+      isi <- lapp(x = c(fo, W), fun = Vectorize(.ISIcalc), fbpMod = FALSE)
+      # Calculate FWI
+      fwi <- lapp(x = c(isi, bui), fun = Vectorize(.fwiCalc))
+      # Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
-      #Create Raster Stack for the ouput
+      # Create Raster Stack for the ouput
       output <- c(fo, isi, fwi, dsr)
       names(output) <- c("hffmc", "hisi", "hfwi", "hdsr")
       return(output)
@@ -170,4 +190,3 @@ hffmcRaster <- function(weatherstream, ffmc_old = 85, time.step = 1,
     return(fo)
   }
 }
-
