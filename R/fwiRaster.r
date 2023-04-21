@@ -279,9 +279,3 @@ fwiRaster <- function(input, init = c(ffmc = 85, dmc = 6, dc = 15), mon = 7,
   }
   return(new_FWI)
 }
-day01 <- rast(system.file("extdata","test_rast_day01.tif",package="cffdrs"))
-day01 <- crop(day01,c(250,255,47,51))
-# assign variable names:
-names(day01)<-c("temp","rh","ws","prec")
-# (1) use the initial values
-foo<-fwiRaster(day01,lat.adjust = F)
