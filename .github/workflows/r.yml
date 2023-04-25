@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        r-version: [3.5, 3.6, 4.0, 4.1]
+        r-version: [4.0, 4.1, 4.2]
         os: [macos-latest, windows-latest, ubuntu-18.04]
     runs-on: ${{ matrix.os }}
     steps:

@@ -7,11 +7,11 @@
 gfmcRaster(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC")
 }
 \arguments{
-\item{input}{[raster stack]
+\item{input}{[SpatRast stack]
 \tabular{lll}{
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-\var{rh}   \tab (required) \tab Relative humidity (\%)\cr 
-\var{ws}   \tab (required) \tab 10-m height wind speed (km/h)\cr 
+\var{rh}   \tab (required) \tab Relative humidity (\%)\cr
+\var{ws}   \tab (required) \tab 10-m height wind speed (km/h)\cr
 \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
 \var{isol} \tab (required) \tab Solar radiation (kW/m^2)\cr }}
 
@@ -19,18 +19,52 @@ gfmcRaster(input, GFMCold = 85, time.step = 1, roFL = 0.3, out = "GFMCandMC")
 
 \item{time.step}{The hourly time steps (integer hour, default=1)}
 
-\item{roFL}{Nominal fuel load of the fine fuel layer (kg/m^2 double, default=0.3)}
+\item{roFL}{Nominal fuel load of the fine fuel layer
+(kg/m^2 double, default=0.3)}
 
 \item{out}{Output format (GFMCandMC/MC/GFMC/ALL, default=GFMCandMC)}
 }
 \value{
-Returns a raster stack of either MC, GMFC, GFMC and MC or All
+Returns a spatrast stack of either MC, GFMC, GFMC and MC or All
 }
 \description{
 Calculation of the Grass Fuel Moisture Code. This calculates the
-moisture content of both the surface of a fully cured matted grass layer and 
-also an equivalent Grass Fuel Moisture Code. All equations come from Wotton 
+moisture content of both the surface of a fully cured matted grass layer and
+also an equivalent Grass Fuel Moisture Code. All equations come from Wotton
 (2009) as cited below unless otherwise specified.
+}
+\examples{
+set.seed(5123)
+test_gfmc_r <- rast(
+  nrows = 25,
+  ncols = 25,
+  crs = "EPSG:3402",
+  resolution = 100,
+  ymin = 5652012,
+  ymax = 5652012 + (25 * 100),
+  xmin = 565550,
+  xmax = 565550 + (25 * 100),
+  names = "temp",
+  vals = sample(x = 19:27, size = 25 * 25, replace = TRUE)
+)
+
+test_gfmc_r <- c(
+  test_gfmc_r,
+  setValues(test_gfmc_r, sample(x = 0:3, size = 25 * 25, replace = TRUE)),
+  setValues(test_gfmc_r, sample(x = 10:20, size = 25 * 25, replace = TRUE)),
+  setValues(test_gfmc_r, sample(x = 30:70, size = 25 * 25, replace = TRUE)),
+  setValues(
+    test_gfmc_r,
+    sample(
+      x = (5:950) / 1000,
+      size = 25 * 25,
+      replace = TRUE
+    )
+  )
+)
+names(test_gfmc_r) <- c("temp", "prec", "ws", "rh", "isol")
+
+gfmcRaster(test_gfmc_r, out = "GFMCandMC")
 }
 \references{
 Wotton, B.M. 2009. A grass moisture model for the Canadian

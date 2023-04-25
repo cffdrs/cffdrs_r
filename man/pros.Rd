@@ -13,26 +13,31 @@ Variable names have to be the same as in the following list, but they are
 case insensitive. The order in which the input variables are entered is not
 important.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{T1} \tab (required) \tab Time that the fire front
 crossed point 1. Time entered in fractional \cr\tab\tab format. Output ROS
 will depend on the level of precision entered \cr\tab\tab (minute, second,
-decisecond)\cr 
+decisecond)\cr
 \var{T2} \tab (required) \tab Time that the fire front
 crossed point 2. Time entered in fractional \cr\tab\tab format. Output ROS
 will depend on the level of precision entered \cr\tab\tab (minute, second,
-decisecond)\cr 
-\var{T3} \tab (required) \tab Time that the fire front crossed point 3. Time 
+decisecond)\cr
+\var{T3} \tab (required) \tab Time that the fire front crossed point 3. Time
 entered in fractional \cr\tab\tab format. Output ROS will depend on the level
  of precision entered \cr\tab\tab (minute, second,
-decisecond)\cr 
-\var{Long1}\tab (required) \tab Longitude for datalogger 1. (decimal degrees). \cr 
-\var{Long2}\tab (required) \tab Longitude for datalogger 2. (decimal degrees). \cr 
-\var{Long3}\tab (required) \tab Longitude for datalogger 3. (decimal degrees). \cr 
-\var{Lat1} \tab (required) \tab Latitude for datalogger 1. (decimal degrees). \cr 
-\var{Lat2} \tab (required) \tab Latitude for datalogger 2. (decimal degrees). \cr
-\var{Lat3} \tab (required) \tab Latitude for datalogger 3. (decimal
-degrees). \cr }}
+decisecond)\cr
+\var{Long1}
+   \tab (required) \tab Longitude for datalogger 1. (decimal degrees). \cr
+\var{Long2}
+   \tab (required) \tab Longitude for datalogger 2. (decimal degrees). \cr
+\var{Long3}
+   \tab (required) \tab Longitude for datalogger 3. (decimal degrees). \cr
+\var{Lat1}
+   \tab (required) \tab Latitude for datalogger 1. (decimal degrees). \cr
+\var{Lat2}
+   \tab (required) \tab Latitude for datalogger 2. (decimal degrees). \cr
+\var{Lat3}
+   \tab (required) \tab Latitude for datalogger 3. (decimal degrees). \cr }}
 }
 \value{
 \code{pros} returns a dataframe which includes the rate of spread
@@ -40,11 +45,12 @@ and spread direction. Output units depend on the user’s inputs for
 distance (typically meters) and time (seconds or minutes).
 }
 \description{
-\code{pros} is used to calculate the rate of spread and direction given one
-set of three point-based observations of fire arrival time. The function
-requires that the user specify the time that the fire crossed each point,
-along with the latitude and longitude of each observational point. This
-function allows quick input of a dataframe specifying one or many triangles.
+\code{pros} is used to calculate the rate of spread and
+direction given one set of three point-based observations of fire arrival
+time. The function requires that the user specify the time that the fire
+crossed each point, along with the latitude and longitude of each
+observational point. This function allows quick input of a dataframe
+specifying one or many triangles.
 
 \code{pros} allows R users to calculate the rate of spread and direction of
 a fire across a triangle, given three time measurements and details about
@@ -92,10 +98,14 @@ determine each triangle of interest automatically.
 
 library(cffdrs)
 # manual single entry
-pros.in1 <- data.frame(t(c(2, -79.701027, 43.808872, 50, -79.699650, 43.808833
-                            , 120, -79.700387, 43.809816)))
-colnames(pros.in1)<-c("T1", "LONG1", "LAT1", "T2", "LONG2", "LAT2", "T3", 
-                      "LONG3", "LAT3")
+pros.in1 <- data.frame(t(c(
+  2, -79.701027, 43.808872, 50, -79.699650, 43.808833,
+  120, -79.700387, 43.809816
+)))
+colnames(pros.in1) <- c(
+  "T1", "LONG1", "LAT1", "T2", "LONG2", "LAT2", "T3",
+  "LONG3", "LAT3"
+)
 pros.out1 <- pros(pros.in1)
 # multiple entries using a dataframe
 # load the test dataframe for pros

@@ -19,56 +19,56 @@ and do not have to be in any particular order. Fuel type is of type
 character; other arguments are numeric. Missing values in numeric variables
 could either be assigned as NA or leave as blank.
 
-\tabular{lll}{ 
-\bold{Required Inputs:}\tab\tab\cr 
-\bold{Input} \tab \bold{Description/Full name} \tab \bold{Defaults}\cr 
+\tabular{lll}{
+\bold{Required Inputs:}\tab\tab\cr
+\bold{Input} \tab \bold{Description/Full name} \tab \bold{Defaults}\cr
 
-\var{FuelType} 
+\var{FuelType}
 \tab FBP System Fuel Type including "C-1",\cr
 \tab"C-2", "C-3", "C-4","C-5", "C-6", "C-7",\cr
 \tab "D-1", "M-1", "M-2", "M-3", "M-4", "NF",\cr
 \tab "D-1", "S-2", "S-3", "O-1a", "O-1b", and\cr
 \tab  "WA", where "WA" and "NF" stand for \cr
 \tab "water" and "non-fuel", respectively.\cr\cr
- 
-\var{LAT} \tab Latitude [decimal degrees] \tab 55\cr 
-\var{LONG} \tab Longitude [decimal degrees] \tab -120\cr 
-\var{FFMC} \tab Fine fuel moisture code [FWI System component] \tab 90\cr 
-\var{BUI} \tab Buildup index [FWI System component] \tab 60\cr 
+
+\var{LAT} \tab Latitude [decimal degrees] \tab 55\cr
+\var{LONG} \tab Longitude [decimal degrees] \tab -120\cr
+\var{FFMC} \tab Fine fuel moisture code [FWI System component] \tab 90\cr
+\var{BUI} \tab Buildup index [FWI System component] \tab 60\cr
 \var{WS} \tab Wind speed [km/h] \tab 10\cr
-\var{GS} \tab Ground Slope [percent] \tab 0\cr 
-\var{Dj} \tab Julian day \tab 180\cr 
-\var{Aspect} \tab Aspect of the slope [decimal degrees] \tab 0\cr\cr 
+\var{GS} \tab Ground Slope [percent] \tab 0\cr
+\var{Dj} \tab Julian day \tab 180\cr
+\var{Aspect} \tab Aspect of the slope [decimal degrees] \tab 0\cr\cr
 
 \bold{Optional Inputs (1):}
 \tab Variables associated with certain fuel \cr
 \tab types. These could be skipped if relevant \cr
 \tab fuel types do not appear in the input data.\cr\cr
 
-\bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
+\bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr
 
-\var{PC} \tab Percent Conifer for M1/M2 [percent] \tab 50\cr 
+\var{PC} \tab Percent Conifer for M1/M2 [percent] \tab 50\cr
 \var{PDF} \tab Percent Dead Fir for M3/M4 [percent] \tab 35\cr
-\var{cc} \tab Percent Cured for O1a/O1b [percent] \tab 80\cr 
-\var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr 
+\var{cc} \tab Percent Cured for O1a/O1b [percent] \tab 80\cr
+\var{GFL} \tab Grass Fuel Load [kg/m^2] \tab 0.35\cr\cr
 
-\bold{Optional Inputs (2):} 
+\bold{Optional Inputs (2):}
 \tab Variables that could be ignored without \cr
 \tab causing major impacts to the primary outputs\cr\cr
 
-\bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr 
-\var{CBH}   \tab Crown to Base Height [m] \tab 3\cr 
-\var{WD}    \tab Wind direction [decimal degrees] \tab 0\cr 
-\var{Accel} \tab Acceleration: 1 = point, 0 = line \tab 0\cr 
-\var{ELV*}  \tab Elevation [meters above sea level] \tab NA\cr 
-\var{BUIEff}\tab Buildup Index effect: 1=yes, 0=no \tab 1\cr 
-\var{D0}    \tab Julian day of minimum Foliar Moisture Content \tab 0\cr 
-\var{hr}    \tab Hours since ignition \tab 1\cr 
-\var{ISI}   \tab Initial spread index \tab 0\cr 
-\var{CFL}   \tab Crown Fuel Load [kg/m^2]\tab 1.0\cr 
-\var{FMC}   \tab Foliar Moisture Content if known [percent] \tab 0\cr 
-\var{SH}    \tab C-6 Fuel Type Stand Height [m] \tab 0\cr 
-\var{SD}    \tab C-6 Fuel Type Stand Density [stems/ha] \tab 0\cr 
+\bold{Input} \tab \bold{Full names of inputs} \tab \bold{Defaults}\cr
+\var{CBH}   \tab Crown to Base Height [m] \tab 3\cr
+\var{WD}    \tab Wind direction [decimal degrees] \tab 0\cr
+\var{Accel} \tab Acceleration: 1 = point, 0 = line \tab 0\cr
+\var{ELV*}  \tab Elevation [meters above sea level] \tab NA\cr
+\var{BUIEff}\tab Buildup Index effect: 1=yes, 0=no \tab 1\cr
+\var{D0}    \tab Julian day of minimum Foliar Moisture Content \tab 0\cr
+\var{hr}    \tab Hours since ignition \tab 1\cr
+\var{ISI}   \tab Initial spread index \tab 0\cr
+\var{CFL}   \tab Crown Fuel Load [kg/m^2]\tab 1.0\cr
+\var{FMC}   \tab Foliar Moisture Content if known [percent] \tab 0\cr
+\var{SH}    \tab C-6 Fuel Type Stand Height [m] \tab 0\cr
+\var{SD}    \tab C-6 Fuel Type Stand Density [stems/ha] \tab 0\cr
 \var{theta} \tab Elliptical direction of calculation [degrees] \tab 0\cr\cr }}
 
 \item{output}{FBP output offers 3 options (see details in \bold{Values}
@@ -96,29 +96,29 @@ million grid points). For small dataset, \code{cores=1} is actually faster.}
 \value{
 Either Primary, Secondary, or all FBP outputs in a raster stack
 
-\code{fbpRaster} returns a RasterStack with primary, secondary, or 
-all output variables, a combination of the primary and secondary outputs. 
-Primary FBP output includes the following 8 raster layers: 
+\code{fbpRaster} returns a RasterStack with primary, secondary, or
+all output variables, a combination of the primary and secondary outputs.
+Primary FBP output includes the following 8 raster layers:
 
-\item{CFB}{Crown Fraction Burned by the head fire} 
-\item{CFC}{Crown Fuel Consumption [kg/m^2]} 
-\item{FD}{Fire description (1=Surface, 2=Intermittent, 3=Crown)} 
+\item{CFB}{Crown Fraction Burned by the head fire}
+\item{CFC}{Crown Fuel Consumption [kg/m^2]}
+\item{FD}{Fire description (1=Surface, 2=Intermittent, 3=Crown)}
 \item{HFI}{Head Fire Intensity [kW/m]}
-\item{RAZ}{Spread direction azimuth [degrees]} 
-\item{ROS}{Equilibrium Head Fire Rate of Spread [m/min]} 
-\item{SFC}{Surface Fuel Consumption [kg/m^2]} 
+\item{RAZ}{Spread direction azimuth [degrees]}
+\item{ROS}{Equilibrium Head Fire Rate of Spread [m/min]}
+\item{SFC}{Surface Fuel Consumption [kg/m^2]}
 \item{TFC}{Total Fuel Consumption [kg/m^2]}
 
-Secondary FBP System outputs include the following 34 raster layers. In order 
-to calculate the reliable secondary outputs, depending on the outputs, 
-optional inputs may have to be provided.  
+Secondary FBP System outputs include the following 34 raster layers. In order
+to calculate the reliable secondary outputs, depending on the outputs,
+optional inputs may have to be provided.
 
-\item{BE}{BUI effect on spread rate} 
-\item{SF}{Slope Factor (multiplier for ROS increase upslope)} 
-\item{ISI}{Initial Spread Index} 
-\item{FFMC}{Fine fuel moisture code [FWI System component]} 
-\item{FMC}{Foliar Moisture Content [\%]} 
-\item{Do}{Julian Date of minimum FMC} 
+\item{BE}{BUI effect on spread rate}
+\item{SF}{Slope Factor (multiplier for ROS increase upslope)}
+\item{ISI}{Initial Spread Index}
+\item{FFMC}{Fine fuel moisture code [FWI System component]}
+\item{FMC}{Foliar Moisture Content [\%]}
+\item{Do}{Julian Date of minimum FMC}
 \item{RSO}{Critical spread rate for crowning [m/min]}
 \item{CSI}{Critical Surface Intensity for crowning [kW/m]}
 \item{FROS}{Equilibrium Flank Fire Rate of Spread [m/min]}
@@ -126,27 +126,28 @@ optional inputs may have to be provided.
 \item{HROSt}{Head Fire Rate of Spread at time hr [m/min]}
 \item{FROSt}{Flank Fire Rate of Spread at time hr [m/min]}
 \item{BROSt}{Back Fire Rate of Spread at time hr [m/min]}
-\item{FCFB}{Flank Fire Crown Fraction Burned} 
-\item{BCFB}{Back Fire Crown Fraction Burned} 
-\item{FFI}{Equilibrium Spread Flank Fire Intensity [kW/m]} 
-\item{BFI}{Equilibrium Spread Back Fire Intensity [kW/m]} 
-\item{FTFC}{Flank Fire Total Fuel Consumption [kg/m^2] } 
-\item{BTFC}{Back Fire Total Fuel Consumption [kg/m^2] } 
+\item{FCFB}{Flank Fire Crown Fraction Burned}
+\item{BCFB}{Back Fire Crown Fraction Burned}
+\item{FFI}{Equilibrium Spread Flank Fire Intensity [kW/m]}
+\item{BFI}{Equilibrium Spread Back Fire Intensity [kW/m]}
+\item{FTFC}{Flank Fire Total Fuel Consumption [kg/m^2] }
+\item{BTFC}{Back Fire Total Fuel Consumption [kg/m^2] }
 \item{DH}{Head Fire Spread Distance after time hr [m] }
 \item{DB}{Back Fire Spread Distance after time hr [m] }
 \item{DF}{Flank Fire Spread Distance after time hr [m] }
 \item{TI}{Time to Crown Fire Initiation [hrs since ignition] }
-\item{FTI}{Time to Flank Fire Crown initiation [hrs since ignition]} 
-\item{BTI}{Time to Back Fire Crown initiation [hrs since ignition]} 
-\item{LB}{Length to Breadth ratio} 
-\item{LBt}{Length to Breadth ratio after elapsed time hr } 
-\item{WSV}{Net vectored wind speed [km/hr]} 
-\item{TROS*}{Equilibrium Rate of Spread at bearing theta [m/min] } 
-\item{TROSt*}{Rate of Spread at bearing theta at time t [m/min] } 
-\item{TCFB*}{Crown Fraction Burned at bearing theta } 
-\item{TFI*}{Fire Intensity at bearing theta [kW/m] } 
-\item{TTFC*}{Total Fuel Consumption at bearing theta [kg/m^2] } 
-\item{TTI*}{Time to Crown Fire initiation at bearing theta [hrs since ignition] }
+\item{FTI}{Time to Flank Fire Crown initiation [hrs since ignition]}
+\item{BTI}{Time to Back Fire Crown initiation [hrs since ignition]}
+\item{LB}{Length to Breadth ratio}
+\item{LBt}{Length to Breadth ratio after elapsed time hr }
+\item{WSV}{Net vectored wind speed [km/hr]}
+\item{TROS*}{Equilibrium Rate of Spread at bearing theta [m/min] }
+\item{TROSt*}{Rate of Spread at bearing theta at time t [m/min] }
+\item{TCFB*}{Crown Fraction Burned at bearing theta }
+\item{TFI*}{Fire Intensity at bearing theta [kW/m] }
+\item{TTFC*}{Total Fuel Consumption at bearing theta [kg/m^2] }
+\item{TTI*}{Time to Crown Fire initiation at bearing theta [hrs since
+ignition] }
 
 *These outputs represent fire behaviour at a point on the perimeter of an
 elliptical fire defined by a user input angle theta. theta represents the
@@ -158,10 +159,10 @@ identical to methods presented in Wotton et al (2009) and Tymstra et al
 (2009).
 }
 \description{
-\code{fbpRaster} calculates the outputs from the Canadian Forest Fire
-Behavior Prediction (FBP) System (Forestry Canada Fire Danger Group 1992)
-based on raster format fire weather and fuel moisture conditions (from the
-Canadian Forest Fire Weather Index (FWI) System (Van Wagner 1987)), fuel
+\code{fbpRaster} calculates the outputs from the Canadian Forest
+Fire Behavior Prediction (FBP) System (Forestry Canada Fire Danger Group
+1992) based on raster format fire weather and fuel moisture conditions (from
+the Canadian Forest Fire Weather Index (FWI) System (Van Wagner 1987)), fuel
 type, date, and slope. Fire weather, for the purpose of FBP System
 calculation, comprises observations of 10 m wind speed and direction at the
 time of the fire, and two associated outputs from the Fire Weather Index
@@ -218,30 +219,30 @@ for instance theta=RAZ (the final spread azimuth of the fire) then the rate
 of spread at angle theta (TROS) will be equivalent to ROS.
 
 Because raster format data cannot hold characters, we have to code these fuel
-types in numeric codes. In sequence, the codes are c(1:19). FuelType could 
-also be converted as factor and assigned to the raster layer, the function 
+types in numeric codes. In sequence, the codes are c(1:19). FuelType could
+also be converted as factor and assigned to the raster layer, the function
 will still work.
 
 \tabular{ll}{
-\bold{Fuel Type} \tab \bold{code} \cr 
-\verb{C-1}       \tab 1           \cr 
-\verb{C-2}       \tab 2           \cr 
+\bold{Fuel Type} \tab \bold{code} \cr
+\verb{C-1}       \tab 1           \cr
+\verb{C-2}       \tab 2           \cr
 \verb{C-3}       \tab 3           \cr
-\verb{C-4}       \tab 4           \cr 
-\verb{C-5}       \tab 5           \cr 
-\verb{C-6}       \tab 6           \cr 
-\verb{C-7}       \tab 7           \cr 
-\verb{D-1}       \tab 8           \cr 
-\verb{M-1}       \tab 9           \cr 
-\verb{M-2}       \tab 10          \cr 
-\verb{M-3}       \tab 11          \cr 
-\verb{M-4}       \tab 12          \cr 
-\verb{NF}        \tab 13          \cr 
-\verb{O-1a}      \tab 14          \cr 
-\verb{O-1b}      \tab 15          \cr 
-\verb{S-1}       \tab 16          \cr 
-\verb{S-2}       \tab 17          \cr 
-\verb{S-3}       \tab 18          \cr 
+\verb{C-4}       \tab 4           \cr
+\verb{C-5}       \tab 5           \cr
+\verb{C-6}       \tab 6           \cr
+\verb{C-7}       \tab 7           \cr
+\verb{D-1}       \tab 8           \cr
+\verb{M-1}       \tab 9           \cr
+\verb{M-2}       \tab 10          \cr
+\verb{M-3}       \tab 11          \cr
+\verb{M-4}       \tab 12          \cr
+\verb{NF}        \tab 13          \cr
+\verb{O-1a}      \tab 14          \cr
+\verb{O-1b}      \tab 15          \cr
+\verb{S-1}       \tab 16          \cr
+\verb{S-2}       \tab 17          \cr
+\verb{S-3}       \tab 18          \cr
 \verb{WA}        \tab 19          \cr\cr}
 }
 \examples{
@@ -249,27 +250,34 @@ will still work.
 # The dataset is the standard test data for FBP system
 # provided by Wotton et al (2009), and randomly assigned
 # to a stack of raster layers
-test_fbpRaster <- stack(system.file("extdata", "test_fbpRaster.tif", package="cffdrs"))
-input<-test_fbpRaster
+test_fbpRaster <- rast(
+  system.file("extdata", "test_fbpRaster.tif", package = "cffdrs")
+)
+input <- test_fbpRaster
 # Stack doesn't hold the raster layer names, we have to assign
 # them:
-names(input)<-c("FuelType","LAT","LONG","ELV","FFMC","BUI", "WS","WD","GS","Dj","D0","hr","PC",
-"PDF","GFL","cc","theta","Accel","Aspect","BUIEff","CBH","CFL","ISI")
+names(input) <- c(
+  "FuelType", "LAT", "LONG", "ELV", "FFMC", "BUI", "WS", "WD", "GS",
+  "Dj", "D0", "hr", "PC", "PDF", "GFL", "cc", "theta", "Accel", "Aspect",
+  "BUIEff", "CBH", "CFL", "ISI"
+)
 # Primary outputs:
-system.time(foo<-fbpRaster(input = input))
+system.time(foo <- fbpRaster(input = input))
 # Using the "select" option:
-system.time(foo<-fbpRaster(input = input,select=c("HFI","TFC", "ROS")))
+system.time(foo <- fbpRaster(input = input, select = c("HFI", "TFC", "ROS")))
 # Secondary outputs:
-system.time(foo<-fbpRaster(input = input,output="S"))
+system.time(foo <- fbpRaster(input = input, output = "S"))
 # All outputs:
-#system.time(foo<-fbpRaster(input = input,output="A"))
+system.time(foo <- fbpRaster(input = input, output = "A"))
 
 ### Additional, longer running examples  ###
 # Keep only the required input layers, the other layers would be
 # assigned with default values:
 # keep only the required inputs:
-dat0<-input[[c("FuelType","LAT","LONG","FFMC","BUI","WS","GS", "Dj","Aspect")]]
-system.time(foo<-fbpRaster(input = dat0,output="A"))
+dat0 <- input[[c(
+  "FuelType", "LAT", "LONG", "FFMC", "BUI", "WS", "GS", "Dj", "Aspect"
+)]]
+system.time(foo <- fbpRaster(input = dat0, output = "A"))
 
 }
 \references{
@@ -286,12 +294,15 @@ Ottawa, Ontario Information Report ST-X-3. 63 p.
 to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 Canada. Information Report GLC-X-10, 45p.
-\url{http://publications.gc.ca/collections/collection_2010/nrcan/Fo123-2-10-2009-eng.pdf}
+\url{
+http://publications.gc.ca/collections/collection_2010/nrcan/
+Fo123-2-10-2009-eng.pdf}
 
 4.  Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
 and structure of Prometheus: the Canadian wildland fire growth simulation
 Model. Nat. Resour. Can., Can. For. Serv., North. For. Cent., Edmonton, AB.
-Inf. Rep. NOR-X-417.\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
+Inf. Rep. NOR-X-417.
+\url{https://d1ied5g1xfgpx8.cloudfront.net/pdfs/31775.pdf}
 }
 \seealso{
 \code{\link{fbp}, \link{fwiRaster}, \link{hffmcRaster}}

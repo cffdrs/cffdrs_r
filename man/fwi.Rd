@@ -19,20 +19,22 @@ observations taken at noon LST. Variable names have to be the same as in the
 following list, but they are case insensitive. The order in which the input
 variables are entered is not important.
 
-\tabular{lll}{ 
-\var{id} \tab (optional) 
+\tabular{lll}{
+\var{id} \tab (optional)
 \tab Unique identifier of a weather\cr
 \tab\tab station or spatial point (no restriction on\cr
-\tab\tab data type); required when \code{batch=TRUE}\cr 
-\var{lat} \tab (recommended) \tab Latitude (decimal degree, default=55)\cr 
-\var{long} \tab (optional) \tab Longitude (decimal degree)\cr 
+\tab\tab data type); required when \code{batch=TRUE}\cr
+\var{lat} \tab (recommended) \tab Latitude (decimal degree, default=55)\cr
+\var{long} \tab (optional) \tab Longitude (decimal degree)\cr
 \var{yr} \tab (optional) \tab Year of observation;
-required when \code{batch=TRUE}\cr 
-\var{mon} \tab (recommended) \tab Month of the year (integer 1-12, default=7)\cr 
-\var{day} \tab (optional) \tab Dayof the month (integer); required when \code{batch=TRUE}\cr 
-\var{temp} \tab (required) \tab Temperature (centigrade)\cr 
-\var{rh} \tab (required) \tab Relative humidity (\%)\cr 
-\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
+required when \code{batch=TRUE}\cr
+\var{mon} \tab (recommended) \tab Month of the year
+   (integer 1-12, default=7)\cr
+\var{day} \tab (optional) \tab Dayof the month (integer); required when
+   \code{batch=TRUE}\cr
+\var{temp} \tab (required) \tab Temperature (centigrade)\cr
+\var{rh} \tab (required) \tab Relative humidity (\%)\cr
+\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
 \var{prec} \tab (required) \tab 24-hour rainfall (mm)\cr }}
 
 \item{init}{A data.frame or vector contains either the initial values for
@@ -42,9 +44,10 @@ function also accepts a vector if the initial or previous day FWI values is
 for only one weather station (a warning message comes up if a single set of
 initial values is used for multiple weather stations). Defaults are the
 standard initial values for FFMC, DMC, and DC defined as the following:
-\tabular{lll}{ 
+\tabular{lll}{
 \bold{Variable} \tab \bold{Description} \tab \bold{Default} \cr
-\var{ffmc} \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
+\var{ffmc}
+   \tab Previous day Fine Fuel Moisture Code (FFMC; unitless) \tab 85 \cr
 \var{dmc} \tab Previous day Duff Moisture Code (DMC; unitless)\tab 6 \cr
 \var{dc} \tab Previous Day Drought Code (DC; unitless) \tab 15\cr
 \var{lat} \tab Latitude of the weather station (\emph{Optional}) \tab 55 \cr}}
@@ -74,23 +77,24 @@ this argument. Default is TRUE.}
 }
 \value{
 \code{fwi} returns a dataframe which includes both the input and the
-FWI System variables as described below: 
-\item{Input Variables }{Including temp, rh, ws, and prec with id, long, lat, yr, mon, or day as optional.}
-\item{ffmc }{Fine Fuel Moisture Code} 
+FWI System variables as described below:
+\item{Input Variables }{Including temp, rh, ws, and prec with id, long, lat,
+   yr, mon, or day as optional.}
+\item{ffmc }{Fine Fuel Moisture Code}
 \item{dmc }{Duff Moisture Code}
-\item{dc }{Drought Code} 
-\item{isi }{Initial Spread Index} 
-\item{bui }{Buildup Index} 
-\item{fwi }{Fire Weather Index} 
+\item{dc }{Drought Code}
+\item{isi }{Initial Spread Index}
+\item{bui }{Buildup Index}
+\item{fwi }{Fire Weather Index}
 \item{dsr }{Daily Severity Rating}
 }
 \description{
-\code{fwi} is used to calculate the outputs of the Canadian Forest Fire
-Weather Index (FWI) System for one day or one fire season based on noon
-local standard time (LST) weather observations of temperature, relative
-humidity, wind speed, and 24-hour rainfall, as well as the previous day's
-fuel moisture conditions. This function could be used for either one weather
-station or for multiple weather stations.
+\code{fwi} is used to calculate the outputs of the Canadian
+Forest Fire Weather Index (FWI) System for one day or one fire season based
+on noon local standard time (LST) weather observations of temperature,
+relative humidity, wind speed, and 24-hour rainfall, as well as the previous
+day's fuel moisture conditions. This function could be used for either one
+weather station or for multiple weather stations.
 
 The Canadian Forest Fire Weather Index (FWI) System is a major subsystem of
 the Canadian Forest Fire Danger Rating System, which also includes Canadian
@@ -143,7 +147,7 @@ different parts of the world.
 
 # library(cffdrs)
 # The test data is a standard test
-# dataset for FWI system (Van Wagner and Pickett 1985) 
+# dataset for FWI system (Van Wagner and Pickett 1985)
 # data("test_fwi")
 # Show the data, which is already sorted by time:
 # head(test_fwi)
@@ -155,49 +159,52 @@ different parts of the world.
 # -100	40	1985	4	  17	13	  34	24	0
 
 ## (1) FWI System variables for a single weather station:
-# Using the default initial values and batch argument, 
+# Using the default initial values and batch argument,
 # the function calculate FWI variables chronically:
-fwi.out1<-fwi(test_fwi) 				
+fwi.out1 <- fwi(test_fwi)
 # Using a different set of initial values:
-fwi.out2<-fwi(test_fwi,init=data.frame(ffmc=80, dmc=10,dc=16, lat=50))
+fwi.out2 <- fwi(
+  test_fwi,
+  init = data.frame(ffmc = 80, dmc = 10, dc = 16, lat = 50)
+)
 # This could also be done as the following:
-fwi.out2<-fwi(test_fwi,init=data.frame(80,10,6,50))
+fwi.out2 <- fwi(test_fwi, init = data.frame(80, 10, 6, 50))
 # Or:
-fwi.out2<-fwi(test_fwi,init=c(80,10,6,50))
-# Latitude could be ignored, and the default value (55) will 
+fwi.out2 <- fwi(test_fwi, init = c(80, 10, 6, 50))
+# Latitude could be ignored, and the default value (55) will
 # be used:
-fwi.out2<-fwi(test_fwi,init=data.frame(80,10,6))
+fwi.out2 <- fwi(test_fwi, init = data.frame(80, 10, 6))
 
 ## (2) FWI for one or multiple stations in a single day:
-# Change batch argument to FALSE, fwi calculates FWI 
+# Change batch argument to FALSE, fwi calculates FWI
 # components based on previous day's fwi outputs:
 
-fwi.out3<-fwi(test_fwi,init=fwi.out1,batch=FALSE)                 
+fwi.out3 <- fwi(test_fwi, init = fwi.out1, batch = FALSE)
 # Using a suite of initials, assuming variables from fwi.out1
-# are the initial values for different records. 
-init_suite<-fwi.out1[,c("FFMC","DMC","DC","LAT")]
+# are the initial values for different records.
+init_suite <- fwi.out1[, c("FFMC", "DMC", "DC", "LAT")]
 # Calculating FWI variables for one day but with multiple
-# stations. Because the calculations is for one time step, 
+# stations. Because the calculations is for one time step,
 # batch=FALSE:
-fwi.out4<-fwi(test_fwi,init=init_suite,batch=FALSE)
+fwi.out4 <- fwi(test_fwi, init = init_suite, batch = FALSE)
 
-## (3) FWI for multiple weather stations over a period of time: 
-# Assuming there are 4 weather stations in the test dataset, and they are 
+## (3) FWI for multiple weather stations over a period of time:
+# Assuming there are 4 weather stations in the test dataset, and they are
 # ordered by day:
-test_fwi$day<-rep(1:(nrow(test_fwi)/4),each=4)
-test_fwi$id<-rep(1:4,length(unique(test_fwi$day)))
-# Running the function with the same default initial inputs, will receive a 
-# warning message, but that is fine: 
+test_fwi$day <- rep(1:(nrow(test_fwi) / 4), each = 4)
+test_fwi$id <- rep(1:4, length(unique(test_fwi$day)))
+# Running the function with the same default initial inputs, will receive a
+# warning message, but that is fine:
 fwi(test_fwi)
 
 ## (4) Daylength adjustment:
 # Change latitude values where the monthly daylength adjustments
 # are different from the standard ones
-test_fwi$lat<-22
+test_fwi$lat <- 22
 # With daylength adjustment
-fwi(test_fwi)[1:3,]
+fwi(test_fwi)[1:3, ]
 # Without daylength adjustment
-fwi(test_fwi,lat.adjust=FALSE)[1:3,]
+fwi(test_fwi, lat.adjust = FALSE)[1:3, ]
 
 }
 \references{

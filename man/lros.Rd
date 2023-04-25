@@ -13,50 +13,50 @@ Variable names have to be the same as in the following list, but they are
 case insensitive. The order in which the input variables are entered is not
 important.
 
-\tabular{lll}{ 
-\var{T1} 
-\tab (required) 
+\tabular{lll}{
+\var{T1}
+\tab (required)
 \tab Time that the fire front crossed point 1.\cr
 \tab\tab Time entered in fractional format. \cr
 \tab\tab Output ROS will depend on the level \cr
 \tab\tab of precision entered \cr
-\tab\tab (minute, second, decisecond)\cr 
-\var{T2} 
-\tab (required) 
+\tab\tab (minute, second, decisecond)\cr
+\var{T2}
+\tab (required)
 \tab Time that the fire front crossed point 2.\cr
 \tab\tab Time entered in fractional format. \cr
 \tab\tab Output ROS will depend on the level \cr
 \tab\tab of precision entered \cr
-\tab\tab (minute, second, decisecond)\cr 
-\var{T3} 
-\tab (required) 
-\tab Time that the fire front crossed point 3. \cr 
+\tab\tab (minute, second, decisecond)\cr
+\var{T3}
+\tab (required)
+\tab Time that the fire front crossed point 3. \cr
 \tab\tab Time entered in fractional format. \cr
 \tab\tab Output ROS will depend on the level \cr
 \tab\tab of precision entered \cr
-\tab\tab (minute, second, decisecond)\cr 
+\tab\tab (minute, second, decisecond)\cr
 \var{LengthT1T2}
 \tab (required) \tab Length between each pair of\cr
 \tab\tab observation points T1 and T2 (subscripts \cr
-\tab\tab denote time-ordered pairs). (meters)\cr 
+\tab\tab denote time-ordered pairs). (meters)\cr
 \var{LengthT2T3}
-\tab (required) 
+\tab (required)
 \tab Length between each pair of\cr
 \tab\tab observation points T2 and T3 (subscripts \cr
-\tab\tab denote time-ordered pairs). (meters)\cr 
+\tab\tab denote time-ordered pairs). (meters)\cr
 \var{LengthT1T3}
-\tab (required) 
+\tab (required)
 \tab Length between each pair of\cr
 \tab\tab observation points T1 and T3 (subscripts \cr
-\tab\tab denote time-ordered pairs). (meters)\cr 
-\var{BearingT1T2} 
-\tab (required) 
+\tab\tab denote time-ordered pairs). (meters)\cr
+\var{BearingT1T2}
+\tab (required)
 \tab Reference bearing. For reference,\cr
-\tab\tab North = 0, West = -90, East = 90 (degrees)\cr 
-\var{BearingT1T3} 
-\tab (required) 
-\tab Reference bearing. For reference,\cr 
-\tab\tab North = 0, West = -90, East = 90 (degrees)\cr 
+\tab\tab North = 0, West = -90, East = 90 (degrees)\cr
+\var{BearingT1T3}
+\tab (required)
+\tab Reference bearing. For reference,\cr
+\tab\tab North = 0, West = -90, East = 90 (degrees)\cr
 }}
 }
 \value{
@@ -65,12 +65,13 @@ and spread direction. Output units depend on the user’s inputs for
 distance (typically meters) and time (seconds or minutes).
 }
 \description{
-\code{lros} is used to calculate the rate of spread and direction given one
-set of three point-based observations of fire arrival time. The function
-requires that the user specify the time that the fire crossed each point,
-along with the measured lengths between each pair of observational points,
-and a reference bearing (one specified side of the triangle). This function
-allows quick input of a dataframe specifying one or many triangles.
+\code{lros} is used to calculate the rate of spread and
+direction given one set of three point-based observations of fire arrival
+time. The function requires that the user specify the time that the fire
+crossed each point, along with the measured lengths between each pair of
+observational points, and a reference bearing (one specified side of the
+triangle). This function allows quick input of a dataframe specifying one or
+many triangles.
 
 \code{lros} Allows R users to calculate the rate of spread and direction of
 a fire across a triangle, given three time measurements and details about
@@ -90,8 +91,10 @@ determine each triangle of interest automatically.
 library(cffdrs)
 # manual single entry, but converted to a data frame
 lros.in1 <- data.frame(t(c(0, 24.5, 50, 22.6, 120, 20.0, 90, 35)))
-colnames(lros.in1)<-c("T1","LengthT1T2", "T2", "LengthT1T3", "T3", 
-                      "LengthT2T3", "bearingT1T2", "bearingT1T3")
+colnames(lros.in1) <- c(
+  "T1", "LengthT1T2", "T2", "LengthT1T3", "T3",
+  "LengthT2T3", "bearingT1T2", "bearingT1T3"
+)
 lros.out1 <- lros(lros.in1)
 lros.out1
 
@@ -99,8 +102,6 @@ lros.out1
 # load the test dataframe for lros
 data("test_lros")
 lros(test_lros)
-
-
 
 }
 \references{
