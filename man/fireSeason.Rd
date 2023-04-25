@@ -19,12 +19,14 @@ date/time and daily maximum temperature. Variable names have to be the same
 as in the following list, but they are case insensitive. The order in which
 the input variables are entered is not important either.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{yr} \tab (required) \tab Year of the observations\cr
-\var{mon} \tab (required) \tab Month of the observations\cr 
-\var{day} \tab (required) \tab Day of the observations\cr 
-\var{tmax} \tab (required) \tab Maximum Daily Temperature (degrees C)\cr 
-\var{snow_depth} \tab (optional) \tab Is consistent snow data in the input?\cr }.}
+\var{mon} \tab (required) \tab Month of the observations\cr
+\var{day} \tab (required) \tab Day of the observations\cr
+\var{tmax} \tab (required) \tab Maximum Daily Temperature (degrees C)\cr
+\var{snow_depth}
+ \tab (optional) \tab Is consistent snow data in the input?\cr
+}.}
 
 \item{fs.start}{Temperature threshold (degrees C) to start the fire season
 (default=12)}
@@ -44,19 +46,20 @@ the input variables are entered is not important either.
 \link{fireSeason} returns a data frame of season and start and end
 dates. Columns in data frame are described below.
 
-Primary FBP output includes the following 8 variables: 
-\item{yr }{Year of the fire season start/end date} 
-\item{mon }{Month of the fire season start/end date} 
+Primary FBP output includes the following 8 variables:
+\item{yr }{Year of the fire season start/end date}
+\item{mon }{Month of the fire season start/end date}
 \item{day }{Day of the fire season start/end date}
-\item{fsdatetype }{Fire season date type (values are either "start" or "end")} 
+\item{fsdatetype }{
+ Fire season date type (values are either "start" or "end")}
 \item{date}{Full date value}
 }
 \description{
-\code{\link{fireSeason}} calculates the start and end fire season dates for
-a given weather station. The current method used in the function is based on
-three consecutive daily maximum temperature thresholds (Wotton and Flannigan
-1993, Lawson and Armitage 2008). This function process input from a single
-weather station.
+\code{\link{fireSeason}} calculates the start and end fire
+season dates for a given weather station. The current method used in the
+function is based on three consecutive daily maximum temperature thresholds
+(Wotton and Flannigan 1993, Lawson and Armitage 2008). This function process
+input from a single weather station.
 
 An important aspect to consider when calculating Fire Weather Index (FWI)
 System variables is a definition of the fire season start and end dates
@@ -82,51 +85,52 @@ conjunction.
 \examples{
 
 library(cffdrs)
-#The standard test data:
+# The standard test data:
 data("test_wDC")
 print(head(test_wDC))
 ## Sort the data:
-input <- with(test_wDC, test_wDC[order(id,yr,mon,day),])
+input <- with(test_wDC, test_wDC[order(id, yr, mon, day), ])
 
-#Using the default fire season start and end temperature 
-#thresholds:
-a_fs <- fireSeason(input[input$id==1,])
+# Using the default fire season start and end temperature
+# thresholds:
+a_fs <- fireSeason(input[input$id == 1, ])
 
-#Check the result:
+# Check the result:
 a_fs
 
 #    yr mon day fsdatetype
-#1 1999   5   4      start
-#2 1999   5  12        end
-#3 1999   5  18      start
-#4 1999   5  25        end
-#5 1999   5  30      start
-#6 1999  10   6        end
-#7 2000   6  27      start
-#8 2000  10   7        end
+# 1 1999   5   4      start
+# 2 1999   5  12        end
+# 3 1999   5  18      start
+# 4 1999   5  25        end
+# 5 1999   5  30      start
+# 6 1999  10   6        end
+# 7 2000   6  27      start
+# 8 2000  10   7        end
 
-#In the resulting data frame, the fire season starts 
-#and ends multiple times in the first year. It is up to the user #for how to interpret this.
+# In the resulting data frame, the fire season starts
+# and ends multiple times in the first year. It is up to the user for how
+# to interpret this.
 
-#modified fire season start and end temperature thresholds
-a_fs <- fireSeason (input[input$id==1,],fs.start=10, fs.end=3)
+# modified fire season start and end temperature thresholds
+a_fs <- fireSeason(input[input$id == 1, ], fs.start = 10, fs.end = 3)
 a_fs
 #    yr mon day fsdatetype
-#1 1999   5   2      start
-#2 1999  10  20        end
-#3 2000   6  16      start
-#4 2000  10   7        end
-#select another id value, specify method explicitly
-b_fs <- fireSeason(input[input$id==2,],method="WF93")
-#print the calculated fireseason
+# 1 1999   5   2      start
+# 2 1999  10  20        end
+# 3 2000   6  16      start
+# 4 2000  10   7        end
+# select another id value, specify method explicitly
+b_fs <- fireSeason(input[input$id == 2, ], method = "WF93")
+# print the calculated fireseason
 b_fs
 #   yr mon day fsdatetype
-#1 1980   4  21      start
-#2 1980   9  19        end
-#3 1980  10   6      start
-#4 1980  10  16        end
-#5 1981   5  21      start
-#6 1981  10  13        end
+# 1 1980   4  21      start
+# 2 1980   9  19        end
+# 3 1980  10   6      start
+# 4 1980  10  16        end
+# 5 1981   5  21      start
+# 6 1981  10  13        end
 
 }
 \references{

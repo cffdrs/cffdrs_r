@@ -12,12 +12,12 @@ observations. Variable names have to be the same as in the following list,
 but they are case insensitive. The order in which the input variables are
 entered is not important either.
 
-\tabular{lll}{ 
+\tabular{lll}{
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
-\var{rh} \tab (required) \tab Relative humidity (\%)\cr 
-\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr 
+\var{rh} \tab (required) \tab Relative humidity (\%)\cr
+\var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
 \var{prec} \tab (required) \tab 1-hour rainfall (mm)\cr
-\var{mon} \tab (recommended) \tab Month of the observations (integer 1-12)\cr 
+\var{mon} \tab (recommended) \tab Month of the observations (integer 1-12)\cr
 \var{day} \tab (optional) \tab Day of the observations (integer)\cr }}
 
 \item{sdmc_old}{Previous day's value of SDMC. At the start of calculations,
@@ -41,12 +41,12 @@ base on either the previous day's SDMC or the initial start value.}
 values.
 }
 \description{
-\code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et al., 2005)
-based on daily noon weather observations of temperature, relative humidity,
-wind speed, 24-hour rainfall, and a previous day's calculated or estimated
-value of sDMC. This function calculates sDMC for either one weather station
-or for multiple weather stations over the duration of the daily weather data
-set, typically over a fire season.
+\code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et
+al., 2005) based on daily noon weather observations of temperature, relative
+humidity, wind speed, 24-hour rainfall, and a previous day's calculated or
+estimated value of sDMC. This function calculates sDMC for either one weather
+station or for multiple weather stations over the duration of the daily
+weather data set, typically over a fire season.
 
 The Duff Moisture Code (DMC) component of the Canadian Forest Fire Weather
 Index (FWI) System tracks moisture content of the forest floor away from the
@@ -67,26 +67,26 @@ with decreasing moisture content.
 
 library(cffdrs)
 data("test_sdmc")
-#order the data:
-test_sdmc<-test_sdmc[with(test_sdmc,order(yr,mon,day)),]
-# (1)Default of sdmc, calculate sdmc for a chronical period 
-# of time. 
+# order the data:
+test_sdmc <- test_sdmc[with(test_sdmc, order(yr, mon, day)), ]
+# (1)Default of sdmc, calculate sdmc for a chronical period
+# of time.
 # Because sdmc_old is better to be calculated, we normally
 # ignore this option:
-test_sdmc$SDMC<-sdmc(test_sdmc)
-# (2) multiple weather stations: 
+test_sdmc$SDMC <- sdmc(test_sdmc)
+# (2) multiple weather stations:
 # Batch process with multiple stations (2 stations) assuming
 # they are from the same month:
-test_sdmc$mon<-7
-test_sdmc$day<-rep(1:24,2)
-test_sdmc$id<-rep(1:2,each=24)
+test_sdmc$mon <- 7
+test_sdmc$day <- rep(1:24, 2)
+test_sdmc$id <- rep(1:2, each = 24)
 # Sort the data by date and weather station id:
-test_sdmc<-test_sdmc[with(test_sdmc,order(yr,mon,day,id)),]
+test_sdmc <- test_sdmc[with(test_sdmc, order(yr, mon, day, id)), ]
 # Apply the function
-test_sdmc$SDMC_mult_stn<-sdmc(test_sdmc,batch=TRUE)
-# Assuming each record is from a different weather station, and 
-# calculate only one time step: 
-  foo<-sdmc(test_sdmc,batch=FALSE)
+test_sdmc$SDMC_mult_stn <- sdmc(test_sdmc, batch = TRUE)
+# Assuming each record is from a different weather station, and
+# calculate only one time step:
+foo <- sdmc(test_sdmc, batch = FALSE)
 
 }
 \references{
