@@ -176,7 +176,7 @@
   # Surface spread rate with 0 wind on level ground, using D1
   RSZ <- ifelse(
     FUELTYPE %in% c("M3"),
-    .rate_of_spread(
+    rate_of_spread(
       rep("D1", length(ISZ)),
       ISZ, NoBUI, FMC, SFC, PC, PDF100, CC, CBH
     ),
