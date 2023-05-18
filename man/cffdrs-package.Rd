@@ -43,7 +43,7 @@ major vegetation types in Canada.
 1.8.16\cr Date: \tab 2020-05-26\cr License: \tab GPL-2\cr } This package
 includes eleven functions. Seven functions, \code{\link{fwi}},
 \code{\link{fwiRaster}}, \code{\link{hffmc}}, \code{\link{hffmcRaster}},
-\code{\link{sheltered_duff_moisture_code}}, \code{\link{gfmc}}, and
+\code{\link{sdmc}}, \code{\link{gfmc}}, and
 \code{\link{overwinter_drought_code}} are used for
 FWI System calculation, whereas two functions, \code{\link{fbp}} and
 \code{\link{fbpRaster}} are used for FBP System calculation. One function,
@@ -52,7 +52,7 @@ weather. Two functions \code{\link{pros}} and \code{\link{lros}} are rate of
 spread and direction calculations across triangles. These functions are not
 fully independent: their inputs overlap greatly and the users will have to
 provide FWI System outputs to calculate FBP System outputs. The fwi,
-fwiRaster, and sheltered_duff_moisture_code functions calculate the outputs
+fwiRaster, and sdmc functions calculate the outputs
 based on daily noon local standard time (LST) weather observations of
 temperature, relative humidity, wind speed, and 24-hour rainfall, as well as
 the previous day's moisture content. The hffmc, gfmc, and hffmcRaster
@@ -199,7 +199,7 @@ Inf. Rep. NOR-X-417.
 \code{\link{fbp}}, \code{\link{fire_season}}, \code{\link{fwi}},
 \code{\link{fwiRaster}}, \code{\link{gfmc}}, \code{\link{hffmc}},
 \code{\link{hffmcRaster}}, \code{\link{lros}}, \code{\link{pros}},
-\code{\link{sheltered_duff_moisture_code}},
+\code{\link{sdmc}},
 \code{\link{overwinter_drought_code}}
 }
 \author{
