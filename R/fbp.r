@@ -294,6 +294,7 @@ fbp <- function(
   if (!is.na(charmatch("input", search()))) {
     detach(input)
   }
+  names(input) <- toupper(names(input))
   # If input is not provided, then calculate FBP with default values
   if (is.null(input)) {
     fullList <- fire_behaviour_prediction(input)
@@ -307,6 +308,7 @@ fbp <- function(
     n <- ifelse(m * n0 >= nrow(input), n0, n0 + 1)
     # Set up parallel processing, if # of cores is entered
     if (cores > 1) {
+      # print(input)
       # create and register a set of parallel R instances for foreach
       cl <- parallel::makeCluster(cores)
       doParallel::registerDoParallel(cl)

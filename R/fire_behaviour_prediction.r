@@ -27,6 +27,8 @@ fire_behaviour_prediction <- function(
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
+  # print(input)
+  # print(input$ID)
   output <- toupper(output)
   # if input does not exist, then set defaults
   if (is.null(input)) {
@@ -454,7 +456,9 @@ fire_behaviour_prediction <- function(
     DF <- ifelse(ACCEL == 1, (DH + DB) / (LBt * 2), (DH + DB) / (LB * 2))
   }
   # Create an id field if it does not exist
-  ID <- ifelse(exists("ID") && !is.null(ID), ID, row.names(input))
+  if (!exists("ID") || is.null(ID)) {
+    ID <- row.names(input)
+  }
   # if Primary is selected, wrap the primary outputs into a data frame and
   #  return them
   if (output %in% c("PRIMARY", "P")) {
