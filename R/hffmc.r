@@ -200,10 +200,10 @@ hffmc <- function(
     short = c("temp", "prec", "ws", "rh")
   )
 
-  if (nrow(required_cols[-which(names(input) %in% short)]) > 0) {
+  if (nrow(required_cols[-which(short %in% names(input))]) > 0) {
     stop(
       paste(
-        required_cols[-which(names(input) %in% short), full],
+        required_cols[-which(short %in% names(input)), full],
         collapse = " , "
       ),
       " is missing!"
@@ -219,11 +219,11 @@ hffmc <- function(
   if (!length(input[["rh"]][input[["rh"]] < 0]) == 0) {
     stop("relative humidity (rh) cannot be negative!")
   }
-  if (length(H) %% n != 0) {
+  if (length(input$rh) %% n != 0) {
     warning("input do not match with number of weather stations")
   }
   # Length of weather run
-  n0 <- length(H) / n
+  n0 <- length(input$rh) / n
   f <- NULL
   # For each day in the run
   for (i in 1:n0) {
@@ -243,7 +243,7 @@ hffmc <- function(
       t0 = t0
     )
     Fo <- f1
-    f <- c(f1, Fo)
+    f <- c(f, f1)
   }
   # Calculate hourly isi and fwi
   if (hourlyFWI) {
@@ -269,3 +269,5 @@ hffmc <- function(
     return(f)
   }
 }
+
+
