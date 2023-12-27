@@ -91,18 +91,19 @@
   ISF_M3 <- rep(-99, length(FFMC))
   ISF_M4 <- rep(-99, length(FFMC))
 
-  # Eqs. 41a, 41b (Wotton 2009) - Calculate the slope equivalend ISI
-  ISF <- ifelse(
-    FUELTYPE %in% c(
-      "C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "S1", "S2", "S3"
-    ),
-    ifelse(
-      (1 - (RSF / a[FUELTYPE])**(1 / c0[FUELTYPE])) >= 0.01,
-      log(1 - (RSF / a[FUELTYPE])**(1 / c0[FUELTYPE])) / (-b[FUELTYPE]),
-      log(0.01) / (-b[FUELTYPE])
-    ),
-    ISF
-  )
+  # Eqs. 41a, 41b (Wotton 2009) - Calculate the slope equivalent ISI
+
+  ISF_Fuels <- FUELTYPE[which(FUELTYPE %in% c(
+    "C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "S1", "S2", "S3"
+    ))]
+
+  ISF_Calc <- ISF_Fuels[which((1 - (RSF[which(FUELTYPE %in% ISF_Fuels)] / a[ISF_Fuels])**(1 / c0[ISF_Fuels])) >= 0.01)]
+
+  ISF[which(FUELTYPE %in% ISF_Calc)] <- log(1 - (RSF[which(FUELTYPE %in% ISF_Calc)] / a[ISF_Calc])**(1 / c0[ISF_Calc])) / (-b[ISF_Calc])
+
+  ISF_Calc <- ISF_Fuels[which(!(1 - (RSF[which(FUELTYPE %in% ISF_Fuels)] / a[ISF_Fuels])**(1 / c0[ISF_Fuels])) >= 0.01)]
+
+  ISF[which(FUELTYPE %in% ISF_Calc)] <- log(0.01) / (-b[ISF_Calc])
 
   # When calculating the M1/M2 types, we are going to calculate for both C2
   # and D1 types, and combine
