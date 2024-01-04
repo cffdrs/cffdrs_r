@@ -200,10 +200,10 @@ hffmc <- function(
     short = c("temp", "prec", "ws", "rh")
   )
 
-  if (nrow(required_cols[-which(names(input) %in% short)]) > 0) {
+  if (nrow(required_cols[-which(short %in% names(input))]) > 0) {
     stop(
       paste(
-        required_cols[-which(names(input) %in% short), full],
+        required_cols[-which(short %in% names(input)), full],
         collapse = " , "
       ),
       " is missing!"

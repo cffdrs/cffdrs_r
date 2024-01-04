@@ -93,17 +93,21 @@
 
   # Eqs. 41a, 41b (Wotton 2009) - Calculate the slope equivalent ISI
 
-  ISF_Fuels <- FUELTYPE[which(FUELTYPE %in% c(
+  is_basic <- Vectorize(function(fuel) { fuel %in% c(
     "C1", "C2", "C3", "C4", "C5", "C6", "C7", "D1", "S1", "S2", "S3"
-    ))]
-
-  ISF_Calc <- ISF_Fuels[which((1 - (RSF[which(FUELTYPE %in% ISF_Fuels)] / a[ISF_Fuels])**(1 / c0[ISF_Fuels])) >= 0.01)]
-
-  ISF[which(FUELTYPE %in% ISF_Calc)] <- log(1 - (RSF[which(FUELTYPE %in% ISF_Calc)] / a[ISF_Calc])**(1 / c0[ISF_Calc])) / (-b[ISF_Calc])
-
-  ISF_Calc <- ISF_Fuels[which(!(1 - (RSF[which(FUELTYPE %in% ISF_Fuels)] / a[ISF_Fuels])**(1 / c0[ISF_Fuels])) >= 0.01)]
-
-  ISF[which(FUELTYPE %in% ISF_Calc)] <- log(0.01) / (-b[ISF_Calc])
+  ) })(FUELTYPE)
+  basic_isf <- Vectorize(function(rsf, fuel) {
+    ifelse(
+      (1 - (rsf / a[fuel])**(1 / c0[fuel])) >= 0.01,
+      log(1 - (rsf / a[fuel])**(1 / c0[fuel])) / (-b[fuel]),
+      log(0.01) / (-b[fuel])
+    )
+  })
+  ISF <- ifelse(
+    is_basic,
+    basic_isf(RSF, FUELTYPE),
+    ISF
+  )
 
   # When calculating the M1/M2 types, we are going to calculate for both C2
   # and D1 types, and combine
@@ -293,6 +297,13 @@
     ),
     ISF
   )
+  ifelse(
+    FUELTYPE %in% c("NF", "WA"),
+    {WSV <- NA
+    RAZ <- NA
+    return(WSV)
+    return(RAZ)},
+    {
   # Eq. 46 (FCFDG 1992)
   m <- 147.27723 * (101 - FFMC) / (59.5 + FFMC)
   # Eq. 45 (FCFDG 1992) - FFMC function from the ISI equation
@@ -322,5 +333,6 @@
   # Eq. 51 (FCFDG 1992) - convert possible negative RAZ into more understandable
   # directions
   RAZ <- ifelse(WSX < 0, 2 * pi - RAZ, RAZ)
-  return(RAZ)
+  return(RAZ)}
+  )
 }

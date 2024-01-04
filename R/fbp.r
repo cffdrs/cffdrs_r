@@ -297,6 +297,11 @@ fbp <- function(
   names(input) <- toupper(names(input))
   # If input is not provided, then calculate FBP with default values
   if (is.null(input)) {
+    input<-data.frame(FUELTYPE="C2",ACCEL=0,DJ=180,D0=0,ELV=0,BUIEFF=1,HR=1,
+                      FFMC=90,ISI=0,BUI=60,WS=10,WD=0,GS=0,ASPECT=0,PC=50,
+                      PDF=35,CC=80,GFL=0.35,CBH=3,CFL=1,LAT=55,LONG=-120,
+                      FMC=0,THETA=0)
+    input[, "FUELTYPE"] <- as.character(input[, "FUELTYPE"])
     fullList <- fire_behaviour_prediction(input)
   } else {
     # determine optimal number of pixels to process at each iteration
