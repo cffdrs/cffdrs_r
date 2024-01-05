@@ -1,6 +1,6 @@
 test_that("RateOfSpreadAtTheta", {
   checkData('RateOfSpreadAtTheta',
-            RateOfSpreadAtTheta,
+            rate_of_spread_at_theta,
             list(data.table(ROS=ROS),
                  data.table(FROS=ROS),
                  data.table(BROS=ROS),

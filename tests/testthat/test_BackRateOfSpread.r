@@ -1,6 +1,6 @@
 test_that("BackRateOfSpread", {
   checkData('BackRateOfSpread',
-            BackRateOfSpread,
+            back_rate_of_spread,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(FFMC=FFMC),
                  data.table(BUI=BUI),

@@ -1,6 +1,6 @@
 test_that("RateOfSpread", {
   checkData('RateOfSpread',
-            RateOfSpread,
+            rate_of_spread,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(ISI=ISI),
                  data.table(BUI=BUI),

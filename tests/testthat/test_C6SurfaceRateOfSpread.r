@@ -1,13 +1,20 @@
-test_that("C6SurfaceRateOfSpreadC6", {
-  fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
+test_that("C6SurfaceRateOfSpread", {
+  # fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
+  # {
+  #   stopifnot("C6" == FUELTYPE)
+  #   stopifnot("RSI" == option)
+  #   RSI <- IntermediateSurfaceRateOfSpreadC6(ISI, FMC)
+  #   return(SurfaceRateOfSpreadC6(RSI, BUI))
+  # }
+  fctRSSC6 <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
   {
     stopifnot("C6" == FUELTYPE)
-    stopifnot("RSI" == option)
-    RSI <- IntermediateSurfaceRateOfSpreadC6(ISI, FMC)
-    return(SurfaceRateOfSpreadC6(RSI, BUI))
+    RSI <- .C6calc(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
+    RSS <- RSI * .BEcalc(FUELTYPE, BUI)
+    return(RSS)
   }
   checkData('C6SurfaceRateOfSpread',
-            fct,
+            fctRSSC6,
             list(data.table(FUELTYPE=c("C6")),
                  data.table(ISI=ISI),
                  data.table(BUI=BUI),

@@ -44,3 +44,13 @@
 #   # only the first record, the rests would be calculated:
 #   hffmc(dat0,time.step=1,calc.step=TRUE)
 # })
+test_that("hffmc", {
+  checkData('hffmc',
+            hffmc,
+            list(data.table(hr=HOURS),
+                 data.table(temp=TEMP),
+                 data.table(prec=PREC),
+                 data.table(rh=RH),
+                 data.table(ws=WS)),
+            split_args=FALSE)
+})

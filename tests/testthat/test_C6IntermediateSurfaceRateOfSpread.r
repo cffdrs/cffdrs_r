@@ -1,10 +1,10 @@
 test_that("C6IntermediateSurfaceRateOfSpread", {
-  fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
-  {
-    return(IntermediateSurfaceRateOfSpreadC6(ISI, FMC))
-  }
+  # fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
+  # {
+  #   return(IntermediateSurfaceRateOfSpreadC6(ISI, FMC))
+  # }
   checkData('C6IntermediateSurfaceRateOfSpread',
-            fct,
+            .C6calc,
             list(data.table(FUELTYPE=c("C6")),
                  data.table(ISI=ISI),
                  data.table(BUI=BUI),
