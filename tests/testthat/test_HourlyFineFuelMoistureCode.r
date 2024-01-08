@@ -8,9 +8,14 @@ test_that("hffmc", {
                  data.table(ws=WS)),
             split_args=FALSE)
 })
+
+fctHFFMC <- function(temp, rh, ws, prec, ffmc_old, time.step) {
+  return(hourly_fine_fuel_moisture_code(temp, rh, ws, prec, ffmc_old, time.step))
+}
+
 test_that("HourlyFineFuelMoistureCode", {
   checkData('HourlyFineFuelMoistureCode',
-            HourlyFineFuelMoistureCode,
+            fctHFFMC,
             list(data.table(temp=TEMP),
                  data.table(rh=RH),
                  data.table(ws=WS),

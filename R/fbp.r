@@ -353,8 +353,8 @@ fbp <- function(
     # create a single keyed data table
     fullList <- data.table::rbindlist(ca)
     data.table::setkey(fullList, ID)
-    # convert to data frame
-    # fullList <- as.data.frame(fullList)
+    # convert to data frame to keep backwards compatibility
+    fullList <- as.data.frame(fullList)
   }
   return(fullList)
 }

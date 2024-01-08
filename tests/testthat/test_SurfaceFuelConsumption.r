@@ -1,6 +1,6 @@
 test_that("SurfaceFuelConsumption", {
   checkData('SurfaceFuelConsumption',
-            SurfaceFuelConsumption,
+            surface_fuel_consumption,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(FFMC=FFMC),
                  data.table(BUI=BUI),

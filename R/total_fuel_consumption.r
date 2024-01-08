@@ -27,15 +27,27 @@
 #'
 #' @noRd
 
+
+crown_fuel_consumption <- function(FUELTYPE, CFL, CFB, PC, PDF) {
+  # Eq. 66a (Wotton 2009) - Crown Fuel Consumption (CFC)
+  CFC <- CFL * CFB
+  CFC <- ifelse(
+    FUELTYPE %in% c("M1", "M2"),
+    # Eq. 66b (Wotton 2009) - CFC for M1/M2 types
+    PC / 100 * CFC,
+    ifelse(
+      FUELTYPE %in% c("M3", "M4"),
+      # Eq. 66c (Wotton 2009) - CFC for M3/M4 types
+      PDF / 100 * CFC,
+    CFC)
+  )
+  return(CFC)
+}
+
 total_fuel_consumption <- function(
     FUELTYPE, CFL, CFB, SFC, PC, PDF,
     option = "TFC") {
-  # Eq. 66a (Wotton 2009) - Crown Fuel Consumption (CFC)
-  CFC <- CFL * CFB
-  # Eq. 66b (Wotton 2009) - CFC for M1/M2 types
-  CFC <- ifelse(FUELTYPE %in% c("M1", "M2"), PC / 100 * CFC, CFC)
-  # Eq. 66c (Wotton 2009) - CFC for M3/M4 types
-  CFC <- ifelse(FUELTYPE %in% c("M3", "M4"), PDF / 100 * CFC, CFC)
+  CFC <- crown_fuel_consumption(FUELTYPE, CFL, CFB, PC, PDF)
   # Return CFC if requested
   if (option == "CFC") {
     return(CFC)

@@ -25,12 +25,19 @@
 #' @return CFB, CSI, RSO depending on which option was selected.
 #' @noRd
 
+critical_surface_intensity <- function(FMC, CBH)
+{
+  # FIX: .FuelNF returns non-NA values from this
+  #Eq. 56 (FCFDG 1992) Critical surface intensity
+  CSI <- 0.001 * (CBH**1.5) * (460 + 25.9 * FMC)**1.5
+  return (CSI)
+}
+
 .CFBcalc <- function(
     FUELTYPE, FMC, SFC, ROS, CBH,
     option = "CFB") {
   CFB <- 0
-  # Eq. 56 (FCFDG 1992) Critical surface intensity
-  CSI <- 0.001 * (CBH**1.5) * (460 + 25.9 * FMC)**1.5
+  CSI <- critical_surface_intensity(FMC, CBH)
   # Return at this point, if specified by caller
   if (option == "CSI") {
     return(CSI)

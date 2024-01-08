@@ -1,11 +1,6 @@
 test_that("TotalFuelConsumption", {
-  fctTFC <- function(FUELTYPE, CFL, CFB, SFC, PC, PDF, option)
-  {
-    CFC <- CrownFuelConsumption(FUELTYPE, CFL, CFB, PC, PDF)
-    return(TotalFuelConsumption(CFC, SFC))
-  }
   checkData('TotalFuelConsumption',
-            fctTFC,
+            total_fuel_consumption,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(CFL=CFL),
                  data.table(CFB=CFB),
@@ -14,4 +9,3 @@ test_that("TotalFuelConsumption", {
                  data.table(PDF=PDF),
                  data.table(option="TFC")))
 })
-  

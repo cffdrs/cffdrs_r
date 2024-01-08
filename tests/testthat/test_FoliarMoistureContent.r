@@ -1,6 +1,6 @@
 test_that("FoliarMoistureContent", {
   checkData('FoliarMoistureContent',
-            FoliarMoistureContent,
+            foliar_moisture_content,
             list(data.table(LAT=LAT),
                  data.table(LONG=LONG),
                  data.table(ELV=ELV),

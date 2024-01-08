@@ -1,10 +1,10 @@
 test_that("CrownFuelConsumption", {
-  # fctTFC <- function(FUELTYPE, CFL, CFB, SFC, PC, PDF, option)
-  # {
-  #   return(CrownFuelConsumption(FUELTYPE, CFL, CFB, PC, PDF))
-  # }
+  fctCFC <- function(FUELTYPE, CFL, CFB, SFC, PC, PDF, option)
+  {
+    return(crown_fuel_consumption(FUELTYPE, CFL, CFB, PC, PDF))
+  }
   checkData('CrownFuelConsumption',
-            .TFCcalc,
+            fctCFC,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(CFL=CFL),
                  data.table(CFB=CFB),
