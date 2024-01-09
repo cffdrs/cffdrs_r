@@ -258,7 +258,10 @@ fire_behaviour_prediction <- function(
   ############################################################################
   SFC <- TFC <- HFI <- CFB <- ROS <- rep(0, length(LONG))
   RAZ <- rep(-999, length(LONG))
-  if (output %in% c("SECONDARY", "ALL", "S", "A")) {
+  validOutTypes <- c("SECONDARY", "ALL", "S", "A")
+  # HACK: add options to ensure tests work for now
+  validOutTypes <- c(validOutTypes, c("RAZ0", "WSV0"))
+  if (output %in% validOutTypes) {
     FROS <- BROS <- TROS <- HROSt <- FROSt <- BROSt <- TROSt <- FCFB <-
       BCFB <- TCFB <- FFI <- BFI <- TFI <- FTFC <- BTFC <- TTFC <- rep(
         0,
@@ -287,12 +290,18 @@ fire_behaviour_prediction <- function(
     FMC, SFC, PC, PDF, CC, CBH, ISI,
     output = "WSV"
   )
+  if ("WSV0" == output) {
+    return(WSV0)
+  }
   WSV <- ifelse(GS > 0 & FFMC > 0, WSV0, WS)
   # Calculate the net effective wind direction (RAZ)
   RAZ0 <- .Slopecalc(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ,
     FMC, SFC, PC, PDF, CC, CBH, ISI,
     output = "RAZ"
   )
+  if ("RAZ0" == output) {
+    return(RAZ0)
+  }
   RAZ <- ifelse(GS > 0 & FFMC > 0, RAZ0, WAZ)
   # Calculate or keep Initial Spread Index (ISI)
   ISI <- ifelse(ISI > 0, ISI, initial_spread_index(FFMC, WSV, TRUE))

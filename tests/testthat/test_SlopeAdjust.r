@@ -1,18 +1,6 @@
-fctSlopeAdjust <- function(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC,
-                           PC, PDF, CC, CBH, ISI, output)
-{
-  result <- SlopeAdjust(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ,
-                        FMC, SFC, PC, PDF, CC, CBH, ISI)
-  if ('WSV' == output)
-  {
-    return(result[["WSV"]])
-  }
-  return(result[["RAZ"]])
-  # return(result[[output]])
-}
 test_that("SlopeAdjust$RAZ", {
   checkData('SlopeAdjustRAZ',
-            fctSlopeAdjust,
+            .Slopecalc,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(FFMC=FFMC),
                  data.table(BUI=BUI),
@@ -31,7 +19,7 @@ test_that("SlopeAdjust$RAZ", {
 })
 test_that("SlopeAdjust$WSV", {
   checkData('SlopeAdjustWSV',
-            fctSlopeAdjust,
+            .Slopecalc,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(FFMC=FFMC),
                  data.table(BUI=BUI),

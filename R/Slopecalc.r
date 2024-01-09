@@ -45,6 +45,8 @@
 
   # check for valid output types
   validOutTypes <- c("RAZ", "WAZ", "WSV")
+  # HACK: add options to ensure tests work for now
+  validOutTypes <- c(validOutTypes, c("ISF", "WSE", "WSX", "WSY"))
   if (!(output %in% validOutTypes)) {
     stop(paste0(
       "In 'slopecalc()', '", output, "' is an invalid 'output' type."
@@ -297,6 +299,10 @@
     ),
     ISF
   )
+  # HACK: add options to ensure tests work for now
+  if ("ISF" == output) {
+    return(ISF)
+  }
   ifelse(
     FUELTYPE %in% c("NF", "WA"),
     {WSV <- NA
@@ -318,10 +324,22 @@
   )
   # Eqs. 44c (Wotton 2009) - Slope equivalent wind speed
   WSE <- ifelse(WSE > 40 & ISF >= (0.999 * 2.496 * fF), 112.45, WSE)
+  # HACK: add options to ensure tests work for now
+  if ("WSE" == output) {
+    return(WSE)
+  }
   # Eq. 47 (FCFDG 1992) - resultant vector magnitude in the x-direction
   WSX <- WS * sin(WAZ) + WSE * sin(SAZ)
+  # HACK: add options to ensure tests work for now
+  if ("WSX" == output) {
+    return(WSX)
+  }
   # Eq. 48 (FCFDG 1992) - resultant vector magnitude in the y-direction
   WSY <- WS * cos(WAZ) + WSE * cos(SAZ)
+  # HACK: add options to ensure tests work for now
+  if ("WSY" == output) {
+    return(WSY)
+  }
   # Eq. 49 (FCFDG 1992) - the net effective wind speed
   WSV <- sqrt(WSX * WSX + WSY * WSY)
   # stop execution here and return WSV if requested
