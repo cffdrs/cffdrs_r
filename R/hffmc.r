@@ -243,7 +243,7 @@ hffmc <- function(
       t0 = t0
     )
     Fo <- f1
-    f <- c(f1, Fo)
+    f <- c(f, Fo)
   }
   # Calculate hourly isi and fwi
   if (hourlyFWI) {

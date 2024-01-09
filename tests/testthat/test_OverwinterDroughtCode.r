@@ -1,14 +1,14 @@
 test_that("OverwinterDroughtCode_test_wDC_1", {
   checkResults('OverwinterDroughtCode_test_wDC_1',
-               wDC(DCf=300,rw=110))
+               overwinter_drought_code(DCf=300,rw=110))
 })
 test_that("OverwinterDroughtCode_test_wDC_2", {
   checkResults('OverwinterDroughtCode_test_wDC_2',
-               wDC(DCf=300,rw=110,a=1.0,b=0.9))
+               overwinter_drought_code(DCf=300,rw=110,a=1.0,b=0.9))
 })
 test_that("OverwinterDroughtCode_test_wDC_3", {
   checkResults('OverwinterDroughtCode_test_wDC_3',
-               wDC(DCf=c(400,300,250), rw=c(99,110,200),
+               overwinter_drought_code(DCf=c(400,300,250), rw=c(99,110,200),
                                      a=c(0.75,1.0,0.75), b=c(0.75,0.9,0.75)))
 })
 test_that("OverwinterDroughtCode_test_wDC_4", {
@@ -33,7 +33,7 @@ test_that("OverwinterDroughtCode_test_wDC_4", {
   #Assign a fall DC value
   fallDC <- 500
   checkResults('OverwinterDroughtCode_test_wDc_4',
-               wDC(DCf=fallDC,rw=curYr.prec))
+               overwinter_drought_code(DCf=fallDC,rw=curYr.prec))
 })
 test_that("OverwinterDroughtCode_test_wDC_5", {
   test_wDC <- read.csv2('../../data/test_wDC.csv', sep=';')
@@ -57,11 +57,11 @@ test_that("OverwinterDroughtCode_test_wDC_5", {
   #Assign a fall DC value
   fallDC <- 250
   checkResults('OverwinterDroughtCode_test_wDc_5',
-               wDC(DCf=fallDC,rw=curYr.prec))
+               overwinter_drought_code(DCf=fallDC,rw=curYr.prec))
 })
 test_that("OverwinterDroughtCode", {
   checkData('OverwinterDroughtCode',
-            wDC,
+            overwinter_drought_code,
             list(data.table(DCf=DMC),
                  data.table(rw=seq(0, 1000)),
                  data.table(a=FRACTION),
