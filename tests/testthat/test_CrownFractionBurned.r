@@ -1,13 +1,13 @@
 test_that("CrownFractionBurned", {
-  # fctCFB <- function(FUELTYPE, FMC, SFC, ROS, CBH)
-  # {
-  #   CSI <- CriticalSurfaceIntensity(FUELTYPE, FMC, CBH)
-  #   #Calculate Surface fire rate of spread (m/min)
-  #   RSO <- CriticalSurfaceRateOfSpread(CSI, SFC)
-  #   return(CrownFractionBurned(FUELTYPE, ROS, RSO))
-  # }
+  fctCFB <- function(FUELTYPE, FMC, SFC, ROS, CBH)
+  {
+    CSI <- critical_surface_intensity(FMC, CBH)
+    RSO <- surface_fire_rate_of_spread(CSI, SFC)
+    CFB <- crown_fraction_burned(ROS, RSO)
+    return(CFB)
+  }
   checkData('CrownFractionBurned',
-            .CFBcalc,
+            fctCFB,
             list(data.table(FUELTYPE=FUELTYPE),
                  data.table(FMC=FMC),
                  data.table(SFC=SFC),

@@ -1,19 +1,18 @@
 test_that("C6CrownFractionBurned", {
-  # fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
-  # {
-  #   stopifnot("C6" == FUELTYPE)
-  #   stopifnot("CFB" == option)
-  #   RSI <- IntermediateSurfaceRateOfSpreadC6(ISI, FMC)
-  #   RSS <- SurfaceRateOfSpreadC6(RSI, BUI)
-  #   RSC <- CrownRateOfSpreadC6(ISI, FMC)
-  #   CSI <- CriticalSurfaceIntensity(FUELTYPE, FMC, CBH)
-  #   #Eq. 57 (FCFDG 1992) Surface fire rate of spread (m/min)
-  #   RSO <- CSI / (300 * SFC)
-  #   CFB <- ifelse(RSC > RSS, CrownFractionBurned(FUELTYPE, RSS, RSO), 0)
-  #   return(CFB)
-  # }
+  fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
+  {
+    stopifnot("C6" == FUELTYPE)
+    stopifnot("CFB" == option)
+    RSI <- intermediate_surface_rate_of_spread_c6(ISI)
+    RSC <- crown_rate_of_spread_c6(ISI, FMC)
+    RSS <- surface_rate_of_spread_c6(RSI, BUI)
+    CSI <- critical_surface_intensity(FMC, CBH)
+    RSO <- surface_fire_rate_of_spread(CSI, SFC)
+    CFB <- ifelse((RSC > RSS) && (RSS > RSO), crown_fraction_burned(RSS, RSO), 0)
+    return(CFB)
+  }
   checkData('C6CrownFractionBurned',
-            .C6calc,
+            fct,
             list(data.table(FUELTYPE=c("C6")),
                  data.table(ISI=ISI),
                  data.table(BUI=BUI),

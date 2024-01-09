@@ -33,22 +33,38 @@ critical_surface_intensity <- function(FMC, CBH)
   return (CSI)
 }
 
+surface_fire_rate_of_spread <- function(CSI, SFC) {
+  # Eq. 57 (FCFDG 1992) Surface fire rate of spread (m/min)
+  # # no fuel consumption means no spread
+  # RSO <- ifelse(0 == SFC,
+  #               0,
+  #               CSI / (300 * SFC))
+  RSO <- CSI / (300 * SFC)
+  return(RSO)
+}
+
+crown_fraction_burned <- function(ROS, RSO) {
+  # Eq. 58 (FCFDG 1992) Crown fraction burned
+  CFB <- ifelse(ROS > RSO, 1 - exp(-0.23 * (ROS - RSO)), 0)
+  return(CFB)
+}
+
 .CFBcalc <- function(
     FUELTYPE, FMC, SFC, ROS, CBH,
     option = "CFB") {
-  CFB <- 0
   CSI <- critical_surface_intensity(FMC, CBH)
   # Return at this point, if specified by caller
   if (option == "CSI") {
+    .Deprecated("critical_surface_intensity")
     return(CSI)
   }
-  # Eq. 57 (FCFDG 1992) Surface fire rate of spread (m/min)
-  RSO <- CSI / (300 * SFC)
+  RSO <- surface_fire_rate_of_spread(CSI, SFC)
   # Return at this point, if specified by caller
   if (option == "RSO") {
+    .Deprecated("surface_fire_rate_of_spread")
     return(RSO)
   }
-  # Eq. 58 (FCFDG 1992) Crown fraction burned
-  CFB <- ifelse(ROS > RSO, 1 - exp(-0.23 * (ROS - RSO)), CFB)
+  CFB <- crown_fraction_burned(ROS, RSO)
+  .Deprecated("crown_fraction_burned")
   return(CFB)
 }

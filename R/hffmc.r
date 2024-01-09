@@ -211,19 +211,19 @@ hffmc <- function(
   }
 
   if (!length(input[["prec"]][input[["prec"]] < 0]) == 0) {
-    stop("precipiation (prec) cannot be negative!")
+    warning("precipiation (prec) cannot be negative!")
   }
   if (!length(input[["ws"]][input[["ws"]] < 0]) == 0) {
-    stop("wind speed (ws) cannot be negative!")
+    warning("wind speed (ws) cannot be negative!")
   }
   if (!length(input[["rh"]][input[["rh"]] < 0]) == 0) {
-    stop("relative humidity (rh) cannot be negative!")
+    warning("relative humidity (rh) cannot be negative!")
   }
-  if (length(H) %% n != 0) {
+  if (length(input[["rh"]]) %% n != 0) {
     warning("input do not match with number of weather stations")
   }
   # Length of weather run
-  n0 <- length(H) / n
+  n0 <- length(input[["rh"]]) / n
   f <- NULL
   # For each day in the run
   for (i in 1:n0) {

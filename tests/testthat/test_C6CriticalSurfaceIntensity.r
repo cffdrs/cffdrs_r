@@ -3,9 +3,12 @@ test_that("C6CriticalSurfaceIntensity", {
   {
     stopifnot("C6" == FUELTYPE)
     stopifnot("RSC" == option)
-    # CSI <- CriticalSurfaceIntensity(FUELTYPE, FMC, CBH)
-    # return(CSI)
-    CSI <- cffdrs:::.CFBcalc(FUELTYPE, FMC, SFC, ROS, CBH, "CSI")
+    # feels like this should make sense, but fails when called from fbp() and not all C6
+    # stopifnot("C6" == FUELTYPE)
+    RSI <- intermediate_surface_rate_of_spread_c6(ISI)
+    RSC <- crown_rate_of_spread_c6(ISI, FMC)
+    RSS <- surface_rate_of_spread_c6(RSI, BUI)
+    CSI <- critical_surface_intensity(FMC, CBH)
     return(CSI)
   }
   checkData('C6CriticalSurfaceIntensity',

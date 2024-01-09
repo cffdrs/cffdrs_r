@@ -1,21 +1,13 @@
 test_that("C6CriticalSurfaceRateOfSpread", {
-  # fct <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
-  # {
-  #   stopifnot("C6" == FUELTYPE)
-  #   stopifnot("CFB" == option)
-  #   RSI <- IntermediateSurfaceRateOfSpreadC6(ISI, FMC)
-  #   RSS <- SurfaceRateOfSpreadC6(RSI, BUI)
-  #   RSC <- CrownRateOfSpreadC6(ISI, FMC)
-  #   CSI <- CriticalSurfaceIntensity(FUELTYPE, FMC, CBH)
-  #   #Eq. 57 (FCFDG 1992) Surface fire rate of spread (m/min)
-  #   RSO <- CSI / (300 * SFC)
-  #   return(RSO)
-  # }
   fctRSOC6 <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
   {
     stopifnot("C6" == FUELTYPE)
-    stopifnot("RSC" == option)
-    RSO <- cffdrs:::.CFBcalc(FUELTYPE, FMC, SFC, ROS, CBH, "RSO")
+    stopifnot("RSO" == option)
+    RSI <- intermediate_surface_rate_of_spread_c6(ISI)
+    RSC <- crown_rate_of_spread_c6(ISI, FMC)
+    RSS <- surface_rate_of_spread_c6(RSI, BUI)
+    CSI <- critical_surface_intensity(FMC, CBH)
+    RSO <- surface_fire_rate_of_spread(CSI, SFC)
     return(RSO)
   }
   checkData('C6CriticalSurfaceRateOfSpread',
@@ -29,5 +21,5 @@ test_that("C6CriticalSurfaceRateOfSpread", {
                  data.table(ROS=ROS),
                  data.table(CFB=CFB),
                  data.table(RSC=ROS),
-                 data.table(option=c("RSC"))))
+                 data.table(option=c("RSO"))))
 })

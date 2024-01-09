@@ -29,7 +29,8 @@
 #'
 #' @noRd
 
-rate_of_spread <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
+# HACK: C6 ROS depends on CFB so do this to not repeat calculations
+rate_of_spread_extended <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
   # Set up some data vectors
   NoBUI <- rep(-1, length(ISI))
   d <- c(
@@ -142,15 +143,50 @@ rate_of_spread <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
     a[FUELTYPE] * ((1 - exp(-b[FUELTYPE] * ISI))**c0[FUELTYPE]) * CF,
     RSI
   )
-  # Calculate C6 separately
+  # used to be called like this and return ROS here
+  # # Calculate the Rate of Spread (ROS)
+  # ROS <- rate_of_spread(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
+  # Calculate Critical Surface Intensity
+  CSI <- critical_surface_intensity(FMC, CBH)
+  # Calculate Surface fire rate of spread (m/min)
+  RSO <- surface_fire_rate_of_spread(CSI, SFC)
+  # use ifelse for C6 because ROS depends on CFB (opposite of other fuels)
+  RSI <- ifelse(
+    FUELTYPE %in% c("C6"),
+    intermediate_surface_rate_of_spread_c6(ISI),
+    RSI)
+  RSC <- ifelse(
+    FUELTYPE %in% c("C6"),
+    crown_rate_of_spread_c6(ISI, FMC),
+    NA)
+  # HACK: need ROS first for non-C6
+  # this is RSS for C6 and ROS otherwise
+  RSS <- ifelse(
+    FUELTYPE %in% c("C6"),
+    surface_rate_of_spread_c6(RSI, BUI),
+    buildup_effect(FUELTYPE, BUI) * RSI)
+  # Calculate Crown Fraction Burned (CFB), C6 has different calculations
+  CFB <- ifelse(
+    FUELTYPE %in% c("C6"),
+    crown_fraction_burned_c6(RSC, RSS, RSO),
+    crown_fraction_burned(RSS, RSO))
   ROS <- ifelse(
     FUELTYPE %in% c("C6"),
-    .C6calc(FUELTYPE, ISI, BUI, FMC, SFC, CBH, option = "ROS"),
-    buildup_effect(FUELTYPE, BUI) * RSI
-  )
+    rate_of_spread_c6(RSC, RSS, CFB),
+    RSS)
   # add a constraint
   ROS <- ifelse(ROS <= 0, 0.000001, ROS)
-  return(ROS)
+  # CFB <- ros_and_cfb$CFB
+  return(list(ROS=ROS,
+              CFB=CFB,
+              CSI=CSI,
+              RSO=RSO))
+}
+
+rate_of_spread <- function(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH) {
+  # HACK: C6 ROS depends on CFB so do this to not repeat calculations
+  ros_vars <- rate_of_spread_extended(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
+  return(ros_vars$ROS)
 }
 
 .ROScalc <- function(...) {
