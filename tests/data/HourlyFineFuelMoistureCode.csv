@@ -1,4 +1,4 @@
-"temp","rh","ws","prec","ffmc_old","time.step","HourlyFineFuelMoistureCode"
+temp,rh,ws,prec,ffmc_old,time.step,HourlyFineFuelMoistureCode
 -30,-10,0,-10,0,0,NA
 42.9,-10,0,-10,0,0,NA
 25.7,-2.71,0,-10,0,0,NA

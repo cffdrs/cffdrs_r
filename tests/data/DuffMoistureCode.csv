@@ -1,4 +1,4 @@
-"dmc_yda","temp","rh","prec","lat","mon","lat.adjust","DuffMoistureCode"
+dmc_yda,temp,rh,prec,lat,mon,lat.adjust,DuffMoistureCode
 0,-30,-10,-10,-90,1,TRUE,0
 218.7,-30,-10,-10,-90,1,TRUE,218.7
 437.4,-30,-10,-10,-90,1,TRUE,437.4

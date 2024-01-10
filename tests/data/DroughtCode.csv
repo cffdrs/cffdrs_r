@@ -1,4 +1,4 @@
-"dc_yda","temp","rh","prec","lat","mon","lat.adjust","DroughtCode"
+dc_yda,temp,rh,prec,lat,mon,lat.adjust,DroughtCode
 0,-30,-10,-10,-90,1,TRUE,3.2
 218.7,-30,-10,-10,-90,1,TRUE,221.9
 437.4,-30,-10,-10,-90,1,TRUE,440.6

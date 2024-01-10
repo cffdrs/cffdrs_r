@@ -1,4 +1,4 @@
-"ffmc_yda","temp","rh","ws","prec","FineFuelMoistureCode"
+ffmc_yda,temp,rh,ws,prec,FineFuelMoistureCode
 0,-30,-10,0,-10,NA
 8.1,-30,-10,0,-10,NA
 16.2,-30,-10,0,-10,NA
