@@ -392,7 +392,7 @@ fbpRaster <- function(
   r[, FUELTYPE := fuelCross[match(r$FUEL, fuelCross$code), FUELTYPE0]]
   # Calculate FBP through the fbp() function
   FBP <- fbp(r, output = output, m = m, cores = cores)
-  FBP <- FBP[r, on = c("ID")]
+  # FBP <- FBP[r, on = c("ID")]
   # If secondary output selected then we need to reassign character
   # representation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")) {
@@ -420,7 +420,7 @@ fbpRaster <- function(
   }
   out <- c(rep(input[[1]], length(select)))
   names(out) <- select
-  FBP <- FBP[, ..select]
+  # FBP <- FBP[, ..select]
   for (i in select) {
     out[[i]] <- FBP[[i]]
   }
