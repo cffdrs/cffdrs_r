@@ -30,7 +30,7 @@ test_that("fwi_05", {
 })
 test_that("fwi_06", {
   library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")\
+  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
   # warning about generating NaNs
   suppressWarnings({
     actual <- fwi(test_fwi, init = data.frame(ffmc = 200, dmc = 1000, dc = 10000, lat = 55))
@@ -62,9 +62,10 @@ test_that("fwi_10", {
   actual <- fwi(test_fwi[8:13, ])
   checkResults("fwi_10", actual)
 })
-# test_that("fwi_11", {
-#   library(data.table)
-#   test_fwi <- read.csv('../../data/test_fwi.csv', sep=';')
-#   expected <- read.csv("../data/fwi_11.csv")
-#   checkResults("fwi_11", actual)
-# })
+test_that("fwi_11", {
+  library(data.table)
+  test_fwi <- read.csv('../../data/test_fwi.csv', sep=';')
+  expected <- read.csv("../data/fwi_11.csv")
+  actual <- fwi(test_fwi, batch = FALSE)
+  checkResults("fwi_11", actual)
+})
