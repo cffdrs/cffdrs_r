@@ -5,7 +5,7 @@ test_raster <- function(name, fct) {
   names(day01src) <- c("temp", "rh", "ws", "prec")
   day01 <- crop(day01src, c(250, 255, 47, 51))
 
-  test_fwi <- rast(sprintf("tests/data/rasters/%s/%s.tif", name, name))
+  test_fwi <- rast(sprintf("../data/rasters/%s/%s.tif", name, name))
   test_fwi <- crop(test_fwi, c(250, 255, 47, 51))
 
   day01_out <- fct(day01)

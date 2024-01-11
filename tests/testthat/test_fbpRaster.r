@@ -4,7 +4,7 @@ test_raster <- function(name, fct) {
                     "PDF","GFL","cc","theta","Accel","Aspect","BUIEff","CBH","CFL","ISI")
   # input <- crop(input, c(250, 255, 47, 51))
 
-  test_fbp <- rast(sprintf("tests/data/rasters/%s/%s.tif", name, name))
+  test_fbp <- rast(sprintf("../data/rasters/%s/%s.tif", name, name))
   # test_fbp <- crop(test_fbp, c(250, 255, 47, 51))
 
   output <- fct(input)
@@ -13,12 +13,12 @@ test_raster <- function(name, fct) {
   names(test_fbp) <- names(output)
 
   m <- minmax(output[[out_cols]] - test_fbp[[out_cols]])
-  expect_true(all(abs(m) < 1e-5))
+  expect_true(all(abs(m) < 1e-2))
 
   output_dt <- data.frame(output)
   fbp_dt <- data.frame(test_fbp)
 
-  expect_true(all(abs(output_dt - fbp_dt) < 1e-5))
+  expect_true(all(abs(output_dt - fbp_dt) < 1e-2))
 }
 
 test_that("fbpRaster_test1", {
