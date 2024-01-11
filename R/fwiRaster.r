@@ -183,10 +183,14 @@ fwiRaster <- function(
     input <- terra::rast(input)
   }
   names(input) <- tolower(names(input))
-
-  if (!"lat" %in% names(input)) {
-    input[["lat"]] <- terra::init(input[["temp"]], "y")
+  had_latitude <- "lat" %in% names(input)
+  if (!had_latitude) {
+    # FIX: use actual latitude from raster
+    # input[["lat"]] <- terra::init(input[["temp"]], "y")
+    # use old default value
+    input[["lat"]] <- terra::init(input[["temp"]], 55)
   }
+
 
   required_cols <- data.table(
     full = c("temperature", "precipitation", "wind speed", "relative humidity"),
@@ -231,7 +235,8 @@ fwiRaster <- function(
     dc_yda <- init$dc
   }
   # constrain relative humidity
-  input[["rh"]][input[["rh"]] >= 100] <- 99.9999
+  was_rh_100 <- input[["rh"]] >= 100
+  input[["rh"]][was_rh_100] <- 99.9999
   ###########################################################################
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
@@ -298,7 +303,10 @@ fwiRaster <- function(
   ###########################################################################
   # Eq. 31
   dsr <- 0.0272 * (fwi^1.77)
-
+  if (!had_latitude) {
+    input <- input[[setdiff(names(input), c("lat"))]]
+  }
+  input[["rh"]][was_rh_100] <- 100.0
   # If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
     # Creating a raster stack of FWI variables to return
