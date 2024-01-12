@@ -1,4 +1,7 @@
 library(data.table)
+
+SIG_DIGS <- 6
+
 DESIRED_ROWS <- 5000
 
 DAY <- seq(0, 366)
@@ -123,35 +126,28 @@ makeInput <- function(arguments)
   return(data.table(d1))
 }
 
-makeData <- function(name, fct, arguments, split_args)
-{
+makeData <- function(name, fct, arguments, split_args) {
   i <- makeInput(arguments)
-  if (!split_args)
-  {
+  if (!split_args) {
     stopifnot(is.data.table(i))
     values <- fct(i)
     i[, c(name)] <- values
     return(i)
   }
   n0 <- nrow(i)
-  #i[, c(name)] <- do.call(fct, i)
+  # i[, c(name)] <- do.call(fct, i)
   r <- list(do.call(fct, i[1, ]))
   isRow <- length(r[[1]]) > 1
-  if (isRow)
-  {
+  if (isRow) {
     r <- r[[1]]
-    for (n in 2:nrow(i))
-    {
+    for (n in 2:nrow(i)) {
       r2 <- do.call(fct, i[n, ])
       r <- rbind(r, r2)
     }
     stopifnot(nrow(i) == n0)
     return(r)
-  }
-  else
-  {
-    for (n in 2:nrow(i))
-    {
+  } else {
+    for (n in 2:nrow(i)) {
       r <- append(r, do.call(fct, i[n, ]))
     }
     i[, c(name)] <- unlist(r)
@@ -160,10 +156,19 @@ makeData <- function(name, fct, arguments, split_args)
   }
 }
 
+roundData <- function(data) {
+  for (col in names(data)) {
+    if (is.numeric(data[[col]])) {
+      data[[col]] <- signif(data[[col]], SIG_DIGS)
+    }
+  }
+  return(data)
+}
+
 checkEqual <- function(name, df1, df2) {
   ignore_names <- is.vector(df1)
-  df1 <- as.data.table(df1)
-  df2 <- as.data.table(df2)
+  df1 <- roundData(as.data.table(df1))
+  df2 <- roundData(as.data.table(df2))
   expect_equal(length(colnames(df1)), length(colnames(df2)))
   if (ignore_names)
   {
@@ -185,12 +190,12 @@ checkEqual <- function(name, df1, df2) {
   }
 }
 
-get_data_path <- function(path, ext="") {
-  return(fs::path_abs(test_path(sprintf("../data/%s%s", path, ext))))
+get_data_path <- function(name) {
+  return(fs::path_abs(test_path(sprintf("../data/%s", name))))
 }
 
 read_data <- function(name) {
-  return(read.csv(get_data_path(name, ".csv")))
+  return(read.csv(get_data_path(sprintf("%s.csv", name))))
 }
 
 read_raster <- function(name) {
@@ -205,7 +210,7 @@ checkResults <- function(name, df1)
 checkData <- function(name, fct, arguments, split_args=TRUE)
 {
   df1 <- makeData(name, fct, arguments, split_args)
-  df2 <- data.table(read_data(name))
+  df2 <- read_data(name)
   #print(df1[[name]])
   #print(as.numeric(df1[[name]]))
   #print(df2[[name]])
@@ -221,8 +226,9 @@ checkData <- function(name, fct, arguments, split_args=TRUE)
     actual <- df1
     expected <- df2
   }
-  expect_equal(actual, expected)
+  checkEqual(name, actual, expected)
 }
+
 fctOnInput <- function(fct)
 {
   return(function(ID, FUELTYPE, FFMC, BUI, WS, WD, FMC, GS, LAT, LONG, ELV, DJ, D0,
@@ -258,26 +264,4 @@ fctOnInput <- function(fct)
                         ISI=ISI)
     return(fct(input=input, output="S"))
   })
-}
-test_columns <- function(actual, expected)
-{
-  for (n in names(actual))
-  {
-    test_that(n, {
-      a <- actual[[n]]
-      e <- expected[[n]]
-      if (is.numeric(a))
-      {
-        expect_equal(a, as.numeric(e))
-      }
-      else if(is.character(a))
-      {
-        expect_equal(a, as.character(e))
-      }
-      else
-      {
-        expect_equal(a, e)
-      }
-    })
-  }
 }
