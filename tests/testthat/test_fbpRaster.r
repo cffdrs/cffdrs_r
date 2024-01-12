@@ -4,10 +4,13 @@ test_raster <- function(name, fct) {
                     "PDF","GFL","cc","theta","Accel","Aspect","BUIEff","CBH","CFL","ISI")
   # input <- crop(input, c(250, 255, 47, 51))
 
-  test_fbp <- rast(sprintf("../data/rasters/%s/%s.tif", name, name))
+  test_fbp <- read_raster(name)
   # test_fbp <- crop(test_fbp, c(250, 255, 47, 51))
 
-  output <- fct(input)
+  # ignore warning:
+  #   "FD = 1,2,3 representing Surface (S), Intermittent (I), and Crown (C) fire"
+  suppressMessages({ output <- fct(input) })
+
   out_cols <- setdiff(names(output), toupper(names(input)))
   # we don't actually know the names of the columns from the file, so assign from output
   names(test_fbp) <- names(output)

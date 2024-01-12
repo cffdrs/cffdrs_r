@@ -1,71 +1,88 @@
-test_that("fwi_01", {
+fct_test_fwi <- function(name, fct) {
   library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi)
-  checkResults("fwi_01", actual)
+  data("test_fwi", package = "cffdrs", envir = environment())
+  actual <- fct(test_fwi)
+  expected <- read_data(name)
+  checkEqual(name, actual, expected)
+}
+test_that("fwi_01", {
+  fct_test_fwi("fwi_01", function(test_fwi) { fwi(test_fwi) })
 })
 test_that("fwi_02", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, out = "all")
-  checkResults("fwi_02", actual)
+  fct_test_fwi("fwi_02", function(test_fwi) { fwi(test_fwi, out = "all") })
 })
 test_that("fwi_03", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, out = "fwi")
-  checkResults("fwi_03", actual)
+  fct_test_fwi("fwi_03", function(test_fwi) { fwi(test_fwi, out = "fwi") })
 })
 test_that("fwi_04", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, init = data.frame(ffmc = 85, dmc = 6, dc = 15, lat = 55))
-  checkResults("fwi_04", actual)
+  fct_test_fwi("fwi_04",
+           function(test_fwi) {
+             fwi(test_fwi, init=data.frame(ffmc=85, dmc=6, dc=15, lat=55))
+           })
 })
 test_that("fwi_05", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, init = data.frame(ffmc = 0, dmc = 0, dc = 0, lat = 55))
-  checkResults("fwi_05", actual)
+  fct_test_fwi("fwi_05",
+           function(test_fwi) {
+             fwi(test_fwi, init=data.frame(ffmc=0, dmc=0, dc=0, lat=55))
+           })
 })
 test_that("fwi_06", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  # warning about generating NaNs
-  suppressWarnings({
-    actual <- fwi(test_fwi, init = data.frame(ffmc = 200, dmc = 1000, dc = 10000, lat = 55))
-  })
-  checkResults("fwi_06", actual)
+  fct_test_fwi("fwi_06",
+           function(test_fwi) {
+             # HACK: we know there should be multiple warnings and 'all = TRUE' is deprecated
+             expect_warning(
+               expect_warning(
+                 expect_warning(
+                   expect_warning(
+                     expect_warning(
+                       expect_warning(
+                         expect_warning(
+                           expect_warning(
+                             {actual <- fwi(test_fwi, init=data.frame(ffmc=200, dmc=1000, dc=10000, lat=55))},
+                             "*NaNs produced*"),
+                           "*NaNs produced*"),
+                         "*NaNs produced*"),
+                       "*NaNs produced*"),
+                     "*NaNs produced*"),
+                   "*NaNs produced*"),
+                 "*NaNs produced*"),
+               "*NaNs produced*")
+             return(actual)
+           })
 })
 test_that("fwi_07", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, lat.adjust = FALSE)
-  checkResults("fwi_07", actual)
+  fct_test_fwi("fwi_07",
+           function(test_fwi) {
+             fwi(test_fwi, lat.adjust = FALSE)
+           })
 })
 test_that("fwi_08", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi, uppercase = FALSE)
-  checkResults("fwi_08", actual)
+  fct_test_fwi("fwi_08",
+           function(test_fwi) {
+             fwi(test_fwi, uppercase = FALSE)
+           })
 })
 test_that("fwi_09", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  actual <- fwi(test_fwi[7, ])
-  checkResults("fwi_09", actual)
+  fct_test_fwi("fwi_09",
+           function(test_fwi) {
+             fwi(test_fwi[7, ])
+           })
 })
 test_that("fwi_10", {
-  library(data.table)
-  test_fwi <- read.csv("../../data/test_fwi.csv", sep = ";")
-  expected <- read.csv("../data/fwi_10.csv")
-  actual <- fwi(test_fwi[8:13, ])
-  checkResults("fwi_10", actual)
+  fct_test_fwi("fwi_10",
+           function(test_fwi) {
+             fwi(test_fwi[8:13, ])
+           })
 })
 test_that("fwi_11", {
-  library(data.table)
-  test_fwi <- read.csv('../../data/test_fwi.csv', sep=';')
-  expected <- read.csv("../data/fwi_11.csv")
-  actual <- fwi(test_fwi, batch = FALSE)
-  checkResults("fwi_11", actual)
+  fct_test_fwi("fwi_11",
+           function(test_fwi) {
+             expect_warning({
+               expect_warning(
+                 {actual <- fwi(test_fwi, batch = FALSE)},
+                 "*NaNs produced*")
+               },
+               "Same initial data were used for multiple weather stations")
+           return(actual)
+           })
 })

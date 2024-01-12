@@ -1,6 +1,4 @@
 library(data.table)
-#setwd("tests/testthat")
-PATH <- '../data/'
 DESIRED_ROWS <- 5000
 
 DAY <- seq(0, 366)
@@ -162,13 +160,10 @@ makeData <- function(name, fct, arguments, split_args)
   }
 }
 
-
-checkResults <- function(name, df1)
-{
-  # don't worry about what names are if this isn't actually a table
+checkEqual <- function(name, df1, df2) {
   ignore_names <- is.vector(df1)
-  df1 <- data.table(df1)
-  df2 <- data.table(read.csv(paste0(PATH, name, '.csv')))
+  df1 <- as.data.table(df1)
+  df2 <- as.data.table(df2)
   expect_equal(length(colnames(df1)), length(colnames(df2)))
   if (ignore_names)
   {
@@ -190,10 +185,27 @@ checkResults <- function(name, df1)
   }
 }
 
+get_data_path <- function(path, ext="") {
+  return(fs::path_abs(test_path(sprintf("../data/%s%s", path, ext))))
+}
+
+read_data <- function(name) {
+  return(read.csv(get_data_path(name, ".csv")))
+}
+
+read_raster <- function(name) {
+  return(rast(get_data_path(sprintf("rasters/%s/%s.tif", name, name))))
+}
+
+checkResults <- function(name, df1)
+{
+  checkEqual(name, df1, read_data(name))
+}
+
 checkData <- function(name, fct, arguments, split_args=TRUE)
 {
   df1 <- makeData(name, fct, arguments, split_args)
-  df2 <- data.table(read.csv(paste0(PATH, name, '.csv')))
+  df2 <- data.table(read_data(name))
   #print(df1[[name]])
   #print(as.numeric(df1[[name]]))
   #print(df2[[name]])
