@@ -1,4 +1,5 @@
 library(data.table)
+library(terra)
 
 SIG_DIGS <- 6
 
@@ -126,7 +127,7 @@ makeInput <- function(arguments)
   return(data.table(d1))
 }
 
-makeData <- function(name, fct, arguments, split_args) {
+makeData <- function(name, fct, arguments, split_args, with_input = FALSE) {
   i <- makeInput(arguments)
   if (!split_args) {
     stopifnot(is.data.table(i))
@@ -145,6 +146,9 @@ makeData <- function(name, fct, arguments, split_args) {
       r <- rbind(r, r2)
     }
     stopifnot(nrow(i) == n0)
+    if (with_input) {
+      r <- cbind(i, r)
+    }
     return(r)
   } else {
     for (n in 2:nrow(i)) {
@@ -207,9 +211,8 @@ checkResults <- function(name, df1)
   checkEqual(name, df1, read_data(name))
 }
 
-checkData <- function(name, fct, arguments, split_args=TRUE)
-{
-  df1 <- makeData(name, fct, arguments, split_args)
+checkData <- function(name, fct, arguments, split_args = TRUE, with_input = FALSE) {
+  df1 <- makeData(name, fct, arguments, split_args, with_input)
   df2 <- read_data(name)
   #print(df1[[name]])
   #print(as.numeric(df1[[name]]))

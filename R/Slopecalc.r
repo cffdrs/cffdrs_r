@@ -38,21 +38,8 @@
 #' @noRd
 #'
 
-.Slopecalc <- function(
-    FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI,
-    output = "RAZ") {
-  # output options include: RAZ and WSV
-
-  # check for valid output types
-  validOutTypes <- c("RAZ", "WAZ", "WSV")
-  # HACK: add options to ensure tests work for now
-  validOutTypes <- c(validOutTypes, c("ISF", "WSE", "WSX", "WSY"))
-  if (!(output %in% validOutTypes)) {
-    stop(paste0(
-      "In 'slopecalc()', '", output, "' is an invalid 'output' type."
-    ))
-  }
-
+slope_adjustment <- function(
+    FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI) {
   NoBUI <- rep(-1, length(FFMC))
   # Eq. 39 (FCFDG 1992) - Calculate Spread Factor
   SF <- ifelse(GS >= 70, 10, exp(3.533 * (GS / 100)^1.2))
@@ -299,16 +286,18 @@
     ),
     ISF
   )
-  # HACK: add options to ensure tests work for now
-  if ("ISF" == output) {
-    return(ISF)
-  }
   ifelse(
     FUELTYPE %in% c("NF", "WA"),
-    {WSV <- NA
-    RAZ <- NA
-    return(WSV)
-    return(RAZ)},
+    {
+      return(list(
+        ISF = ISF,
+        WSE = NA,
+        WSX = NA,
+        WSY = NA,
+        WSV = NA,
+        RAZ = NA
+      ))
+    },
     {
   # Eq. 46 (FCFDG 1992)
   m <- 147.27723 * (101 - FFMC) / (59.5 + FFMC)
@@ -324,33 +313,42 @@
   )
   # Eqs. 44c (Wotton 2009) - Slope equivalent wind speed
   WSE <- ifelse(WSE > 40 & ISF >= (0.999 * 2.496 * fF), 112.45, WSE)
-  # HACK: add options to ensure tests work for now
-  if ("WSE" == output) {
-    return(WSE)
-  }
   # Eq. 47 (FCFDG 1992) - resultant vector magnitude in the x-direction
   WSX <- WS * sin(WAZ) + WSE * sin(SAZ)
-  # HACK: add options to ensure tests work for now
-  if ("WSX" == output) {
-    return(WSX)
-  }
   # Eq. 48 (FCFDG 1992) - resultant vector magnitude in the y-direction
   WSY <- WS * cos(WAZ) + WSE * cos(SAZ)
-  # HACK: add options to ensure tests work for now
-  if ("WSY" == output) {
-    return(WSY)
-  }
   # Eq. 49 (FCFDG 1992) - the net effective wind speed
   WSV <- sqrt(WSX * WSX + WSY * WSY)
-  # stop execution here and return WSV if requested
-  if (output == "WSV") {
-    return(WSV)
-  }
   # Eq. 50 (FCFDG 1992) - the net effective wind direction (radians)
   RAZ <- acos(WSY / WSV)
   # Eq. 51 (FCFDG 1992) - convert possible negative RAZ into more understandable
   # directions
   RAZ <- ifelse(WSX < 0, 2 * pi - RAZ, RAZ)
-  return(RAZ)}
+  return(list(
+    ISF = ISF,
+    WSE = WSE,
+    WSX = WSX,
+    WSY = WSY,
+    WSV = WSV,
+    RAZ = RAZ
+  ))
+}
   )
+}
+
+.Slopecalc <- function(
+    FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI,
+    output = "RAZ") {
+  # output options include: RAZ and WSV
+
+  # check for valid output types
+  validOutTypes <- c("RAZ", "WAZ", "WSV")
+  if (!(output %in% validOutTypes)) {
+    stop(paste0(
+      "In 'slopecalc()', '", output, "' is an invalid 'output' type."
+    ))
+  }
+
+  values <- slope_adjustment(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI)
+  return(values[[output]])
 }

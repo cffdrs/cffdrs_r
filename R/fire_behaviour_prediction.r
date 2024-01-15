@@ -285,20 +285,16 @@ fire_behaviour_prediction <- function(
   SFC <- surface_fuel_consumption(FUELTYPE, FFMC, BUI, PC, GFL)
   # Disable BUI Effect if necessary
   BUI <- ifelse(BUIEFF != 1, 0, BUI)
+  slope_values <- slope_adjustment(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ,
+    FMC, SFC, PC, PDF, CC, CBH, ISI)
   # Calculate the net effective windspeed (WSV)
-  WSV0 <- .Slopecalc(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ,
-    FMC, SFC, PC, PDF, CC, CBH, ISI,
-    output = "WSV"
-  )
+  WSV0 <- slope_values[["WSV"]]
   if ("WSV0" == output) {
     return(WSV0)
   }
   WSV <- ifelse(GS > 0 & FFMC > 0, WSV0, WS)
   # Calculate the net effective wind direction (RAZ)
-  RAZ0 <- .Slopecalc(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ,
-    FMC, SFC, PC, PDF, CC, CBH, ISI,
-    output = "RAZ"
-  )
+  RAZ0 <- slope_values[["RAZ"]]
   if ("RAZ0" == output) {
     return(RAZ0)
   }
