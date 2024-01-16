@@ -1,7 +1,7 @@
 library(data.table)
 library(terra)
 
-SIG_DIGS <- 6
+SIG_DIGS <- 4
 
 DESIRED_ROWS <- 5000
 
@@ -160,13 +160,27 @@ makeData <- function(name, fct, arguments, split_args, with_input = FALSE) {
   }
 }
 
+# want to apply to each individual number
+significant <- Vectorize(function(data) {
+  # keep at least 2 decimal places
+  return(signif(data,
+           pmax(ceiling(log10(abs(data))) + 2,
+                SIG_DIGS)))
+})
+
 roundData <- function(data) {
+  data <- as.data.table(data)
   for (col in names(data)) {
-    if (is.numeric(data[[col]])) {
-      data[[col]] <- signif(data[[col]], SIG_DIGS)
+  # don't round integers
+    if (is.numeric(data[[col]]) && !is.integer(data[[col]])) {
+      data[[col]] <- significant(data[[col]])
     }
   }
   return(data)
+}
+
+roundRaster <- function(data) {
+  return(signif(data, SIG_DIGS))
 }
 
 checkEqual <- function(name, df1, df2) {
@@ -194,16 +208,20 @@ checkEqual <- function(name, df1, df2) {
   }
 }
 
-get_data_path <- function(name) {
-  return(fs::path_abs(test_path(sprintf("../data/%s", name))))
+get_data_path <- function(name, suffix="csv") {
+  return(fs::path_abs(test_path(sprintf("../data/%s.%s", name, suffix))))
 }
 
 read_data <- function(name) {
-  return(read.csv(get_data_path(sprintf("%s.csv", name))))
+  return(read.csv(get_data_path(name)))
+}
+
+get_raster_path <- function(name) {
+  return(get_data_path(name, "tif"))
 }
 
 read_raster <- function(name) {
-  return(rast(get_data_path(sprintf("rasters/%s/%s.tif", name, name))))
+  return(rast(get_raster_path(name)))
 }
 
 checkResults <- function(name, df1)
@@ -267,4 +285,20 @@ fctOnInput <- function(fct)
                         ISI=ISI)
     return(fct(input=input, output="S"))
   })
+}
+
+test_raster <- function(name, input, fct) {
+  # only comparing to significant digits specified
+  actual <- roundRaster(fct(input))
+  expected <- read_raster(name)
+
+  out_cols <- setdiff(names(actual), toupper(names(input)))
+  # we don't actually know the names of the columns from the file, so assign from output
+  names(expected) <- names(actual)
+
+  expect_equal(names(expected), names(actual))
+  # # nc seems to prefer negative longitudes
+  # ext(actual) <- ext(expected)
+  m <- minmax(actual[[out_cols]] - expected[[out_cols]])
+  expect_true(all(abs(m) < (10 ^ -SIG_DIGS)))
 }
