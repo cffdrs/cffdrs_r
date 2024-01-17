@@ -75,8 +75,13 @@ gfmcRaster <- function(
   names(input) <- tolower(names(input))
   out <- toupper(out)
 
-  GFMCold <- if (typeof(GFMCold) == "double") setValues(input[[1]], GFMCold)
-  if (class(GFMCold) == "SpatRaster") names(GFMCold) <- "GFMCold"
+  if (class(GFMCold) != "SpatRaster") {
+    GFMCold <-setValues(input[[1]], GFMCold)
+    }
+
+  if (class(GFMCold) == "SpatRaster") {
+    names(GFMCold) <- "GFMCold"
+    }
 
   roFL <- if (typeof(roFL) == "double") setValues(input[[1]], roFL)
   if (class(roFL) == "SpatRaster") names(roFL) <- "roFL"
@@ -120,7 +125,8 @@ gfmcRaster <- function(
     warning("Single roFL value for grid is applied to the whole grid")
     # roFL <- setValues(input["temp"], roFL)
   }
-  validOutTypes <- c("GFMCandMC", "MC", "GFMC", "ALL")
+  validOutTypes <- toupper(c("GFMCandMC", "MC", "GFMC", "ALL"))
+  out <- toupper(out)
   if (!(out %in% validOutTypes)) {
     stop(paste("'", out, "' is an invalid 'out' type.", sep = ""))
   }
