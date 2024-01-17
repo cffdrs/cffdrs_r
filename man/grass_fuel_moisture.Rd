@@ -4,7 +4,16 @@
 \alias{grass_fuel_moisture}
 \title{Moisture content Calculation}
 \usage{
-grass_fuel_moisture(temp, rh, ws, prec, isol, GFMCold, roFL, time.step)
+grass_fuel_moisture(
+  temp,
+  rh,
+  ws,
+  prec,
+  isol,
+  GFMCold,
+  roFL = 0.3,
+  time.step = 1
+)
 }
 \arguments{
 \item{temp}{Temperature}
