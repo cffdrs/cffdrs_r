@@ -162,10 +162,12 @@ hffmcRaster <- function(
   if (!exists("H") | is.null(H)) {
     warning("relative humidity (rh) is missing!")
   }
+  if (class(ffmc_old) != "SpatRaster") {
+    ffmc_old <- terra::setValues(weatherstream["temp"], ffmc_old)
+  }
   fo <- lapp(
-    x = c(Tp, H, W, ro),
+    x = c(Tp, H, W, ro, ffmc_old),
     fun = Vectorize(hourly_fine_fuel_moisture_code),
-    Fo = ffmc_old,
     t0 = time.step
   )
   # Calculate hourly isi and fwi

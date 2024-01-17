@@ -252,7 +252,7 @@ hffmc <- function(
       warning("Daily BUI is required to calculate hourly FWI")
     } else {
       # Calculate ISI
-      isi <- initial_spread_index(f, W, FALSE)
+      isi <- initial_spread_index(f, ws, FALSE)
       # Calculate FWI
       fwi <- fire_weather_index(isi, bui)
       # Calculate DSR
