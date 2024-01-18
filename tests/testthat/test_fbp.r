@@ -2,10 +2,7 @@ fct_test_fbp <- function(name, fct) {
   library(data.table)
   data("test_fbp", package = "cffdrs", envir = environment())
   actual <- fct(test_fbp)
-  expected <- read_data(name)
-  # HACK: for now change type here
-  expected$ID <- as.integer(expected$ID)
-  checkEqual(name, actual, expected)
+  checkResults(name, actual)
 }
 test_that("fbp_01", {
   fct_test_fbp("fbp_01", function(test_fbp) { fbp(test_fbp) })

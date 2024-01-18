@@ -1,6 +1,6 @@
 test_that("Slope", {
-  fctSlope <- function(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI, output) {
-    return(slope_adjustment(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI))
+  fctSlope <- function(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI) {
+    return(as.data.table(slope_adjustment(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI)))
   }
   checkData("Slope",
     fctSlope,
@@ -18,8 +18,7 @@ test_that("Slope", {
       data.table(PDF = PDF),
       data.table(CC = CC),
       data.table(CBH = CBH),
-      data.table(ISI = ISI),
-      data.table(output = "RAZ")
+      data.table(ISI = ISI)
     ),
     split_args = TRUE,
     with_input = TRUE

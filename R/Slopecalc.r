@@ -290,10 +290,6 @@ slope_adjustment <- function(
     FUELTYPE %in% c("NF", "WA"),
     {
       return(list(
-        ISF = ISF,
-        WSE = NA,
-        WSX = NA,
-        WSY = NA,
         WSV = NA,
         RAZ = NA
       ))
@@ -325,10 +321,6 @@ slope_adjustment <- function(
   # directions
   RAZ <- ifelse(WSX < 0, 2 * pi - RAZ, RAZ)
   return(list(
-    ISF = ISF,
-    WSE = WSE,
-    WSX = WSX,
-    WSY = WSY,
     WSV = WSV,
     RAZ = RAZ
   ))

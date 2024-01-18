@@ -2,8 +2,7 @@ fct_test_fwi <- function(name, fct) {
   library(data.table)
   data("test_fwi", package = "cffdrs", envir = environment())
   actual <- fct(test_fwi)
-  expected <- read_data(name)
-  checkEqual(name, actual, expected)
+  checkResults(name, actual)
 }
 test_that("fwi_01", {
   fct_test_fwi("fwi_01", function(test_fwi) { fwi(test_fwi) })

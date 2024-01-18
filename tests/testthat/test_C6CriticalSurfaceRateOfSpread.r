@@ -2,7 +2,7 @@ test_that("C6CriticalSurfaceRateOfSpread", {
   fctRSOC6 <- function(FUELTYPE, ISI, BUI, FMC, SFC, CBH, ROS, CFB, RSC, option)
   {
     stopifnot("C6" == FUELTYPE)
-    stopifnot("RSO" == option)
+    stopifnot("RSC" == option)
     RSI <- intermediate_surface_rate_of_spread_c6(ISI)
     RSC <- crown_rate_of_spread_c6(ISI, FMC)
     RSS <- surface_rate_of_spread_c6(RSI, BUI)
@@ -21,5 +21,5 @@ test_that("C6CriticalSurfaceRateOfSpread", {
                  data.table(ROS=ROS),
                  data.table(CFB=CFB),
                  data.table(RSC=ROS),
-                 data.table(option=c("RSO"))))
+                 data.table(option=c("RSC"))))
 })
