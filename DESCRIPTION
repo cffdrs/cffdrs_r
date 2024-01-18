@@ -22,7 +22,8 @@ Depends:
     foreach
 Imports:
     geosphere,
-    doParallel
+    doParallel,
+	methods
 Description: This project provides a group of new functions to calculate the
     outputs of the two main components of the Canadian Forest Fire Danger Rating
     System (CFFDRS) Van Wagner and Pickett (1985) 
