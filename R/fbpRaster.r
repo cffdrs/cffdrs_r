@@ -262,8 +262,9 @@
 #'
 #' @importFrom foreach registerDoSEQ
 #' @importFrom terra rast ncell values setValues writeRaster
+#' @importFrom methods is
 #' @import sf
-#' @importFrom data.table as.data.table data.table
+#' @importFrom data.table as.data.table data.table :=
 #'
 #' @keywords methods
 #' @examples
