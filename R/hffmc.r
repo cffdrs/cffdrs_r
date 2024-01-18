@@ -248,6 +248,7 @@ hffmc <- function(
   # Calculate hourly isi and fwi
   if (hourlyFWI) {
     bui <- input$bui
+    ws <- input$ws
     if (!exists("bui") | is.null(bui)) {
       warning("Daily BUI is required to calculate hourly FWI")
     } else {
