@@ -1,13 +1,13 @@
 test_that("hffmcRaster", {
-  test_hffmcRaster <- stack(system.file("extdata", "test_rast_hour01.tif", package = "cffdrs"))
+  test_hffmcRaster <- rast(system.file("extdata", "test_rast_hour01.tif", package = "cffdrs"))
   names(test_hffmcRaster) <- c("temp", "rh", "ws", "prec")
 
-  hour02 <- stack(system.file("extdata", "test_rast_hour02.tif", package = "cffdrs"))
+  hour02 <- rast(system.file("extdata", "test_rast_hour02.tif", package = "cffdrs"))
   # Assign variable names to the layers:
   names(hour02) <- c("temp", "rh", "ws", "prec")
 
   # so we can reuse this as an input
-  output1 <- cffdrs::hffmcRaster(test_hffmcRaster)
+  output1 <- hffmcRaster(test_hffmcRaster)
 
   test_that("hffmcRaster_test1", {
     test_raster(
@@ -29,7 +29,7 @@ test_that("hffmcRaster", {
     )
   })
 
-  hour02 <- stack(hour02, setValues(hour02$temp, 50))
+  hour02 <- c(hour02, setValues(hour02$temp, 50))
   # Re-assign variable names to the layers:
   names(hour02) <- c("temp", "rh", "ws", "prec", "bui")
 
