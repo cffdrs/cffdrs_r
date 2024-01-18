@@ -21,6 +21,7 @@ but they are case insensitive. The order in which the input variables are
 entered is not important.
 
 \tabular{lll}{
+\var{id} \tab (optional) \tab Batch Identification\cr
 \var{temp} \tab (required) \tab Temperature (centigrade)\cr
 \var{rh} \tab (required) \tab Relative humidity (\%)\cr
 \var{ws} \tab (required) \tab 10-m height wind speed (km/h)\cr
