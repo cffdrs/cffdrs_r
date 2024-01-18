@@ -1,32 +1,47 @@
-# test_that("hffmcRaster", {
-#   library(cffdrs)
-#   require(raster)
-#   ## load the test data for the first hour, namely hour01:
-#   hour01src <- system.file("extdata","test_rast_hour01.tif",package="cffdrs")
-#   hour01 <- stack(hour01src)
-#   # Assign names to the layers:
-#   names(hour01)<-c("temp","rh","ws","prec")
-#   # (1) Default, based on the initial value: 
-#   foo<-hffmcRaster(hour01)
-#   plot(foo)
-#   ### Additional, longer running examples ###
-#   # (2) Based on previous day's hffmc:
-#   # load the test data for the second hour, namely hour02:
-#   hour02src <- system.file("extdata","test_rast_hour02.tif",package="cffdrs")
-#   hour02 <- stack(hour02src)
-#   # Assign variable names to the layers:
-#   names(hour02)<-c("temp","rh","ws","prec")
-#   foo1<-hffmcRaster(hour02,ffmc_old=foo)
-#   plot(foo1)
-#   # (3) Calculate other hourly FWI components (ISI, FWI, and DSR):
-#   # Need BUI layer, 
-#   bui<-hour02$temp
-#   values(bui)<-50
-#   hour02<-stack(hour02,bui)
-#   # Re-assign variable names to the layers:
-#   names(hour02)<-c("temp","rh","ws","prec","bui")
-#   # Calculate all the variables:
-#   foo2<-hffmcRaster(hour02,ffmc_old=foo,hourlyFWI=TRUE)
-#   # Visualize the maps:
-#   plot(foo2)
-# })
+test_that("hffmcRaster", {
+  test_hffmcRaster <- stack(system.file("extdata", "test_rast_hour01.tif", package = "cffdrs"))
+  names(test_hffmcRaster) <- c("temp", "rh", "ws", "prec")
+
+  hour02 <- stack(system.file("extdata", "test_rast_hour02.tif", package = "cffdrs"))
+  # Assign variable names to the layers:
+  names(hour02) <- c("temp", "rh", "ws", "prec")
+
+  # so we can reuse this as an input
+  output1 <- cffdrs::hffmcRaster(test_hffmcRaster)
+
+  test_that("hffmcRaster_test1", {
+    test_raster(
+      "hffmcRaster_test1",
+      test_hffmcRaster,
+      function(input) {
+        output1
+      }
+    )
+  })
+
+  test_that("hffmcRaster_test2", {
+    test_raster(
+      "hffmcRaster_test2",
+      hour02,
+      function(input) {
+        hffmcRaster(input, ffmc_old = output1)
+      }
+    )
+  })
+
+  hour02 <- stack(hour02, setValues(hour02$temp, 50))
+  # Re-assign variable names to the layers:
+  names(hour02) <- c("temp", "rh", "ws", "prec", "bui")
+
+  test_that("hffmcRaster_test3", {
+    test_raster(
+      "hffmcRaster_test3",
+      hour02,
+      function(input) {
+        hffmcRaster(input, ffmc_old = output1, hourlyFWI = TRUE)
+      }
+    )
+  })
+  # HACK: for now just to get it to not complain that the test is empty
+  expect_equal(TRUE, TRUE)
+})
