@@ -101,13 +101,13 @@
 #' # Because the test data has 24 hours input variables
 #' # it is possible to calculate the hourly GFMC continuously
 #' # through multiple days(with the default initial GFMCold=85):
-#' dat$gfmc_default <- gfmc(dat)
+#' dat$gfmc_default <- gfmc(dat,out="GFMC")
 #' # two variables will be added to the input, GFMC and MC
 #' head(dat)
 #' # (2) For multiple weather stations:
 #' # One time step (1 hour) with default initial value:
 #' foo <- gfmc(dat, batch = FALSE)
-#' # Chronical hourly GFMC with only one initial
+#' # Chronological hourly GFMC with only one initial
 #' # value (GFMCold=85), but multiple weather stations.
 #' # Note: data is ordered by date/time and the station id. Subset
 #' # the data by keeping only the first 10 hours of observations
@@ -139,7 +139,6 @@
 
 gfmc <- function(
     input,
-    id = NULL,
     GFMCold = 85,
     batch = TRUE,
     time.step = 1,
@@ -219,8 +218,8 @@ gfmc <- function(
     # Reset vars
     GFMCold <- GFMC
     MCold <- MC
-    GFMC_out <- ifelse(exists("GFMC_out"), c(GFMC_out, GFMC), GFMC)
-    MC_out <- ifelse(exists("MC_out"), c(MC_out, MC), MC)
+    GFMC_out <- if(exists("GFMC_out")) {c(GFMC_out, GFMC)} else {GFMC}
+    MC_out <- if(exists("MC_out")){ c(MC_out, MC)} else {MC}
   }
 
   # Return requested 'out' type
