@@ -69,22 +69,22 @@ gfmcRaster <- function(
     time.step = 1,
     roFL = 0.3,
     out = "GFMCandMC") {
-  if (class(input) != "SpatRaster") {
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   names(input) <- tolower(names(input))
   out <- toupper(out)
 
-  if (class(GFMCold) != "SpatRaster") {
+  if (!is(GFMCold,"SpatRaster")) {
     GFMCold <-setValues(input[[1]], GFMCold)
     }
 
-  if (class(GFMCold) == "SpatRaster") {
+  if (is(GFMCold,"SpatRaster")) {
     names(GFMCold) <- "GFMCold"
     }
 
   roFL <- if (typeof(roFL) == "double") setValues(input[[1]], roFL)
-  if (class(roFL) == "SpatRaster") names(roFL) <- "roFL"
+  if (is(roFL,"SpatRaster")) names(roFL) <- "roFL"
 
   # Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn

@@ -140,7 +140,7 @@ hffmcRaster <- function(
     ffmc_old = 85,
     time.step = 1,
     hourlyFWI = FALSE) {
-  if (class(weatherstream) != "SpatRaster") {
+  if (!is(weatherstream,"SpatRaster")) {
     weatherstream <- terra::rast(weatherstream)
   }
   names(weatherstream) <- tolower(names(weatherstream))
@@ -162,7 +162,7 @@ hffmcRaster <- function(
   if (!exists("H") | is.null(H)) {
     warning("relative humidity (rh) is missing!")
   }
-  if (class(ffmc_old) != "SpatRaster") {
+  if (!is(ffmc_old,"SpatRaster")) {
     ffmc_old <- terra::setValues(weatherstream["temp"], ffmc_old)
   }
   fo <- lapp(
