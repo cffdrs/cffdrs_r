@@ -179,7 +179,7 @@ fwiRaster <- function(
   if (!is.na(charmatch("input", search()))) {
     detach(input)
   }
-  if (class(input) != "SpatRaster") {
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   names(input) <- tolower(names(input))

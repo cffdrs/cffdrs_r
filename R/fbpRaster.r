@@ -316,7 +316,7 @@ fbpRaster <- function(
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
-  if (class(input) != "SpatRaster") {
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   # split up large rasters to allow calculation. This will be used in the
@@ -361,11 +361,11 @@ fbpRaster <- function(
     r <- as.data.table(input, xy = TRUE)
     coords <- st_sfc(
       st_multipoint(matrix(ncol = 2, r[, c(x, y)]), dim = "XY"),
-      crs = crs(input)
+      crs = terra::crs(input)
     )
     coords <- st_coordinates(st_transform(coords, 4326))
     r[, `:=`(x = coords[, "X"], y = coords[, "Y"])]
-    setnames(r, c("x", "y"), c("LON", "LAT"))
+    data.table::setnames(r, c("x", "y"), c("LON", "LAT"))
     # Check for valid latitude
     if (max(r$LAT) > 90 | min(r$LAT) < -90) {
       warning(paste0(
