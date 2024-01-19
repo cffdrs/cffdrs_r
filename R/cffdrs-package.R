@@ -2,11 +2,11 @@
 #'
 #' The cffdrs package allows R users to calculate the outputs of the two main
 #' components of the Canadian Forest Fire Danger Rating System (CFFDRS;
-#' \url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fdr}): the Fire Weather
+#' \url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fdr}): the Fire Weather
 #' Index (FWI) System
-#' (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fwi}) and the Fire
+#' (\url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fwi}) and the Fire
 #' Behaviour Prediction (FBP) System
-#' (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fbp}) along with
+#' (\url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fbp}) along with
 #' additional methods created and used Canadian fire modelling. These systems
 #' are widely used internationally to assess fire danger (FWI System) and
 #' quantify fire behavior (FBP System).
@@ -87,14 +87,14 @@
 #' 5. Forestry Canada Fire Danger Group. 1992. Development and structure of the
 #' Canadian Forest Fire Behavior Prediction System. Forestry Canada, Ottawa,
 #' Ontario Information Report ST-X-3. 63 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
 #'
 #' 6. Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions
 #' to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 #' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 #' Canada. Information Report GLC-X-10, 45p.
 #' \url{
-#' http://publications.gc.ca/collections/collection_2010/nrcan/
+#' https://publications.gc.ca/collections/collection_2010/nrcan/
 #' Fo123-2-10-2009-eng.pdf}
 #'
 #' 7. Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
@@ -217,7 +217,7 @@ NULL
 #' revisions to the 1992 Canadian forest fire behavior prediction system. Nat.
 #' Resour. Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie,
 #' Ontario, Canada. Information Report GLC-X-10, 45p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
 #' @keywords datasets
 NULL
 
@@ -252,7 +252,7 @@ NULL
 #' @references 1. Van Wagner, CE. and T.L. Pickett. 1985. Equations and FORTRAN
 #' program for the Canadian Forest Fire Weather Index System. Can. For. Serv.,
 #' Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 #' @keywords datasets
 NULL
 
@@ -427,7 +427,7 @@ NULL
 #' @references 1. Van Wagner, CE. and T.L. Pickett. 1985. Equations and FORTRAN
 #' program for the Canadian Forest Fire Weather Index System. Can. For. Serv.,
 #' Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 #' @keywords datasets
 NULL
 

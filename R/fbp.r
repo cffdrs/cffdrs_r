@@ -216,14 +216,14 @@
 #' 2.  Forestry Canada Fire Danger Group. 1992. Development and structure of
 #' the Canadian Forest Fire Behavior Prediction System. Forestry Canada,
 #' Ottawa, Ontario Information Report ST-X-3. 63 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
 #'
 #' 3.  Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions
 #' to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 #' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 #' Canada. Information Report GLC-X-10, 45p.
 #' \url{
-#' http://publications.gc.ca/collections/collection_2010/nrcan/
+#' https://publications.gc.ca/collections/collection_2010/nrcan/
 #' Fo123-2-10-2009-eng.pdf}
 #'
 #' 4.  Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
@@ -287,7 +287,7 @@ fbp <- function(
     m = NULL,
     cores = 1) {
   # hack to avoid Note about no visible binding for global variable ID
-  # http://stackoverflow.com/questions/9439256
+  # https://stackoverflow.com/questions/9439256
   # look at the globalvariables() option or others in place of this issue
   # do not remove this comment until resolved
   ID <- NULL

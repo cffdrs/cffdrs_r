@@ -28,7 +28,7 @@
 #' @param rw Winter precipitation (mm)
 #' @param a User selected values accounting for carry-over fraction (view table
 #' below)
-#' @param b User selected values accountain for wetting efficiency fraction
+#' @param b User selected values accounting for wetting efficiency fraction
 #' (view table below)
 #' @return \code{overwinter_drought_code} returns either a single value or a
 #'    vector of wDC values.
@@ -37,12 +37,12 @@
 #' @references Lawson B.D. and Armitage O.B. 2008. Weather Guide for the
 #' Canadian Forest Fire Danger Rating System. Natural Resources Canada,
 #' Canadian Forest Service, Northern Forestry Centre, Edmonton, Alberta. 84 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
 #'
 #' Van Wagner, C.E. 1985. Drought, timelag and fire danger rating. Pages
 #' 178-185 in L.R. Donoghue and R.E. Martin, eds. Proc. 8th Conf. Fire For.
 #' Meteorol., 29 Apr.-3 May 1985, Detroit, MI. Soc. Am. For., Bethesda, MD.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/23550.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/23550.pdf}
 #' @keywords methods
 #' @examples
 #'

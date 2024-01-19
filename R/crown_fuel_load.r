@@ -1,3 +1,11 @@
+#' Crown Fuel Load function
+#' originally from FBP.
+#' 
+#' @param FUELTYPE Character fueltype indicator
+#' @param CFL Crown Fuel Load
+#' 
+#' @noRd
+
 crown_fuel_load <- function(FUELTYPE, CFL) {
   # logic originally in fbp() pulled into its own function
     CFLs <- c(

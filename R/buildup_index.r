@@ -14,7 +14,7 @@
 #'
 #' @return A single Build Up Index value
 #'
-#' @references \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
+#' @references \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
 #' Development and structure of the Canadian Forest Fire Weather Index System.
 #' 1987. Van Wagner, C.E. Canadian Forestry Service, Headquarters, Ottawa.
 #' Forestry Technical Report 35. 35 p.

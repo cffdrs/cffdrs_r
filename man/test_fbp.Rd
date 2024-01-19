@@ -8,7 +8,7 @@
 A data frame containing 24 columns, 21 rows, including 1 header line
 }
 \source{
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
 }
 \description{
 This data set is a set of input data for each of the test cases in the

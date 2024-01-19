@@ -2,7 +2,8 @@
 % Please edit documentation in R/overwinter_drought_code.r
 \name{overwinter_drought_code}
 \alias{overwinter_drought_code}
-\title{Overwintering Drought Code}
+\title{Overwintering Drought Code
+?o}
 \usage{
 overwinter_drought_code(DCf = 100, rw = 200, a = 0.75, b = 0.75)
 }
@@ -14,7 +15,7 @@ overwinter_drought_code(DCf = 100, rw = 200, a = 0.75, b = 0.75)
 \item{a}{User selected values accounting for carry-over fraction (view table
 below)}
 
-\item{b}{User selected values accountain for wetting efficiency fraction
+\item{b}{User selected values accounting for wetting efficiency fraction
 (view table below)}
 }
 \value{
@@ -71,7 +72,7 @@ input <- test_wDC
 # order data by ID and date
 input <- with(input, input[order(id, yr, mon, day), ])
 input$date <- as.Date(as.POSIXlt(
-  paste0(input$yr, "-", input$mon, "-", input$day)
+  paste0(input$yr, "-", input$mon, "-", input$day), format = "\%Y-\%m-\%d"
 ))
 # select id value 1
 input.2 <- input[input$id == 2, ]
@@ -80,7 +81,7 @@ data("test_wDC_fs")
 print(test_wDC_fs)
 # Set date field
 test_wDC_fs$date <- as.Date(as.POSIXlt(
-  paste0(test_wDC_fs$yr, "-", test_wDC_fs$mon, "-", test_wDC_fs$day)
+  paste0(test_wDC_fs$yr, "-", test_wDC_fs$mon, "-", test_wDC_fs$day), format = "\%Y-\%m-\%d"
 ))
 # match to current id value
 input.2.fs <- test_wDC_fs[test_wDC_fs$id == 2, ]
@@ -109,12 +110,12 @@ winter_DC
 Lawson B.D. and Armitage O.B. 2008. Weather Guide for the
 Canadian Forest Fire Danger Rating System. Natural Resources Canada,
 Canadian Forest Service, Northern Forestry Centre, Edmonton, Alberta. 84 p.
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
 
 Van Wagner, C.E. 1985. Drought, timelag and fire danger rating. Pages
 178-185 in L.R. Donoghue and R.E. Martin, eds. Proc. 8th Conf. Fire For.
 Meteorol., 29 Apr.-3 May 1985, Detroit, MI. Soc. Am. For., Bethesda, MD.
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/23550.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/23550.pdf}
 }
 \seealso{
 \code{\link{fwi}}, \code{\link{fire_season}}
