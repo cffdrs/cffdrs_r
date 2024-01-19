@@ -12,14 +12,13 @@ test_that("OverwinterDroughtCode_test_wDC_3", {
                                      a=c(0.75,1.0,0.75), b=c(0.75,0.9,0.75)))
 })
 test_that("OverwinterDroughtCode_test_wDC_4", {
-  test_wDC <- read.csv2('../../data/test_wDC.csv', sep=';')
-  test_wDC$prec <- as.numeric(test_wDC$prec)
+  data("test_wDC", package = "cffdrs", envir = environment())
   input <- test_wDC
   input <- with(input,input[order(id,yr,mon,day),])
   input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep="")))
   #select id value 1
   input.2 <- input[input$id==2,]
-  test_wDC_fs <- read.csv2('../../data/test_wDC_fs.csv', sep=';')
+  data("test_wDC_fs", package = "cffdrs", envir = environment())
   test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",
                                                test_wDC_fs$day,sep="")))
   #match to current id value
@@ -36,14 +35,13 @@ test_that("OverwinterDroughtCode_test_wDC_4", {
                overwinter_drought_code(DCf=fallDC,rw=curYr.prec))
 })
 test_that("OverwinterDroughtCode_test_wDC_5", {
-  test_wDC <- read.csv2('../../data/test_wDC.csv', sep=';')
-  test_wDC$prec <- as.numeric(test_wDC$prec)
+  data("test_wDC", package = "cffdrs", envir = environment())
   input <- test_wDC
   input <- with(input,input[order(id,yr,mon,day),])
   input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep="")))
   #select id value 1
   input.2 <- input[input$id==2,]
-  test_wDC_fs <- read.csv2('../../data/test_wDC_fs.csv', sep=';')
+  data("test_wDC_fs", package = "cffdrs", envir = environment())
   test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",
                                                test_wDC_fs$day,sep="")))
   #match to current id value

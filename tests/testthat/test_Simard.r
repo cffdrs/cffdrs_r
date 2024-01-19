@@ -1,10 +1,10 @@
 test_that("SimardRateOfSpreadLine", {
-  test_lros <- read.csv('../../data/test_lros.txt', sep='\t')
+  data("test_lros", package = "cffdrs", envir = environment())
   checkResults('SimardRateOfSpreadLine',
                lros(test_lros))
 })
 test_that("SimardRateOfSpreadPoint", {
-  test_pros <- read.csv('../../data/test_pros.txt', sep='\t')
+  data("test_pros", package = "cffdrs", envir = environment())
   checkResults('SimardRateOfSpreadPoint',
                pros(test_pros))
 })
