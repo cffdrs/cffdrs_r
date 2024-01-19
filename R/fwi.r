@@ -152,12 +152,12 @@
 #'
 #' @examples
 #'
-#' # library(cffdrs)
+#' library(cffdrs)
 #' # The test data is a standard test
 #' # dataset for FWI system (Van Wagner and Pickett 1985)
-#' # data("test_fwi")
+#' data("test_fwi")
 #' # Show the data, which is already sorted by time:
-#' # head(test_fwi)
+#' head(test_fwi)
 #' # long  lat	yr	mon	day	temp	rh	ws	prec
 #' # -100	40	1985	4	  13	17	  42	25	0
 #' # -100	40	1985	4	  14	20	  21	25	2.4
