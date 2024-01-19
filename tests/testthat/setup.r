@@ -91,8 +91,8 @@ FBP_ARGS <- list(
   data.table(ISI = ISI)
 )
 
-get_data_path <- function(name, suffix = "csv") {
-  return(fs::path_abs(test_path(sprintf("../data/%s.%s", name, suffix))))
+get_data_path <- function(name, suffix="csv") {
+  return(test_path("data", sprintf("%s.%s", name, suffix)))
 }
 
 read_data <- function(name) {
