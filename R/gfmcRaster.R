@@ -69,6 +69,8 @@ gfmcRaster <- function(
     time.step = 1,
     roFL = 0.3,
     out = "GFMCandMC") {
+  # due to NSE notes in R CMD check
+  short = full = NULL
   if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }

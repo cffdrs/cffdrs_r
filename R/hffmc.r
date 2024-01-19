@@ -169,6 +169,8 @@ hffmc <- function(
     calc.step = FALSE,
     batch = TRUE,
     hourlyFWI = FALSE) {
+  # due to NSE notes in R CMD check
+  short = full = NULL
   t0 <- time.step
   names(input) <- tolower(names(input))
   # set up number of stations

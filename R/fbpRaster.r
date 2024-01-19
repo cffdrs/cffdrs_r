@@ -309,6 +309,8 @@ fbpRaster <- function(
     select = NULL,
     m = NULL,
     cores = 1) {
+  # due to NSE notes in R CMD check
+  x = y = FUELTYPE = FUELTYPE0 = NULL
   #  Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn
   #  the user of this case. This is also dont in FBPcalc, but we require use

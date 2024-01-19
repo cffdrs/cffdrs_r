@@ -155,6 +155,8 @@ fwiRaster <- function(
     out = "all",
     lat.adjust = TRUE,
     uppercase = TRUE) {
+  # due to NSE notes in R CMD check
+  short = full = NULL
   # Reference latitude for DMC day length adjustment
   # 46N: Canadian standard, latitude >= 30N   (Van Wagner 1987)
   ell01 <- c(6.5, 7.5, 9, 12.8, 13.9, 13.9, 12.4, 10.9, 9.4, 8, 7, 6)
