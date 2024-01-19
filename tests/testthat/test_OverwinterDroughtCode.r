@@ -15,12 +15,12 @@ test_that("OverwinterDroughtCode_test_wDC_4", {
   data("test_wDC", package = "cffdrs", envir = environment())
   input <- test_wDC
   input <- with(input,input[order(id,yr,mon,day),])
-  input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep="")))
+  input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep=""), format="%Y-%m-%d"))
   #select id value 1
   input.2 <- input[input$id==2,]
   data("test_wDC_fs", package = "cffdrs", envir = environment())
   test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",
-                                               test_wDC_fs$day,sep="")))
+                                               test_wDC_fs$day,sep=""), format="%Y-%m-%d"))
   #match to current id value
   input.2.fs <- test_wDC_fs[test_wDC_fs$id==2,]
   #assign start of winter date (or end of fire season date)
@@ -38,12 +38,12 @@ test_that("OverwinterDroughtCode_test_wDC_5", {
   data("test_wDC", package = "cffdrs", envir = environment())
   input <- test_wDC
   input <- with(input,input[order(id,yr,mon,day),])
-  input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep="")))
+  input$date <- as.Date(as.POSIXlt(paste(input$yr,"-",input$mon,"-",input$day,sep=""), format="%Y-%m-%d"))
   #select id value 1
   input.2 <- input[input$id==2,]
   data("test_wDC_fs", package = "cffdrs", envir = environment())
   test_wDC_fs$date <- as.Date(as.POSIXlt(paste(test_wDC_fs$yr,"-",test_wDC_fs$mon,"-",
-                                               test_wDC_fs$day,sep="")))
+                                               test_wDC_fs$day,sep=""), format="%Y-%m-%d"))
   #match to current id value
   input.2.fs <- test_wDC_fs[test_wDC_fs$id==2,]
   #assign start of winter date (or end of fire season date)

@@ -69,7 +69,7 @@
 #' # order data by ID and date
 #' input <- with(input, input[order(id, yr, mon, day), ])
 #' input$date <- as.Date(as.POSIXlt(
-#'   paste0(input$yr, "-", input$mon, "-", input$day)
+#'   paste0(input$yr, "-", input$mon, "-", input$day), format = "%Y-%m-%d"
 #' ))
 #' # select id value 1
 #' input.2 <- input[input$id == 2, ]
@@ -78,7 +78,7 @@
 #' print(test_wDC_fs)
 #' # Set date field
 #' test_wDC_fs$date <- as.Date(as.POSIXlt(
-#'   paste0(test_wDC_fs$yr, "-", test_wDC_fs$mon, "-", test_wDC_fs$day)
+#'   paste0(test_wDC_fs$yr, "-", test_wDC_fs$mon, "-", test_wDC_fs$day), format = "%Y-%m-%d"
 #' ))
 #' # match to current id value
 #' input.2.fs <- test_wDC_fs[test_wDC_fs$id == 2, ]
@@ -108,26 +108,7 @@ overwinter_drought_code <- function(
     rw = 200,
     a = 0.75,
     b = 0.75) {
-  #############################################################################
-  # Description:
-  #   Computes the over wintering Drought Code (DC) value.
-  #   All variables names are laid out in the same manner as Lawson & Armitage
-  #   (2008).
 
-  #   Lawson B.D. and Armitage O.B. 2008. Weather Guide for the Canadian Forest
-  #   Fire Danger Rating System. Natural Resources Canada, Canadian Forest
-  #   Service, Northern Forestry Centre, Edmonton, Alberta. 84 p.
-  #   http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf
-  #
-  # Args:
-  #     DCf: Final Fall DC Value
-  #      rw: winter precipitation (mm)
-  #       a: user-selected value accounting for carry-over fraction
-  #       b: user-selected value accounting for wetting efficiency fraction
-  # Returns:
-  #     DCs: Overwintered Drought Code (Spring startup DC value)
-  #
-  #############################################################################
   # Eq. 3 - Final fall moisture equivalent of the DC
   Qf <- 800 * exp(-DCf / 400)
   # Eq. 2 - Starting spring moisture equivalent of the DC
