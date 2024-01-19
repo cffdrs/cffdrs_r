@@ -86,8 +86,6 @@
 #' \verb{S-3}       \tab 18          \cr
 #' \verb{WA}        \tab 19          \cr\cr}
 #'
-#' @return Either Primary, Secondary, or all FBP outputs in a raster stack
-#'
 #' @param input The input data, a RasterStack containing fuel types, fire
 #' weather component, and slope layers (see below). Each vector of inputs
 #' defines a single FBP System prediction for a single fuel type and set of
@@ -309,6 +307,9 @@ fbpRaster <- function(
     select = NULL,
     m = NULL,
     cores = 1) {
+
+  output_orig <- output
+  output <- toupper(output)
   # due to NSE notes in R CMD check
   x = y = FUELTYPE = FUELTYPE0 = NULL
   #  Quite often users will have a data frame called "input" already attached
@@ -358,8 +359,21 @@ fbpRaster <- function(
       }
     }
   }
+  # If caller specifies select outputs, then create a raster stack that contains
+  # only those outputs
+  if (is.null(select)) {
+    if (output %in% c("PRIMARY", "P")) {
+      select <- primaryNames
+    } else if (output %in% c("SECONDARY", "S")) {
+      select <- secondaryNames
+    } else if (output %in% c("ALL", "A")) {
+      select <- allNames
+    } else {
+      stop("Invalid output selected. ",output_orig, " cannot be returned.")
+    }
+  }
+
   names(input) <- toupper(names(input))
-  output <- toupper(output)
   if (!"LAT" %in% names(input)) {
     r <- as.data.table(input, xy = TRUE)
     coords <- st_sfc(
@@ -400,20 +414,6 @@ fbpRaster <- function(
   # representation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")) {
     FBP$FD <- as.integer(chartr("SIC", "123", FBP$FD))
-  }
-  # If caller specifies select outputs, then create a raster stack that contains
-  # only those outputs
-  if (is.null(select)) {
-    if (output %in% c("PRIMARY", "P")) {
-      select <- primaryNames
-    } else if (output %in% c("SECONDARY", "S")) {
-      select <- secondaryNames
-    } else if (output %in% c("ALL", "A")) {
-      select <- allNames
-    }
-  }
-  if (is.null(select)) {
-    return(NULL)
   }
   if ("FD" %in% select) {
     message(paste0(
