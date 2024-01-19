@@ -2,8 +2,7 @@
 % Please edit documentation in R/overwinter_drought_code.r
 \name{overwinter_drought_code}
 \alias{overwinter_drought_code}
-\title{Overwintering Drought Code
-?o}
+\title{Overwintering Drought Code}
 \usage{
 overwinter_drought_code(DCf = 100, rw = 200, a = 0.75, b = 0.75)
 }
