@@ -1,0 +1,42 @@
+name: CFFDRS R Bug Report
+description: File a CFFDRS R bug report
+title: "[CFFDRS R Bug]: "
+labels: ["bug", "triage", "CFFDRS"]
+assignees:
+  - badgeronabike
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. An image of the error is also appropriate
+  - type: checkboxes
+    id: approval
+    attributes:
+      label: Approvals Process
+      description: To be completed for bug fix
+      options:
+        - label: Testing For Issue
+        - label: Merge
+      
+    
