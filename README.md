@@ -3,10 +3,10 @@ This project provides a group of new functions to calculate the outputs of the t
 
 <div align="center">
 
-[![r-downloads](https://flat.badgen.net/cran/v/cffdrs)](https://cran.r-project.org/web/packages/cffdrs/index.html)
+[![r-downloads](https://flat.badgen.net/cran/v/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
 
-[![r-version](https://flat.badgen.net/cran/r/cffdrs)](https://cran.r-project.org/web/packages/cffdrs/index.html)
+[![r-version](https://flat.badgen.net/cran/r/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
 
-[![r-dls](https://flat.badgen.net/cran/dt/cffdrs)](https://cran.r-project.org/web/packages/cffdrs/index.html)
+[![r-dls](https://flat.badgen.net/cran/dt/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
 
 </div>
