@@ -69,17 +69,24 @@ gfmcRaster <- function(
     time.step = 1,
     roFL = 0.3,
     out = "GFMCandMC") {
-  if (class(input) != "SpatRaster") {
+  # due to NSE notes in R CMD check
+  short = full = NULL
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   names(input) <- tolower(names(input))
   out <- toupper(out)
 
-  GFMCold <- if (typeof(GFMCold) == "double") setValues(input[[1]], GFMCold)
-  if (class(GFMCold) == "SpatRaster") names(GFMCold) <- "GFMCold"
+  if (!is(GFMCold,"SpatRaster")) {
+    GFMCold <-setValues(input[[1]], GFMCold)
+    }
+
+  if (is(GFMCold,"SpatRaster")) {
+    names(GFMCold) <- "GFMCold"
+    }
 
   roFL <- if (typeof(roFL) == "double") setValues(input[[1]], roFL)
-  if (class(roFL) == "SpatRaster") names(roFL) <- "roFL"
+  if (is(roFL,"SpatRaster")) names(roFL) <- "roFL"
 
   # Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn
@@ -120,7 +127,8 @@ gfmcRaster <- function(
     warning("Single roFL value for grid is applied to the whole grid")
     # roFL <- setValues(input["temp"], roFL)
   }
-  validOutTypes <- c("GFMCandMC", "MC", "GFMC", "ALL")
+  validOutTypes <- toupper(c("GFMCandMC", "MC", "GFMC", "ALL"))
+  out <- toupper(out)
   if (!(out %in% validOutTypes)) {
     stop(paste("'", out, "' is an invalid 'out' type.", sep = ""))
   }
@@ -131,12 +139,12 @@ gfmcRaster <- function(
       GFMCold,
       roFL
     ),
-    fun = Vectorize(mcCalc),
+    fun = Vectorize(grass_fuel_moisture),
     time.step = time.step,
     usenames = TRUE
   )
   names(mc.r) <- "MC"
-  gfmc.r <- lapp(x = mc.r, fun = Vectorize(gfmcCalc))
+  gfmc.r <- lapp(x = mc.r, fun = Vectorize(grass_fuel_moisture_code))
   names(gfmc.r) <- "GFMC"
   # Return requested 'out' type
   if (out == "ALL") {

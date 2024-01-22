@@ -86,8 +86,6 @@
 #' \verb{S-3}       \tab 18          \cr
 #' \verb{WA}        \tab 19          \cr\cr}
 #'
-#' @return Either Primary, Secondary, or all FBP outputs in a raster stack
-#'
 #' @param input The input data, a RasterStack containing fuel types, fire
 #' weather component, and slope layers (see below). Each vector of inputs
 #' defines a single FBP System prediction for a single fuel type and set of
@@ -244,14 +242,14 @@
 #' 2.  Forestry Canada Fire Danger Group. 1992. Development and structure of
 #' the Canadian Forest Fire Behavior Prediction System. Forestry Canada,
 #' Ottawa, Ontario Information Report ST-X-3. 63 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
 #'
 #' 3.  Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions
 #' to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 #' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 #' Canada. Information Report GLC-X-10, 45p.
 #' \url{
-#' http://publications.gc.ca/collections/collection_2010/nrcan/
+#' https://publications.gc.ca/collections/collection_2010/nrcan/
 #' Fo123-2-10-2009-eng.pdf}
 #'
 #' 4.  Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
@@ -262,8 +260,9 @@
 #'
 #' @importFrom foreach registerDoSEQ
 #' @importFrom terra rast ncell values setValues writeRaster
+#' @importFrom methods is
 #' @import sf
-#' @importFrom data.table as.data.table data.table
+#' @importFrom data.table as.data.table data.table :=
 #'
 #' @keywords methods
 #' @examples
@@ -308,6 +307,11 @@ fbpRaster <- function(
     select = NULL,
     m = NULL,
     cores = 1) {
+
+  output_orig <- output
+  output <- toupper(output)
+  # due to NSE notes in R CMD check
+  x = y = FUELTYPE = FUELTYPE0 = NULL
   #  Quite often users will have a data frame called "input" already attached
   #  to the workspace. To mitigate this, we remove that if it exists, and warn
   #  the user of this case. This is also dont in FBPcalc, but we require use
@@ -316,7 +320,7 @@ fbpRaster <- function(
     warning("Attached dataset 'input' is being detached to use fbp() function.")
     detach(input)
   }
-  if (class(input) != "SpatRaster") {
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   # split up large rasters to allow calculation. This will be used in the
@@ -355,17 +359,30 @@ fbpRaster <- function(
       }
     }
   }
+  # If caller specifies select outputs, then create a raster stack that contains
+  # only those outputs
+  if (is.null(select)) {
+    if (output %in% c("PRIMARY", "P")) {
+      select <- primaryNames
+    } else if (output %in% c("SECONDARY", "S")) {
+      select <- secondaryNames
+    } else if (output %in% c("ALL", "A")) {
+      select <- allNames
+    } else {
+      stop("Invalid output selected. ",output_orig, " cannot be returned.")
+    }
+  }
+
   names(input) <- toupper(names(input))
-  output <- toupper(output)
   if (!"LAT" %in% names(input)) {
     r <- as.data.table(input, xy = TRUE)
     coords <- st_sfc(
       st_multipoint(matrix(ncol = 2, r[, c(x, y)]), dim = "XY"),
-      crs = crs(input)
+      crs = terra::crs(input)
     )
     coords <- st_coordinates(st_transform(coords, 4326))
     r[, `:=`(x = coords[, "X"], y = coords[, "Y"])]
-    setnames(r, c("x", "y"), c("LON", "LAT"))
+    data.table::setnames(r, c("x", "y"), c("LON", "LAT"))
     # Check for valid latitude
     if (max(r$LAT) > 90 | min(r$LAT) < -90) {
       warning(paste0(
@@ -392,25 +409,11 @@ fbpRaster <- function(
   r[, FUELTYPE := fuelCross[match(r$FUEL, fuelCross$code), FUELTYPE0]]
   # Calculate FBP through the fbp() function
   FBP <- fbp(r, output = output, m = m, cores = cores)
-  FBP <- FBP[r, on = c("ID")]
+  # FBP <- FBP[r, on = c("ID")]
   # If secondary output selected then we need to reassign character
   # representation of Fire Type S/I/C to a numeric value 1/2/3
   if (!(output == "SECONDARY" | output == "S")) {
     FBP$FD <- as.integer(chartr("SIC", "123", FBP$FD))
-  }
-  # If caller specifies select outputs, then create a raster stack that contains
-  # only those outputs
-  if (is.null(select)) {
-    if (output %in% c("PRIMARY", "P")) {
-      select <- primaryNames
-    } else if (output %in% c("SECONDARY", "S")) {
-      select <- secondaryNames
-    } else if (output %in% c("ALL", "A")) {
-      select <- allNames
-    }
-  }
-  if (is.null(select)) {
-    return(NULL)
   }
   if ("FD" %in% select) {
     message(paste0(
@@ -420,7 +423,7 @@ fbpRaster <- function(
   }
   out <- c(rep(input[[1]], length(select)))
   names(out) <- select
-  FBP <- FBP[, ..select]
+  # FBP <- FBP[, ..select]
   for (i in select) {
     out[[i]] <- FBP[[i]]
   }

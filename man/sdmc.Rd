@@ -37,16 +37,17 @@ and "id".  If \code{batch=FALSE}, the function calculates only one time step
 base on either the previous day's SDMC or the initial start value.}
 }
 \value{
-\code{sdmc} returns either a single value or a vector of SDMC
-values.
+\code{sdmc} returns either a single value or
+   a vector of SDMC values.
 }
 \description{
-\code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et
-al., 2005) based on daily noon weather observations of temperature, relative
-humidity, wind speed, 24-hour rainfall, and a previous day's calculated or
-estimated value of sDMC. This function calculates sDMC for either one weather
-station or for multiple weather stations over the duration of the daily
-weather data set, typically over a fire season.
+\code{sdmc} is used to calculate
+sheltered DMC (sDMC, Wotton et al., 2005) based on daily noon weather
+observations of temperature, relative humidity, wind speed, 24-hour rainfall,
+and a previous day's calculated or estimated value of sDMC. This function
+calculates sDMC for either one weather station or for multiple weather
+stations over the duration of the daily weather data set, typically over a
+fire season.
 
 The Duff Moisture Code (DMC) component of the Canadian Forest Fire Weather
 Index (FWI) System tracks moisture content of the forest floor away from the
@@ -69,8 +70,7 @@ library(cffdrs)
 data("test_sdmc")
 # order the data:
 test_sdmc <- test_sdmc[with(test_sdmc, order(yr, mon, day)), ]
-# (1)Default of sdmc, calculate sdmc for a chronical period
-# of time.
+# (1)Default of sdmc, calculate sdmc for a chronical period of time.
 # Because sdmc_old is better to be calculated, we normally
 # ignore this option:
 test_sdmc$SDMC <- sdmc(test_sdmc)

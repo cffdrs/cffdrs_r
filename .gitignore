@@ -5,3 +5,6 @@
 .DS_Store
 .Rproj
 .Rd2pdf
+.vscode
+dev/*
+revdep/

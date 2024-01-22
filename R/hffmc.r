@@ -108,7 +108,7 @@
 #' content throughout the diurnal cycle. Environment Canada, Canadian Forestry
 #' Service, Petawawa Forest Experiment Station, Chalk River, Ontario.
 #' Information Report PS-X-69.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
 #' @keywords methods
 #' @examples
 #'
@@ -169,6 +169,8 @@ hffmc <- function(
     calc.step = FALSE,
     batch = TRUE,
     hourlyFWI = FALSE) {
+  # due to NSE notes in R CMD check
+  short = full = NULL
   t0 <- time.step
   names(input) <- tolower(names(input))
   # set up number of stations
@@ -211,19 +213,19 @@ hffmc <- function(
   }
 
   if (!length(input[["prec"]][input[["prec"]] < 0]) == 0) {
-    stop("precipiation (prec) cannot be negative!")
+    warning("precipiation (prec) cannot be negative!")
   }
   if (!length(input[["ws"]][input[["ws"]] < 0]) == 0) {
-    stop("wind speed (ws) cannot be negative!")
+    warning("wind speed (ws) cannot be negative!")
   }
   if (!length(input[["rh"]][input[["rh"]] < 0]) == 0) {
-    stop("relative humidity (rh) cannot be negative!")
+    warning("relative humidity (rh) cannot be negative!")
   }
-  if (length(input$rh) %% n != 0) {
+  if (length(input[["rh"]]) %% n != 0) {
     warning("input do not match with number of weather stations")
   }
   # Length of weather run
-  n0 <- length(input$rh) / n
+  n0 <- length(input[["rh"]]) / n
   f <- NULL
   # For each day in the run
   for (i in 1:n0) {
@@ -234,7 +236,7 @@ hffmc <- function(
       t0 <- ifelse(t0 == -23, 1, t0)
       t0 <- ifelse(t0 < 0, -1 * t0, t0)
     }
-    f1 <- hffmcCalc(
+    f1 <- hourly_fine_fuel_moisture_code(
       temp = input$temp[k],
       ws = input$ws[k],
       rh = input$rh[k],
@@ -243,18 +245,19 @@ hffmc <- function(
       t0 = t0
     )
     Fo <- f1
-    f <- c(f, f1)
+    f <- c(f, Fo)
   }
   # Calculate hourly isi and fwi
   if (hourlyFWI) {
     bui <- input$bui
+    ws <- input$ws
     if (!exists("bui") | is.null(bui)) {
       warning("Daily BUI is required to calculate hourly FWI")
     } else {
       # Calculate ISI
-      isi <- .ISIcalc(f, W, FALSE)
+      isi <- initial_spread_index(f, ws, FALSE)
       # Calculate FWI
-      fwi <- .fwiCalc(isi, bui)
+      fwi <- fire_weather_index(isi, bui)
       # Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       # Put all data into a data.frame to return
@@ -269,5 +272,3 @@ hffmc <- function(
     return(f)
   }
 }
-
-

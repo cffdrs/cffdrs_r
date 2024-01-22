@@ -216,14 +216,14 @@
 #' 2.  Forestry Canada Fire Danger Group. 1992. Development and structure of
 #' the Canadian Forest Fire Behavior Prediction System. Forestry Canada,
 #' Ottawa, Ontario Information Report ST-X-3. 63 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
 #'
 #' 3.  Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions
 #' to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 #' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 #' Canada. Information Report GLC-X-10, 45p.
 #' \url{
-#' http://publications.gc.ca/collections/collection_2010/nrcan/
+#' https://publications.gc.ca/collections/collection_2010/nrcan/
 #' Fo123-2-10-2009-eng.pdf}
 #'
 #' 4.  Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
@@ -287,7 +287,7 @@ fbp <- function(
     m = NULL,
     cores = 1) {
   # hack to avoid Note about no visible binding for global variable ID
-  # http://stackoverflow.com/questions/9439256
+  # https://stackoverflow.com/questions/9439256
   # look at the globalvariables() option or others in place of this issue
   # do not remove this comment until resolved
   ID <- NULL
@@ -296,8 +296,14 @@ fbp <- function(
   }
   # If input is not provided, then calculate FBP with default values
   if (is.null(input)) {
-    fullList <- .FBPcalc(input)
+    input<-data.frame(FUELTYPE="C2",ACCEL=0,DJ=180,D0=0,ELV=0,BUIEFF=1,HR=1,
+                      FFMC=90,ISI=0,BUI=60,WS=10,WD=0,GS=0,ASPECT=0,PC=50,
+                      PDF=35,CC=80,GFL=0.35,CBH=3,CFL=1,LAT=55,LONG=-120,
+                      FMC=0,THETA=0)
+    input[, "FUELTYPE"] <- as.character(input[, "FUELTYPE"])
+    fullList <- fire_behaviour_prediction(input)
   } else {
+    names(input) <- toupper(names(input))
     # determine optimal number of pixels to process at each iteration
     if (is.null(m)) {
       m <- ifelse(nrow(input) > 500000, 3000, 1000)
@@ -307,6 +313,7 @@ fbp <- function(
     n <- ifelse(m * n0 >= nrow(input), n0, n0 + 1)
     # Set up parallel processing, if # of cores is entered
     if (cores > 1) {
+      # print(input)
       # create and register a set of parallel R instances for foreach
       cl <- parallel::makeCluster(cores)
       doParallel::registerDoParallel(cl)
@@ -314,13 +321,16 @@ fbp <- function(
       ca <- foreach::foreach(i = 1:n, .packages = "cffdrs") %dopar% {
         if (i == n) {
           # Run FBP functions
-          to.ls <- .FBPcalc(
+          to.ls <- fire_behaviour_prediction(
             input[((i - 1) * m + 1):nrow(input), ],
             output = output
           )
         } else {
           # Run FBP functions
-          to.ls <- .FBPcalc(input[((i - 1) * m + 1):(i * m), ], output = output)
+          to.ls <- fire_behaviour_prediction(
+            input[((i - 1) * m + 1):(i * m), ],
+            output = output
+          )
         }
         to.ls
       }
@@ -337,14 +347,14 @@ fbp <- function(
           foo <- input[((i - 1) * m + 1):(i * m), ]
         }
         # Run FBP functions
-        ca[[i]] <- .FBPcalc(foo, output = output)
+        ca[[i]] <- fire_behaviour_prediction(foo, output = output)
       }
     }
     # create a single keyed data table
     fullList <- data.table::rbindlist(ca)
     data.table::setkey(fullList, ID)
-    # convert to data frame
-    # fullList <- as.data.frame(fullList)
+    # convert to data frame to keep backwards compatibility
+    fullList <- as.data.frame(fullList)
   }
   return(fullList)
 }

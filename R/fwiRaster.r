@@ -43,7 +43,7 @@
 #' Both the Duff Moisture Code (dmc) and Drought Code (dc) are influenced by
 #' day length (see Van Wagner, 1987). Day length adjustments for different
 #' ranges in latitude can be used (as described in Lawson and Armitage 2008
-#' (\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf})) and are included
+#' (\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf})) and are included
 #' in this R function; latitude must be positive in the northern hemisphere and
 #' negative in the southern hemisphere.
 #'
@@ -109,16 +109,16 @@
 #' @references 1. Van Wagner, C.E. and T.L. Pickett. 1985. Equations and
 #' FORTRAN program for the Canadian Forest Fire Weather Index System. Can. For.
 #' Serv., Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 #'
 #' 2. Van Wagner, C.E. 1987. Development and structure of the Canadian forest
 #' fire weather index system. Forest Technology Report 35. (Canadian Forestry
-#' Service: Ottawa). \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
+#' Service: Ottawa). \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
 #'
 #' 3.  Lawson, B.D. and O.B. Armitage. 2008. Weather guide for the Canadian
 #' Forest Fire Danger Rating System. Nat. Resour. Can., Can. For. Serv., North.
 #' For. Cent., Edmonton, AB.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
 #'
 #' @keywords methods
 #'
@@ -128,10 +128,10 @@
 #' require(terra)
 #' # The test data is a stack with four input variables including
 #' # daily noon temp, rh, ws, and prec (we recommend tif format):
-#' day01 <- rast(
+#' day01src <- rast(
 #'   system.file("extdata", "test_rast_day01.tif", package = "cffdrs")
 #' )
-#' day01 <- crop(day01, c(250, 255, 47, 51))
+#' day01 <- crop(day01src, c(250, 255, 47, 51))
 #' # assign variable names:
 #' names(day01) <- c("temp", "rh", "ws", "prec")
 #' # (1) use the initial values
@@ -139,8 +139,9 @@
 #' plot(foo)
 #' ### Additional, longer running examples ###
 #' # (2) use initial values with larger raster
-#' day01 <- rast(day01src)
+#' day01 <- day01src
 #' names(day01) <- c("temp", "rh", "ws", "prec")
+
 #' \donttest{
 #' foo <- fwiRaster(day01)
 #' }
@@ -154,6 +155,8 @@ fwiRaster <- function(
     out = "all",
     lat.adjust = TRUE,
     uppercase = TRUE) {
+  # due to NSE notes in R CMD check
+  short = full = NULL
   # Reference latitude for DMC day length adjustment
   # 46N: Canadian standard, latitude >= 30N   (Van Wagner 1987)
   ell01 <- c(6.5, 7.5, 9, 12.8, 13.9, 13.9, 12.4, 10.9, 9.4, 8, 7, 6)
@@ -178,14 +181,18 @@ fwiRaster <- function(
   if (!is.na(charmatch("input", search()))) {
     detach(input)
   }
-  if (class(input) != "SpatRaster") {
+  if (!is(input,"SpatRaster")) {
     input <- terra::rast(input)
   }
   names(input) <- tolower(names(input))
-
-  if (!"lat" %in% names(input)) {
-    input[["lat"]] <- terra::init(input[["temp"]], "y")
+  had_latitude <- "lat" %in% names(input)
+  if (!had_latitude) {
+    # FIX: use actual latitude from raster
+    # input[["lat"]] <- terra::init(input[["temp"]], "y")
+    # use old default value
+    input[["lat"]] <- terra::init(input[["temp"]], 55)
   }
+
 
   required_cols <- data.table(
     full = c("temperature", "precipitation", "wind speed", "relative humidity"),
@@ -230,14 +237,15 @@ fwiRaster <- function(
     dc_yda <- init$dc
   }
   # constrain relative humidity
-  input[["rh"]][input[["rh"]] >= 100] <- 99.9999
+  was_rh_100 <- input[["rh"]] >= 100
+  input[["rh"]][was_rh_100] <- 99.9999
   ###########################################################################
   #                    Fine Fuel Moisture Code (FFMC)
   ###########################################################################
 
   ffmc <- lapp(
     x = c(ffmc_yda, input[[c("temp", "rh", "ws", "prec")]]),
-    fun = Vectorize(.ffmcCalc)
+    fun = Vectorize(fine_fuel_moisture_code)
   )
 
   ###########################################################################
@@ -251,7 +259,7 @@ fwiRaster <- function(
       input[["lat"]],
       setValues(input[["temp"]], mon)
     ),
-    fun = Vectorize(.dmcCalc),
+    fun = Vectorize(duff_moisture_code),
     lat.adjust = lat.adjust
   )
 
@@ -266,7 +274,7 @@ fwiRaster <- function(
       input[["lat"]],
       setValues(input[["temp"]], mon)
     ),
-    fun = Vectorize(.dcCalc),
+    fun = Vectorize(drought_code),
     lat.adjust = lat.adjust
   )
 
@@ -276,7 +284,7 @@ fwiRaster <- function(
 
   isi <- lapp(
     x = c(ffmc, input[["ws"]]),
-    fun = Vectorize(.ISIcalc),
+    fun = Vectorize(initial_spread_index),
     fbpMod = FALSE
   )
 
@@ -284,20 +292,23 @@ fwiRaster <- function(
   #                       Buildup Index (BUI)
   ###########################################################################
 
-  bui <- lapp(x = c(dmc, dc), fun = Vectorize(.buiCalc))
+  bui <- lapp(x = c(dmc, dc), fun = Vectorize(buildup_index))
 
   ###########################################################################
   #                     Fire Weather Index (FWI)
   ###########################################################################
 
-  fwi <- lapp(x = c(isi, bui), fun = Vectorize(.fwiCalc))
+  fwi <- lapp(x = c(isi, bui), fun = Vectorize(fire_weather_index))
 
   ###########################################################################
   #                   Daily Severity Rating (DSR)
   ###########################################################################
   # Eq. 31
   dsr <- 0.0272 * (fwi^1.77)
-
+  if (!had_latitude) {
+    input <- input[[setdiff(names(input), c("lat"))]]
+  }
+  input[["rh"]][was_rh_100] <- 100.0
   # If output specified is "fwi", then return only the FWI variables
   if (out == "fwi") {
     # Creating a raster stack of FWI variables to return

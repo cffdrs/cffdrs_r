@@ -181,7 +181,7 @@ Van Wagner, C.E. 1977. A method of computing fine fuel moisture
 content throughout the diurnal cycle. Environment Canada, Canadian Forestry
 Service, Petawawa Forest Experiment Station, Chalk River, Ontario.
 Information Report PS-X-69.
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
 }
 \seealso{
 \code{\link{fbp}}, \code{\link{fwi}}, \code{\link{hffmcRaster}}

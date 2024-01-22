@@ -2,11 +2,11 @@
 #'
 #' The cffdrs package allows R users to calculate the outputs of the two main
 #' components of the Canadian Forest Fire Danger Rating System (CFFDRS;
-#' \url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fdr}): the Fire Weather
+#' \url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fdr}): the Fire Weather
 #' Index (FWI) System
-#' (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fwi}) and the Fire
+#' (\url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fwi}) and the Fire
 #' Behaviour Prediction (FBP) System
-#' (\url{http://cwfis.cfs.nrcan.gc.ca/background/summary/fbp}) along with
+#' (\url{https://cwfis.cfs.nrcan.gc.ca/background/summary/fbp}) along with
 #' additional methods created and used Canadian fire modelling. These systems
 #' are widely used internationally to assess fire danger (FWI System) and
 #' quantify fire behavior (FBP System).
@@ -36,24 +36,25 @@
 #' 1.8.16\cr Date: \tab 2020-05-26\cr License: \tab GPL-2\cr } This package
 #' includes eleven functions. Seven functions, \code{\link{fwi}},
 #' \code{\link{fwiRaster}}, \code{\link{hffmc}}, \code{\link{hffmcRaster}},
-#' \code{\link{sdmc}}, \code{\link{gfmc}}, and \code{\link{wDC}} are used for
+#' \code{\link{sdmc}}, \code{\link{gfmc}}, and
+#' \code{\link{overwinter_drought_code}} are used for
 #' FWI System calculation, whereas two functions, \code{\link{fbp}} and
 #' \code{\link{fbpRaster}} are used for FBP System calculation. One function,
-#' \code{\link{fireSeason}} determines fire season start and end dates based on
+#' \code{\link{fire_season}} determines fire season start and end dates based on
 #' weather. Two functions \code{\link{pros}} and \code{\link{lros}} are rate of
 #' spread and direction calculations across triangles. These functions are not
 #' fully independent: their inputs overlap greatly and the users will have to
 #' provide FWI System outputs to calculate FBP System outputs. The fwi,
-#' fwiRaster, and sdmc functions calculate the outputs based on daily noon
-#' local standard time (LST) weather observations of temperature, relative
-#' humidity, wind speed, and 24-hour rainfall, as well as the previous day's
-#' moisture content. The hffmc, gfmc, and hffmcRaster functions calculate the
-#' outputs based on hourly weather observations of temperature, relative
-#' humidity, wind speed, and hourly rainfall, as well as the previous hour's
-#' weather conditions. The fbp and fbpRaster functions calculate the outputs of
-#' the FBP System based on given set of information about fire weather
-#' conditions (weather observations and their associated FWI System
-#' components), fuel type, and slope (optional).
+#' fwiRaster, and sdmc functions calculate the outputs
+#' based on daily noon local standard time (LST) weather observations of
+#' temperature, relative humidity, wind speed, and 24-hour rainfall, as well as
+#' the previous day's moisture content. The hffmc, gfmc, and hffmcRaster
+#' functions calculate the outputs based on hourly weather observations of
+#' temperature, relative humidity, wind speed, and hourly rainfall, as well as
+#' the previous hour's weather conditions. The fbp and fbpRaster functions
+#' calculate the outputs of the FBP System based on given set of information
+#' about fire weather conditions (weather observations and their associated FWI
+#' System components), fuel type, and slope (optional).
 #'
 #' @name cffdrs-package
 #' @aliases cffdrs-package cffdrs
@@ -62,10 +63,11 @@
 #' Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 #'
 #' Maintainer: Alan Cantin \email{Alan.Cantin@nrcan-rncan.gc.ca}
-#' @seealso \code{\link{fbp}}, \code{\link{fireSeason}}, \code{\link{fwi}},
+#' @seealso \code{\link{fbp}}, \code{\link{fire_season}}, \code{\link{fwi}},
 #' \code{\link{fwiRaster}}, \code{\link{gfmc}}, \code{\link{hffmc}},
 #' \code{\link{hffmcRaster}}, \code{\link{lros}}, \code{\link{pros}},
-#' \code{\link{sdmc}}, \code{\link{wDC}}
+#' \code{\link{sdmc}},
+#' \code{\link{overwinter_drought_code}}
 #' @references 1. Van Wagner, C.E. and T.L. Pickett. 1985. Equations and
 #' FORTRAN program for the Canadian Forest Fire Weather Index System. Can. For.
 #' Serv., Ottawa, Ont. For. Tech. Rep. 33. 18 p.
@@ -85,14 +87,14 @@
 #' 5. Forestry Canada Fire Danger Group. 1992. Development and structure of the
 #' Canadian Forest Fire Behavior Prediction System. Forestry Canada, Ottawa,
 #' Ontario Information Report ST-X-3. 63 p.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf}
 #'
 #' 6. Wotton, B.M., Alexander, M.E., Taylor, S.W. 2009. Updates and revisions
 #' to the 1992 Canadian forest fire behavior prediction system. Nat. Resour.
 #' Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie, Ontario,
 #' Canada. Information Report GLC-X-10, 45p.
 #' \url{
-#' http://publications.gc.ca/collections/collection_2010/nrcan/
+#' https://publications.gc.ca/collections/collection_2010/nrcan/
 #' Fo123-2-10-2009-eng.pdf}
 #'
 #' 7. Tymstra, C., Bryce, R.W., Wotton, B.M., Armitage, O.B. 2009. Development
@@ -108,11 +110,12 @@
 #' # given a chronical two years daily fire weather observations from one
 #' # weather station.
 #' # In the example, we showed first how to decide fire season start and end
-#' # dates with fireSeason, we then made overwintering DC adjustment with wDC
-#' # for the second fire season, and eventually calculated the daily FWI System
-#' # variables over two fire seasons with fwi.  All these steps were packed up
-#' # into an example user's function, which could be modified by various user
-#' # groups. Note: the data used in this example is also the test data for wDC.
+#' # dates with fire_season, we then made overwintering DC adjustment with
+#' # overwinter_drought_code for the second fire season, and eventually
+#' # calculated the daily FWI System variables over two fire seasons with fwi.
+#' # All these steps were packed up into an example user's function, which could
+#' # be modified by various user groups. Note: the data used in this example is
+#' # also the test data for overwinter_drought_code.
 #' #
 #' # library(cffdrs)
 #'
@@ -128,7 +131,7 @@
 #'   ))
 #'
 #'   # use default fire season start and end temperature thresholds
-#'   fs <- fireSeason(input)
+#'   fs <- fire_season(input)
 #'   # Fire season dates, ordered chronologically
 #'   fs <- with(fs, fs[order(yr, mon, day), ])
 #'   # Create same Date format as weather dataset for comparison
@@ -158,7 +161,9 @@
 #'       curYr.owdata <- sum(input[(input$date > curYr.owd[1, "date"] &
 #'         input$date < curYr.owd[2, "date"]), ]$prec)
 #'       # calculate overwinter DC value
-#'       owDC <- wDC(DCf = tail(curYr.fwi$DC, n = 1), rw = curYr.owdata)
+#'       owDC <- overwinter_drought_code(
+#'         DCf = tail(curYr.fwi$DC, n = 1), rw = curYr.owdata
+#'       )
 #'       # Initialize moisture codes
 #'       curYr.init <- data.frame(ffmc = 80, dmc = 10, dc = owDC)
 #'     }
@@ -172,7 +177,7 @@
 #'         input$date <= curYr.fsd[2, "date"],
 #'     ]
 #'
-#'     # run fwi on fireseason data
+#'     # run fwi on fire_season data
 #'     curYr.fwi <- fwi(curYr.fsdata, init = curYr.init)
 #'     # force column names to be uppercase for consistency
 #'     names(curYr.fwi) <- toupper(names(curYr.fwi))
@@ -182,7 +187,8 @@
 #' }
 #'
 #' ## Usage of the custom function
-#' # Load the test dataset, which is also the test data for wDC:
+#' # Load the test dataset, which is also the test data for
+#' # overwinter_drought_code:
 #' data("test_wDC")
 #' # select 1 weather station
 #' localWX_1 <- test_wDC[test_wDC$id == 1, ]
@@ -211,7 +217,7 @@ NULL
 #' revisions to the 1992 Canadian forest fire behavior prediction system. Nat.
 #' Resour. Can., Can. For. Serv., Great Lakes For. Cent., Sault Ste. Marie,
 #' Ontario, Canada. Information Report GLC-X-10, 45p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/31414.pdf}
 #' @keywords datasets
 NULL
 
@@ -246,7 +252,7 @@ NULL
 #' @references 1. Van Wagner, CE. and T.L. Pickett. 1985. Equations and FORTRAN
 #' program for the Canadian Forest Fire Weather Index System. Can. For. Serv.,
 #' Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 #' @keywords datasets
 NULL
 
@@ -421,7 +427,7 @@ NULL
 #' @references 1. Van Wagner, CE. and T.L. Pickett. 1985. Equations and FORTRAN
 #' program for the Canadian Forest Fire Weather Index System. Can. For. Serv.,
 #' Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-#' @source \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+#' @source \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 #' @keywords datasets
 NULL
 

@@ -1,11 +1,12 @@
 #' Sheltered Duff Moisture Code
 #'
-#' @description \code{sdmc} is used to calculate sheltered DMC (sDMC, Wotton et
-#' al., 2005) based on daily noon weather observations of temperature, relative
-#' humidity, wind speed, 24-hour rainfall, and a previous day's calculated or
-#' estimated value of sDMC. This function calculates sDMC for either one weather
-#' station or for multiple weather stations over the duration of the daily
-#' weather data set, typically over a fire season.
+#' @description \code{sdmc} is used to calculate
+#' sheltered DMC (sDMC, Wotton et al., 2005) based on daily noon weather
+#' observations of temperature, relative humidity, wind speed, 24-hour rainfall,
+#' and a previous day's calculated or estimated value of sDMC. This function
+#' calculates sDMC for either one weather station or for multiple weather
+#' stations over the duration of the daily weather data set, typically over a
+#' fire season.
 #'
 #' The Duff Moisture Code (DMC) component of the Canadian Forest Fire Weather
 #' Index (FWI) System tracks moisture content of the forest floor away from the
@@ -48,8 +49,8 @@
 #' to label different stations, and the data needs to be sorted by date/time
 #' and "id".  If \code{batch=FALSE}, the function calculates only one time step
 #' base on either the previous day's SDMC or the initial start value.
-#' @return \code{sdmc} returns either a single value or a vector of SDMC
-#' values.
+#' @return \code{sdmc} returns either a single value or
+#'    a vector of SDMC values.
 #' @author Xianli Wang, Mike Wotton, Alan Cantin, and Mike Flannigan
 #' @seealso \code{\link{fwi}}
 #' @references Wotton, B.M., B.J. Stocks, and D.L. Martell. 2005. An index for
@@ -62,8 +63,7 @@
 #' data("test_sdmc")
 #' # order the data:
 #' test_sdmc <- test_sdmc[with(test_sdmc, order(yr, mon, day)), ]
-#' # (1)Default of sdmc, calculate sdmc for a chronical period
-#' # of time.
+#' # (1)Default of sdmc, calculate sdmc for a chronical period of time.
 #' # Because sdmc_old is better to be calculated, we normally
 #' # ignore this option:
 #' test_sdmc$SDMC <- sdmc(test_sdmc)
@@ -105,8 +105,8 @@ sdmc <- function(
   #
   #
   # Args:
-  #       input:  View Documentation (sdmc.Rd) for full description of input
-  #               data frame
+  #       input:  View Documentation (sdmc.Rd) for full
+  #               description of input data frame
   #    sdmc_old:  previous day's calculated sDMC value
   #       batch:  Function can be run in a batch mode, where multiple
   #               weather stations or points can be calculated at once.

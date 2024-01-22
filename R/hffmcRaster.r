@@ -83,7 +83,7 @@
 #' content throughout the diurnal cycle. Environment Canada, Canadian Forestry
 #' Service, Petawawa Forest Experiment Station, Chalk River, Ontario.
 #' Information Report PS-X-69.
-#' \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
+#' \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/25591.pdf}
 #' @keywords methods
 #' @examples
 #'
@@ -140,7 +140,7 @@ hffmcRaster <- function(
     ffmc_old = 85,
     time.step = 1,
     hourlyFWI = FALSE) {
-  if (class(weatherstream) != "SpatRaster") {
+  if (!is(weatherstream,"SpatRaster")) {
     weatherstream <- terra::rast(weatherstream)
   }
   names(weatherstream) <- tolower(names(weatherstream))
@@ -162,10 +162,12 @@ hffmcRaster <- function(
   if (!exists("H") | is.null(H)) {
     warning("relative humidity (rh) is missing!")
   }
+  if (!is(ffmc_old,"SpatRaster")) {
+    ffmc_old <- terra::setValues(weatherstream["temp"], ffmc_old)
+  }
   fo <- lapp(
-    x = c(Tp, H, W, ro),
-    fun = Vectorize(hffmcCalc),
-    Fo = ffmc_old,
+    x = c(Tp, H, W, ro, ffmc_old),
+    fun = Vectorize(hourly_fine_fuel_moisture_code),
     t0 = time.step
   )
   # Calculate hourly isi and fwi
@@ -173,9 +175,13 @@ hffmcRaster <- function(
     if ("bui" %in% names(weatherstream)) {
       bui <- weatherstream$bui
       # Calculate ISI
-      isi <- lapp(x = c(fo, W), fun = Vectorize(.ISIcalc), fbpMod = FALSE)
+      isi <- lapp(
+        x = c(fo, W),
+        fun = Vectorize(initial_spread_index),
+        fbpMod = FALSE
+      )
       # Calculate FWI
-      fwi <- lapp(x = c(isi, bui), fun = Vectorize(.fwiCalc))
+      fwi <- lapp(x = c(isi, bui), fun = Vectorize(fire_weather_index))
       # Calculate DSR
       dsr <- 0.0272 * (fwi^1.77)
       # Create Raster Stack for the ouput

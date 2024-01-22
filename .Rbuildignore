@@ -3,3 +3,6 @@
 ^.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.vscode$
+^revdep$
+^cran-comments\.md$

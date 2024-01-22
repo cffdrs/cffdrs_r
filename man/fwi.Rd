@@ -133,7 +133,7 @@ reasonably-scaled estimate of fire control difficulty.
 Both the Duff Moisture Code (dmc) and Drought Code (dc) are influenced by
 day length (see Van Wagner 1987). Day length adjustments for different
 ranges in latitude can be used (as described in Lawson and Armitage 2008
-(\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf})) and are included
+(\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf})) and are included
 in this R function; latitude must be positive in the northern hemisphere and
 negative in the southern hemisphere.
 
@@ -145,12 +145,12 @@ different parts of the world.
 }
 \examples{
 
-# library(cffdrs)
+library(cffdrs)
 # The test data is a standard test
 # dataset for FWI system (Van Wagner and Pickett 1985)
-# data("test_fwi")
+data("test_fwi")
 # Show the data, which is already sorted by time:
-# head(test_fwi)
+head(test_fwi)
 # long  lat	yr	mon	day	temp	rh	ws	prec
 # -100	40	1985	4	  13	17	  42	25	0
 # -100	40	1985	4	  14	20	  21	25	2.4
@@ -211,21 +211,21 @@ fwi(test_fwi, lat.adjust = FALSE)[1:3, ]
 1. Van Wagner, C.E. and T.L. Pickett. 1985. Equations and
 FORTRAN program for the Canadian Forest Fire Weather Index System. Can. For.
 Serv., Ottawa, Ont. For. Tech. Rep. 33. 18 p.
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 
 2. Van Wagner, C.E. 1987. Development and structure of the Canadian forest
 fire weather index system. Forest Technology Report 35. (Canadian Forestry
-Service: Ottawa). \url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
+Service: Ottawa). \url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf}
 
 3.  Lawson, B.D. and O.B. Armitage. 2008. Weather guide for the Canadian
 Forest Fire Danger Rating System. Nat. Resour. Can., Can. For. Serv., North.
 For. Cent., Edmonton, AB.
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/29152.pdf}
 }
 \seealso{
 \code{\link{fbp}}, \code{\link{fwiRaster}}, \code{\link{gfmc}},
 \code{\link{hffmc}}, \code{\link{hffmcRaster}}, \code{\link{sdmc}},
-\code{\link{wDC}}, \code{\link{fireSeason}}
+\code{\link{overwinter_drought_code}}, \code{\link{fire_season}}
 }
 \author{
 Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry

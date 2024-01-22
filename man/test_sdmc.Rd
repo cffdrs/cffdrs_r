@@ -9,7 +9,7 @@ A data frame containing 10 columns and 49 rows, including 1 header
 line
 }
 \source{
-\url{http://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
+\url{https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19973.pdf}
 }
 \description{
 This data set is the sample input data that was used in original FWI program
