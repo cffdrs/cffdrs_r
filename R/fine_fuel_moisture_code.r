@@ -80,7 +80,7 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   return(ffmc1)
 }
 
-ffmcCalc <- function(...) {
+.ffmcCalc <- function(...) {
   .Deprecated("fine_fuel_moisture_code")
   return(fine_fuel_moisture_code(...))
 }

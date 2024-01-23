@@ -206,8 +206,3 @@ hourly_fine_fuel_moisture_code <- function(temp, rh, ws, prec, Fo, t0) {
   Fo <- ifelse(Fo <= 0, 0, Fo)
   return(Fo)
 }
-
-hffmcCalc <- function(...) {
-  .Deprecated("hourly_fine_fuel_moisture_code")
-  return(hourly_fine_fuel_moisture_code(...))
-}

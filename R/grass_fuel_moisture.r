@@ -59,8 +59,3 @@ grass_fuel_moisture <- function(
   )
   return(MC0)
 }
-
-mcCalc <- function(...) {
-  .Deprecated("grass_fuel_moisture")
-  return(grass_fuel_moisture(...))
-}

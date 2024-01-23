@@ -15,8 +15,3 @@ grass_fuel_moisture_code <- function(MC0) {
   GFMC0 <- 59.5 * ((250 - MC0) / (147.27723 + MC0))
   return(GFMC0)
 }
-
-gfmcCalc <- function(...) {
-  .Deprecated("gfmcCalc")
-  return(grass_fuel_moisture_code(...))
-}

@@ -62,3 +62,8 @@ drought_code <- function(
   dc1 <- ifelse(dc1 < 0, 0, dc1)
   return(dc1)
 }
+
+.dcCalc <- function(...) {
+  .Deprecated("drought_code")
+  return(drought_code(...))
+}
