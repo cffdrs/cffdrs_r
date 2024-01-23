@@ -30,10 +30,9 @@
 #' @param CC        Constant
 #' @param CBH       Crown Base Height (m)
 #' @param ISI       Initial Spread Index
-#' @param output    Type of variable to output (RAZ/WSV, default=RAZ)
 #'
-#' @returns  RAZ or WSV
-#'    - Rate of spread azimuth (degrees) or Wind Slope speed (km/hr)
+#' @returns  RAZ and WSV
+#'    - Rate of spread azimuth (degrees) and Wind Slope speed (km/hr)
 #'
 #' @noRd
 #'
@@ -331,6 +330,7 @@ slope_adjustment <- function(
 .Slopecalc <- function(
     FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI,
     output = "RAZ") {
+  .Deprecated("slope_adjustment")
   # output options include: RAZ and WSV
 
   # check for valid output types
