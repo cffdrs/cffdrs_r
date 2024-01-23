@@ -1,6 +1,6 @@
 [![rcmdcheck](https://github.com/cffdrs/cffdrs_r/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/cffdrs/cffdrs_r/actions/workflows/check-standard.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/cffdrs)](https://cran.r-project.org/package=cffdrs)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cffdrs)](http://www.r-pkg.org/pkg/cffdrs)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/cffdrs)](https://www.r-pkg.org/pkg/cffdrs)
 [![r-downloads](https://flat.badgen.net/cran/v/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
 [![r-version](https://flat.badgen.net/cran/r/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
 [![r-dls](https://flat.badgen.net/cran/dt/cffdrs)](https://CRAN.R-project.org/package=cffdrs)
