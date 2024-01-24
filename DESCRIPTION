@@ -4,16 +4,15 @@ Title: Canadian Forest Fire Danger Rating System
 Version: 1.9.0
 Date: 2024-01-19
 Authors@R: c(
-    person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role = c("cre", "aut")),
+    person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role =  "aut"),
     person("Alan", "Cantin", email = "Alan.Cantin@nrcan-rncan.gc.ca", role = "aut"),
     person("Marc-André", "Parisien", email = "Marc-Andre.Parisien@nrcan-rncan.gc.ca", role = "aut"),
     person("Mike", "Wotton", email = "Mike.Wotton@nrcan-rncan.gc.ca", role = "aut"),
     person("Kerry", "Anderson", role = "aut"),
-    person("Brett", "Moore", email = "Brett.Moore@nrcan-rncan.gc.ca", role = "aut"),
+    person("Brett", "Moore", email = "Brett.Moore@nrcan-rncan.gc.ca", role = c("cre","aut")),
     person("Tom", "Schiks", email = "Tom.Schiks@ontario.ca", role = "aut"),
     person("Mike", "Flannigan", email = "MFlannigan@tru.ca", role = "aut")
   )
-Maintainer: Brett Moore <Brett.Moore@nrcan-rncan.gc.ca>
 Description: This project provides a group of new functions to calculate
     the outputs of the two main components of the Canadian Forest Fire
     Danger Rating System (CFFDRS) Van Wagner and Pickett (1985)
