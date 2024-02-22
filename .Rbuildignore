@@ -1,2 +1,9 @@
+^LICENSE\.md$
+^README\.Rmd$
+^.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.vscode$
+^revdep$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

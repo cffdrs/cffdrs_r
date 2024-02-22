@@ -1,4 +1,11 @@
 .Rproj.user
 .Rhistory
-.RData
-.Ruserdata
+.Rdata
+.httr-oauth
+.DS_Store
+.Rproj
+.Rd2pdf
+.vscode
+dev/*
+revdep/
+CRAN-SUBMISSION
