@@ -19,4 +19,6 @@ You are able to install directly from the remote.
 
 ```
 remotes::install_github("cffdrs/cffdrs_r")
+## For Dev version
+## remotes::install_github("cffdrs/cffdrs_r", ref="dev")
 ```
