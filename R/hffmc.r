@@ -259,7 +259,7 @@ hffmc <- function(
       # Calculate FWI
       fwi <- fire_weather_index(isi, bui)
       # Calculate DSR
-      dsr <- 0.0272 * (fwi^1.77)
+      dsr <- daily_severity_rating(fwi)
       # Put all data into a data.frame to return
       output <- cbind(
         input,

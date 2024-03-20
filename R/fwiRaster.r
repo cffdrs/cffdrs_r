@@ -304,7 +304,7 @@ fwiRaster <- function(
   #                   Daily Severity Rating (DSR)
   ###########################################################################
   # Eq. 31
-  dsr <- 0.0272 * (fwi^1.77)
+  dsr <- daily_severity_rating(fwi)
   if (!had_latitude) {
     input <- input[[setdiff(names(input), c("lat"))]]
   }

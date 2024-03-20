@@ -449,7 +449,7 @@ fwi <- function(
     #                   Daily Severity Rating (DSR)
     ###########################################################################
     # Eq. 31
-    dsr1 <- 0.0272 * (fwi1^1.77)
+    dsr1 <- daily_severity_rating(fwi1)
 
     # Concatenate values
     ffmc <- c(ffmc, ffmc1)

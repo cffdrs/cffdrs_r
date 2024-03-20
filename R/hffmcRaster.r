@@ -183,7 +183,7 @@ hffmcRaster <- function(
       # Calculate FWI
       fwi <- lapp(x = c(isi, bui), fun = Vectorize(fire_weather_index))
       # Calculate DSR
-      dsr <- 0.0272 * (fwi^1.77)
+      dsr <- daily_severity_rating(fwi)
       # Create Raster Stack for the ouput
       output <- c(fo, isi, fwi, dsr)
       names(output) <- c("hffmc", "hisi", "hfwi", "hdsr")
