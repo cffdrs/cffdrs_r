@@ -31,11 +31,15 @@ initial_spread_index <- function(
   # Eq. 24 - Wind Effect
   # the ifelse, also takes care of the ISI modification for the fbp functions
   # This modification is Equation 53a in FCFDG (1992)
-  fW <- ifelse(
-    ws >= 40 & fbpMod == TRUE,
-    12 * (1 - exp(-0.0818 * (ws - 28))),
-    exp(0.05039 * ws)
-  )
+  if(fbpMod){
+    fW <- rep(NA_real_, length(ws))
+    fW.sel <- ws >= 40
+    fW[fW.sel] <- 12 * (1 - exp(-0.0818 * (ws[fW.sel] - 28)))
+    fW[!fW.sel] <- exp(0.05039 * ws[!fW.sel])
+    fW[is.na(fW.sel)] <- NA
+  }else{
+    fW <- exp(0.05039 * ws)
+  }
   # Eq. 25 - Fine Fuel Moisture
   fF <- 91.9 * exp(-0.1386 * fm) * (1 + (fm^5.31) / 49300000)
   # Eq. 26 - Spread Index Equation

@@ -47,62 +47,48 @@ duff_moisture_code <- function(
   ell04 <- c(11.5, 10.5, 9.2, 7.9, 6.8, 6.2, 6.5, 7.4, 8.7, 10, 11.2, 11.8)
   # For latitude near the equator, we simple use a factor of 9 for all months
   # constrain low end of temperature
-  temp <- ifelse(temp < (-1.1), -1.1, temp)
+  temp[temp < (-1.1)] <- -1.1
   # Eq. 16 - The log drying rate
   rk <- 1.894 * (temp + 1.1) * (100 - rh) * ell01[mon] * 1e-04
   # Adjust the day length and thus the drying r, based on latitude and month
   if (lat.adjust) {
-    rk <- ifelse(
-      lat <= 30 & lat > 10,
-      1.894 * (temp + 1.1) * (100 - rh) * ell02[mon] * 1e-04,
-      rk
-    )
-    rk <- ifelse(
-      lat <= -10 & lat > -30,
-      1.894 * (temp + 1.1) * (100 - rh) * ell03[mon] * 1e-04,
-      rk
-    )
-    rk <- ifelse(
-      lat <= -30 & lat >= -90,
-      1.894 * (temp + 1.1) * (100 - rh) * ell04[mon] * 1e-04,
-      rk
-    )
-    rk <- ifelse(
-      lat <= 10 & lat > -10,
-      1.894 * (temp + 1.1) * (100 - rh) * 9 * 1e-04,
-      rk
-    )
+    lat.sel <- lat <= 30 & lat > 10
+    if(any(lat.sel))rk[lat.sel] <- 1.894 * (temp[lat.sel] + 1.1) * (100 - rh[lat.sel]) * ell02[mon] * 1e-04
+    lat.sel <- lat <= -10 & lat > -30
+    if(any(lat.sel))rk[lat.sel] <- 1.894 * (temp[lat.sel] + 1.1) * (100 - rh[lat.sel]) * ell03[mon] * 1e-04
+    lat.sel <- lat <= -30 & lat >= -90
+    if(any(lat.sel))rk[lat.sel] <- 1.894 * (temp[lat.sel] + 1.1) * (100 - rh[lat.sel]) * ell04[mon] * 1e-04
+    lat.sel <- lat <= 10 & lat > -10
+    if(any(lat.sel))rk[lat.sel] <- 1.894 * (temp[lat.sel] + 1.1) * (100 - rh[lat.sel]) * 9 * 1e-04
   }
   # Constrain P
-  pr <- ifelse(
-    prec <= 1.5,
-    dmc_yda,
-    {
-      ra <- prec
-      # Eq. 11 - Net rain amount
-      rw <- 0.92 * ra - 1.27
-      # Alteration to Eq. 12 to calculate more accurately
-      wmi <- 20 + 280 / exp(0.023 * dmc_yda)
-      # Eqs. 13a, 13b, 13c
-      b <- ifelse(
-        dmc_yda <= 33,
-        100 / (0.5 + 0.3 * dmc_yda),
-        ifelse(
-          dmc_yda <= 65,
-          14 - 1.3 * log(dmc_yda),
-          6.2 * log(dmc_yda) - 17.2
-        )
-      )
-      # Eq. 14 - Moisture content after rain
-      wmr <- wmi + 1000 * rw / (48.77 + b * rw)
-      # Alteration to Eq. 15 to calculate more accurately
-      43.43 * (5.6348 - log(wmr - 20))
-    }
-  )
-  pr <- ifelse(pr < 0, 0, pr)
+  # if leq 1.5
+  pr <- prec
+  prec.sel <- prec <= 1.5
+  if(any(prec.sel))pr[prec.sel] <- dmc_yda[prec.sel]
+  # else
+  if(any(!prec.sel)){
+    b <- dmc_yda[!prec.sel]
+    dmc_yda.sel <- dmc_yda[!prec.sel]
+    b[dmc_yda.sel <= 33] <- 100 / (0.5 + 0.3 * dmc_yda.sel[dmc_yda.sel <= 33])
+    b[dmc_yda.sel > 33 & dmc_yda.sel <= 65] <- 14 - 1.3 * log(dmc_yda.sel[dmc_yda.sel > 33 & dmc_yda.sel <= 65])
+    b[dmc_yda.sel > 65] <- 6.2 * log(dmc_yda.sel[dmc_yda.sel > 65]) - 17.2
+    
+    ra <- prec[!prec.sel]
+    # Eq. 11 - Net rain amount
+    rw <- 0.92 * ra - 1.27
+    # Alteration to Eq. 12 to calculate more accurately
+    wmi <- 20 + 280 / exp(0.023 * dmc_yda.sel)
+    # Eqs. 13a, 13b, 13c
+    # Eq. 14 - Moisture content after rain
+    wmr <- wmi + 1000 * rw / (48.77 + b * rw)
+    # Alteration to Eq. 15 to calculate more accurately
+    pr[!prec.sel] <- 43.43 * (5.6348 - log(wmr - 20))
+  }
+  pr[pr < 0] <- 0
   # Calculate final P (DMC)
   dmc1 <- pr + rk
-  dmc1 <- ifelse(dmc1 < 0, 0, dmc1)
+  dmc1[dmc1 < 0] <- 0
   return(dmc1)
 }
 
