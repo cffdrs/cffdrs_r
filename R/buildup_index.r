@@ -25,8 +25,8 @@ buildup_index <- function(dmc, dc) {
   bui1 <- 0.8 * dc * dmc / (dmc + 0.4 * dc)
   bui1[dmc == 0 & dc == 0] <- 0
   # Eq. 27b - next 3 lines
-  p <- (dmc - bui1) / dmc
-  p[dmc == 0] <- 0
+  p <- rep(0, length(dmc))
+  p[dmc != 0] <- (dmc[dmc != 0] - bui1[dmc != 0]) / dmc[dmc != 0]
   cc <- 0.92 + ((0.0114 * dmc)^1.7)
   bui0 <- dmc - cc * p
   # Constraints
