@@ -33,7 +33,7 @@ initial_spread_index <- function(
   # This modification is Equation 53a in FCFDG (1992)
   if(fbpMod){
     fW <- rep(NA_real_, length(ws))
-    fW.sel <- ws >= 40
+    fW.sel <- ws >= 40 & !is.na(ws)
     fW[fW.sel] <- 12 * (1 - exp(-0.0818 * (ws[fW.sel] - 28)))
     fW[!fW.sel] <- exp(0.05039 * ws[!fW.sel])
     fW[is.na(fW.sel)] <- NA
