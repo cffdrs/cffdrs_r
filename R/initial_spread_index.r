@@ -27,7 +27,7 @@ initial_spread_index <- function(
     ws,
     fbpMod = FALSE) {
   # Eq. 10 - Moisture content
-  fm <- 147.27723 * (101 - ffmc) / (59.5 + ffmc)
+  fm <- FFMC_COEFFICIENT * (101 - ffmc) / (59.5 + ffmc)
   # Eq. 24 - Wind Effect
   # the ifelse, also takes care of the ISI modification for the fbp functions
   # This modification is Equation 53a in FCFDG (1992)

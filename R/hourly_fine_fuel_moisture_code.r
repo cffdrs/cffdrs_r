@@ -165,7 +165,7 @@
 
 hourly_fine_fuel_moisture_code <- function(temp, rh, ws, prec, Fo, t0) {
   # Eq. 1 (with a more precise multiplier than the daily)
-  mo <- 147.27723 * (101 - Fo) / (59.5 + Fo)
+  mo <- FFMC_COEFFICIENT * (101 - Fo) / (59.5 + Fo)
   rf <- prec
   # Eqs. 3a & 3b (Van Wagner & Pickett 1985)
   mr <- ifelse(
@@ -201,8 +201,8 @@ hourly_fine_fuel_moisture_code <- function(temp, rh, ws, prec, Fo, t0) {
   # Constraints
   m <- ifelse(mo > Ed, md, mw)
   m <- ifelse(Ed >= mo & mo >= Ew, mo, m)
-  # Eq. 6 - Final hffmc calculation (modified 3rd constant to 147.27723)
-  Fo <- 59.5 * (250 - m) / (147.27723 + m)
+  # Eq. 6 - Final hffmc calculation
+  Fo <- 59.5 * (250 - m) / (FFMC_COEFFICIENT + m)
   Fo <- ifelse(Fo <= 0, 0, Fo)
   return(Fo)
 }
