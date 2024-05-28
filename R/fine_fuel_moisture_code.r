@@ -1,3 +1,6 @@
+# used in conversion between FFMC and moisture content
+FFMC_COEFFICIENT <- 250.0 * 59.5 / 101.0
+
 #' Fine Fuel Moisture Code Calculation
 #'
 #' @description Fine Fuel Moisture Code Calculation. All code is based on a C
@@ -26,7 +29,7 @@
 
 fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   # Eq. 1
-  wmo <- 147.27723 * (101 - ffmc_yda) / (59.5 + ffmc_yda)
+  wmo <- FFMC_COEFFICIENT * (101 - ffmc_yda) / (59.5 + ffmc_yda)
   # Eq. 2 Rain reduction to allow for loss in
   #  overhead canopy
   ra <- ifelse(prec > 0.5, prec - 0.5, prec)
@@ -73,7 +76,7 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   # Eq. 9
   wm <- ifelse(wmo > ed, ed + (wmo - ed) / (10^x), wm)
   # Eq. 10 Final ffmc calculation
-  ffmc1 <- (59.5 * (250 - wm)) / (147.27723 + wm)
+  ffmc1 <- (59.5 * (250 - wm)) / (FFMC_COEFFICIENT + wm)
   # Constraints
   ffmc1 <- ifelse(ffmc1 > 101, 101, ffmc1)
   ffmc1 <- ifelse(ffmc1 < 0, 0, ffmc1)
