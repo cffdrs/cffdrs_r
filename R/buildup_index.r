@@ -22,14 +22,17 @@
 
 buildup_index <- function(dmc, dc) {
   # Eq. 27a
-  bui1 <- ifelse(dmc == 0 & dc == 0, 0, 0.8 * dc * dmc / (dmc + 0.4 * dc))
+  bui1 <- 0.8 * dc * dmc / (dmc + 0.4 * dc)
+  bui1[dmc == 0 & dc == 0] <- 0
   # Eq. 27b - next 3 lines
-  p <- ifelse(dmc == 0, 0, (dmc - bui1) / dmc)
+  p <- rep(0, length(dmc))
+  p[dmc != 0] <- (dmc[dmc != 0] - bui1[dmc != 0]) / dmc[dmc != 0]
   cc <- 0.92 + ((0.0114 * dmc)^1.7)
   bui0 <- dmc - cc * p
   # Constraints
-  bui0 <- ifelse(bui0 < 0, 0, bui0)
-  bui1 <- ifelse(bui1 < dmc, bui0, bui1)
+  bui0[bui0 < 0] <- 0
+  bui1[bui1 < dmc] <- bui0[bui1 < dmc]
+  bui1[bui1 >= dmc] <- bui1[bui1 >= dmc]
   return(bui1)
 }
 

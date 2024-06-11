@@ -76,11 +76,8 @@ test_that("fwi_10", {
 test_that("fwi_11", {
   fct_test_fwi("fwi_11",
            function(test_fwi) {
-             expect_warning({
-               expect_warning(
+             expect_warning(
                  {actual <- fwi(test_fwi, batch = FALSE)},
-                 "*NaNs produced*")
-               },
                "Same initial data were used for multiple weather stations")
            return(actual)
            })

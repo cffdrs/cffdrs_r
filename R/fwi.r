@@ -403,13 +403,13 @@ fwi <- function(
   # Length of weather run
   n0 <- length(temp) / n
   # Initialize variables
-  ffmc <- dmc <- dc <- isi <- bui <- fwi <- dsr <- NULL
+  ffmc <- dmc <- dc <- isi <- bui <- fwi <- dsr <- rep(NA_real_, length(temp))
   # For each day in the run
   for (i in 1:n0) {
     # k is the data for all stations by day
     k <- ((i - 1) * n + 1):(i * n)
     # constrain relative humidity
-    rh[k] <- ifelse(rh[k] >= 100, 99.9999, rh[k])
+    if(any(rh[k] >= 100))rh[k][rh[k] >= 100] <- 99.9999
     ###########################################################################
     # Fine Fuel Moisture Code (FFMC)
     ###########################################################################
@@ -452,13 +452,13 @@ fwi <- function(
     dsr1 <- 0.0272 * (fwi1^1.77)
 
     # Concatenate values
-    ffmc <- c(ffmc, ffmc1)
-    dmc <- c(dmc, dmc1)
-    dc <- c(dc, dc1)
-    isi <- c(isi, isi1)
-    bui <- c(bui, bui1)
-    fwi <- c(fwi, fwi1)
-    dsr <- c(dsr, dsr1)
+    ffmc[k] <- ffmc1
+    dmc[k] <- dmc1
+    dc[k] <- dc1
+    isi[k] <- isi1
+    bui[k] <- bui1
+    fwi[k] <- fwi1
+    dsr[k] <- dsr1
     ffmc_yda <- ffmc1
     dmc_yda <- dmc1
     dc_yda <- dc1
