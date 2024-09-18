@@ -272,12 +272,15 @@ fire_behaviour_prediction <- function(
   }
   CBH <- crown_base_height(FUELTYPE, CBH, SD, SH)
   CFL <- crown_fuel_load(FUELTYPE, CFL)
+  D0 <- ifelse(D0 <= 0, foliar_moisture_content_minimum(LAT, LONG, ELV, DJ, D0), D0)
   FMC <- ifelse(
     FMC <= 0 | FMC > 120 | is.na(FMC),
     foliar_moisture_content(LAT, LONG, ELV, DJ, D0),
     FMC
   )
+
   FMC <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, FMC)
+
   ############################################################################
   #                         END
   ############################################################################
