@@ -43,7 +43,7 @@ fire_behaviour_prediction <- function(
   # set local scope variables from the parameters for simpler to referencing
   names(input) <- toupper(names(input))
   ID <- input$ID
-  FUELTYPE <- toupper(input$FUELTYPE)
+  FUELTYPE <- if(is.null(input$FUELTYPE))stop("FuelType does not exist in input, it is necessary for FBP calculation") else (toupper(input$FUELTYPE))
   FFMC <- input$FFMC
   BUI <- input$BUI
   WS <- input$WS
