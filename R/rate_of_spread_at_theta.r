@@ -19,7 +19,17 @@
 #'
 #' @noRd
 
-rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA, DEGREES = TRUE) {
+# want this to work on columns but ifelse() results in only one warning instead of one per error
+rate_of_spread_at_theta <- Vectorize(function(ROS, FROS, BROS, THETA, DEGREES = TRUE) {
+  # none of this makes sense if ROS isn't the maximum value and located at (0 == THETA)
+  if (!((ROS >= FROS) && (ROS >= BROS))) {
+    warning(sprintf("ROS (%f) must be >= than FROS (%f) and BROS (%f)", ROS, FROS, BROS))
+    return(NA)
+  }
+  if (ROS == FROS && ROS == BROS) {
+    # spread is the same in every direction (since this is a circle) or there is no spread
+    return(ROS)
+  }
   if (DEGREES) {
     THETA <- (THETA %% 360) * pi / 180
   }
@@ -39,7 +49,8 @@ rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA, DEGREES = TRUE) {
       ))
   )
   return(ROStheta)
-}
+})
+
 
 .ROSthetacalc <- function(...) {
   .Deprecated("rate_of_spread_at_theta")
