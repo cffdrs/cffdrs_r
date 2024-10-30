@@ -25,13 +25,14 @@ rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA) {
   # Eq. 94 - Calculate the Rate of Spread at point THETA
   # large equation, view the paper to see a better representation
   ROStheta <- (
-    ((ROS - BROS) / (2 * c1) + (ROS + BROS) / (2 * c1))
+    ((ROS - BROS) / (2 * c1))
+    + (((ROS + BROS) / (2 * c1))
     * (
         (FROS * c1 * sqrt(FROS * FROS * c1 * c1 + (ROS * BROS) * s1 * s1)
           - ((ROS * ROS - BROS * BROS) / 4) * s1 * s1)
         / (FROS * FROS * c1 * c1
             + ((ROS + BROS) / 2) * ((ROS + BROS) / 2) * s1 * s1)
-      )
+      ))
   )
   return(ROStheta)
 }
