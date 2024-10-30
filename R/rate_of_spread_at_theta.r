@@ -12,13 +12,17 @@
 #' @param ROS      Rate of Spread (m/min)
 #' @param FROS     Flank Fire Rate of Spread (m/min)
 #' @param BROS     Back Fire Rate of Spread (m/min)
-#' @param THETA
+#' @param THETA    Angle to calculate Rate of Spread for
+#' @param DEGREES  Whether THETA is is degrees (default = TRUE) - radians if FALSE
 #'
 #' @returns ROSTHETA - Rate of spread at point theta(m/min)
 #'
 #' @noRd
 
-rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA) {
+rate_of_spread_at_theta <- function(ROS, FROS, BROS, THETA, DEGREES = TRUE) {
+  if (DEGREES) {
+    THETA <- (THETA %% 360) * pi / 180
+  }
   c1 <- cos(THETA)
   s1 <- sin(THETA)
   c1 <- ifelse(c1 == 0, cos(THETA + .001), c1)
