@@ -91,6 +91,41 @@ FBP_ARGS <- list(
   data.table(ISI = ISI)
 )
 
+ROS_AT_THETA_INPUT = (function() {
+  # HACK: specific input generation to not make so many invalid arguments
+  # HACK: not using random numbers anywhere else and sample() is easier
+  set.seed(123)
+  input <- NULL
+  sq <- floor(sqrt(DESIRED_ROWS))
+  ros <- c(0, sort(unique(abs(round(rnorm(sq, 5, 20), 2)))))
+  for (i in length(ros):1) {
+    ros_cur <- ros[i]
+    other_ros <- sort(unique(round(runif(sq, 0, ros_cur), 2)))
+    input <- data.table(
+      rbind(input,
+            merge(data.frame(ROS=ros_cur, FROS=other_ros),
+                  data.frame(BROS=other_ros),
+                  by=NULL),
+            # make some (usually) invalid results too
+            data.frame(ROS=sample(other_ros, 1), FROS=ros_cur, BROS=sample(other_ros, 1)),
+            data.frame(ROS=sample(other_ros, 1), FROS=sample(other_ros, 1), BROS=ros_cur)
+      )
+    )
+  }
+  if (nrow(input) > DESIRED_ROWS) {
+    # can't sample directly from table so pick rows
+    input <- input[sample(1:nrow(input), DESIRED_ROWS)]
+  }
+  # add rows we always want to check
+  input <- rbind(
+    input,
+    data.frame(ROS=ros, FROS=ros, BROS=ros))
+  input <- cbind(
+    input,
+    data.frame(THETA=sample(-361:361, nrow(input), replace=TRUE)))
+  input <- setorder(unique(input), ROS, FROS, BROS)
+})()
+
 get_data_path <- function(name, suffix="csv") {
   return(test_path("data", sprintf("%s.%s", name, suffix)))
 }
