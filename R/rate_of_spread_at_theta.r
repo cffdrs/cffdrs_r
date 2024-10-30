@@ -23,12 +23,20 @@
 rate_of_spread_at_theta <- Vectorize(function(ROS, FROS, BROS, THETA, DEGREES = TRUE) {
   # none of this makes sense if ROS isn't the maximum value and located at (0 == THETA)
   if (!((ROS >= FROS) && (ROS >= BROS))) {
-    warning(sprintf("ROS (%f) must be >= than FROS (%f) and BROS (%f)", ROS, FROS, BROS))
+    warning(sprintf("ROS must be >= FROS and BROS (%f vs (%f, %f))", ROS, FROS, BROS))
     return(NA)
   }
   if (ROS == FROS && ROS == BROS) {
     # spread is the same in every direction (since this is a circle) or there is no spread
     return(ROS)
+  }
+  if (0 >= FROS) {
+    warning("FROS must be > 0")
+    return(NA)
+  }
+  if (0 > BROS) {
+    warning("BROS cannot be negative")
+    return(NA)
   }
   if (DEGREES) {
     THETA <- (THETA %% 360) * pi / 180
