@@ -30,12 +30,12 @@ rate_of_spread_at_theta <- Vectorize(function(ROS, FROS, BROS, THETA, DEGREES = 
     # spread is the same in every direction (since this is a circle) or there is no spread
     return(ROS)
   }
-  if (0 >= FROS) {
-    warning("FROS must be > 0")
-    return(NA)
-  }
   if (0 > BROS) {
     warning("BROS cannot be negative")
+    return(NA)
+  }
+  if (0 >= FROS) {
+    warning("FROS must be > 0")
     return(NA)
   }
   if (DEGREES) {
