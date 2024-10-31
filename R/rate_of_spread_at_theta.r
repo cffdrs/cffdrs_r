@@ -43,7 +43,8 @@ rate_of_spread_at_theta <- Vectorize(function(ROS, FROS, BROS, THETA, DEGREES = 
   }
   c1 <- cos(THETA)
   s1 <- sin(THETA)
-  c1 <- ifelse(c1 == 0, cos(THETA + .001), c1)
+  # compare within tolerance because (c1 == 0) is unlikely with rounding error
+  c1 <- ifelse(abs(c1) < 0.0001, cos(THETA + 0.0001), c1)
   # Eq. 94 - Calculate the Rate of Spread at point THETA
   # large equation, view the paper to see a better representation
   ROStheta <- (
