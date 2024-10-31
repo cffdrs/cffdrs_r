@@ -10,10 +10,10 @@ test_that("RateOfSpreadAtTheta", {
                        expect_warning(
                          expect_warning(
                            { data <- makeDataFromInput(name, fct, ROS_AT_THETA_INPUT, split_args=TRUE, with_input=FALSE) },
-                           "ROS must be >= FROS and BROS"),
-                         "FROS must be > 0"),
-                       "FROS must be > 0"),
-                     "FROS must be > 0")
+                           "Expected ROS >= max\\(FROS, BROS\\)"),
+                         "Expected FROS > 0"),
+                       "Expected FROS > 0"),
+                     "Expected FROS > 0")
                    )
                  data
                }
