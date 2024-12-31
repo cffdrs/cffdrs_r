@@ -4,7 +4,8 @@
 #' All variables names are laid out in the same manner as Forestry Canada
 #' Fire Danger Group (FCFDG) (1992). Development and Structure of the
 #' Canadian Forest Fire Behavior Prediction System." Technical Report
-#' ST-X-3, Forestry Canada, Ottawa, Ontario.
+#' ST-X-3, Forestry Canada, Ottawa, Ontario. This function returns the date of 
+#' minimum foliar moisture content.
 #'
 #' @param LAT    Latitude (decimal degrees)
 #' @param LONG   Longitude (decimal degrees)
