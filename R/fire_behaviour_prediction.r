@@ -220,7 +220,11 @@ fire_behaviour_prediction <- function(
   LAT <- ifelse(LAT < -90 | LAT > 90, 0, LAT)
   LAT <- ifelse(is.na(LAT), 55, LAT)
   LONG <- ifelse(LONG < -180 | LONG > 360, 0, LONG)
+  LONG <- ifelse(LONG > 180, LONG - 180, LONG)
   LONG <- ifelse(is.na(LONG), -120, LONG)
+  # Any negative longitudes (western hemisphere) are translated to positive
+  #  longitudes
+  LONG <- ifelse(LONG < 0, -LONG, LONG)
   THETA <- ifelse(is.na(THETA) | THETA < -2 * pi | THETA > 2 * pi, 0, THETA)
   SD <- ifelse(SD < 0 | SD > 1e+05, -999, SD)
   SD <- ifelse(is.na(SD), 0, SD)
@@ -247,9 +251,7 @@ fire_behaviour_prediction <- function(
   WAZ <- ifelse(WAZ > 2 * pi, WAZ - 2 * pi, WAZ)
   SAZ <- ASPECT + pi
   SAZ <- ifelse(SAZ > 2 * pi, SAZ - 2 * pi, SAZ)
-  # Any negative longitudes (western hemisphere) are translated to positive
-  #  longitudes
-  LONG <- ifelse(LONG < 0, -LONG, LONG)
+
   ############################################################################
   #                         END
   ############################################################################
