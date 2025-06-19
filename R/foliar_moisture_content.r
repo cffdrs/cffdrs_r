@@ -12,7 +12,7 @@
 #' @param DJ     Day of year (julian date)
 #' @param D0     Date of minimum foliar moisture content. _If D0, date of min
 #'                   FMC, is not known then D0 = NULL._
-#' @param FMCo Foliar Moisture Content Override - For use when outside of North 
+#' @param FMCo Foliar Moisture Content Override - For use when outside of North
 #'                America
 #'
 #' @return FMC: Foliar Moisture Content value
@@ -20,7 +20,7 @@
 
 foliar_moisture_content <- function(LAT, LONG, ELV, DJ, D0,FMCo=NULL) {
 
-  if(!is.null(FMCo) & LAT < 0){FMC <- FMCo;
+  if(!is.null(FMCo) | is.na(FMCo) & LAT < 0){FMC <- FMCo;
                      message("FMC Override provided, returning as FMC.");
                      return(FMC)
             }
