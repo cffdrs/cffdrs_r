@@ -1,8 +1,12 @@
 test_that("FoliarMoistureContent", {
   checkData('FoliarMoistureContent',
-            foliar_moisture_content,
-            list(data.table(LAT=LAT),
-                 data.table(LONG=LONG),
-                 data.table(ELV=ELV),
-                 data.table(DJ=DJ),
-                 data.table(D0=D0)))})
+              suppressWarnings(
+                expect_message({
+                  expect_warning(
+                    foliar_moisture_content,
+                    "FMC Override provided, returning as FMC.")},
+                  "Location outside of North America. Please define an FMC override in the FMCo variable."),
+                ),
+            FMC_ARGS)
+  }
+  )

@@ -27,6 +27,7 @@ ELV <- seq(0, 10000)
 FC <- seq(-10, 20000)
 FFMC <- seq(0, 101, by = 0.1)
 FMC <- seq(0, 500, by = 0.1)
+FMCo <- c(NA_integer_,120) # Testing the error capture in the foliar moisture content
 FRACTION <- seq(0, 1, by = 0.05)
 FUELTYPE <- c(
   "NF", "WA", "C1", "C2", "C3", "C4", "C5", "C6", "C7",
@@ -90,6 +91,14 @@ FBP_ARGS <- list(
   data.table(CFL = CFL),
   data.table(ISI = ISI)
 )
+
+FMC_ARGS <- list(data.table(LAT=c(LAT[LAT <7][1],LAT[LAT >= 7])),
+       data.table(LONG=LONG[LONG > 52 & LONG <140]),
+       data.table(ELV=ELV),
+       data.table(DJ=DJ),
+       data.table(D0=D0),
+       data.table(FMCo=FMCo))
+
 
 get_data_path <- function(name, suffix="csv") {
   return(test_path("data", sprintf("%s.%s", name, suffix)))
