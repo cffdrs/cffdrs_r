@@ -58,7 +58,7 @@
 #'
 #' @name cffdrs-package
 #' @aliases cffdrs-package cffdrs
-#' @docType package
+#' @docType _PACKAGE
 #' @author Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
 #' Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 #'
