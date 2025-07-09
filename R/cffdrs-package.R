@@ -33,7 +33,7 @@
 #' major vegetation types in Canada.
 #'
 #' \tabular{ll}{ Package: \tab cffdrs\cr Type: \tab Package\cr Version: \tab
-#' 1.8.16\cr Date: \tab 2020-05-26\cr License: \tab GPL-2\cr } This package
+#' 1.9.1\cr Date: \tab 2025-07-09\cr License: \tab GPL-2\cr } This package
 #' includes eleven functions. Seven functions, \code{\link{fwi}},
 #' \code{\link{fwiRaster}}, \code{\link{hffmc}}, \code{\link{hffmcRaster}},
 #' \code{\link{sdmc}}, \code{\link{gfmc}}, and
@@ -58,11 +58,10 @@
 #'
 #' @name cffdrs-package
 #' @aliases cffdrs-package cffdrs
-#' @docType _PACKAGE
 #' @author Xianli Wang, Alan Cantin, Marc-André Parisien, Mike Wotton, Kerry
 #' Anderson, Brett Moore, Tom Schiks, and Mike Flannigan
 #'
-#' Maintainer: Alan Cantin \email{Alan.Cantin@nrcan-rncan.gc.ca}
+#' Maintainer: Brett Moore \email{Brett.Moore@nrcan-rncan.gc.ca}
 #' @seealso \code{\link{fbp}}, \code{\link{fire_season}}, \code{\link{fwi}},
 #' \code{\link{fwiRaster}}, \code{\link{gfmc}}, \code{\link{hffmc}},
 #' \code{\link{hffmcRaster}}, \code{\link{lros}}, \code{\link{pros}},
@@ -198,6 +197,7 @@
 #' # end date, and using overwintered DC
 #' fwi_withFSwDC
 #'
+"_PACKAGE"
 NULL
 
 
