@@ -1,7 +1,7 @@
 Type: Package
 Package: cffdrs
 Title: Canadian Forest Fire Danger Rating System
-Version: 1.9.0
+Version: 1.9.1
 Date: 2024-01-19
 Authors@R: c(
     person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role =  "aut"),
@@ -28,7 +28,6 @@ BugReports:
     https://r-forge.r-project.org/tracker/?func=browse&group_id=1970&atid=5372
 Depends:
     R (>= 3.5)
-    
 Imports:
     sf,
     terra,
