@@ -23,9 +23,9 @@ Description: This project provides a group of new functions to calculate
     <https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf>. Some functions
     have two versions, table and raster based.
 License: GPL-2
-URL: https://r-forge.r-project.org/projects/cffdrs/
+URL: https://github.com/cffdrs/cffdrs_r
 BugReports: 
-    https://r-forge.r-project.org/tracker/?func=browse&group_id=1970&atid=5372
+    https://github.com/cffdrs/cffdrs_r/issues/new/choose
 Depends:
     R (>= 3.5)
 Imports:
