@@ -40,8 +40,10 @@ test_that("fbp_10", {
                  return(actual)
                })
 })
+## Returns NA and warns ad nauseum
 test_that("fbp_11", {
-  fct_test_fbp("fbp_11",
+  expect_warning(
+    fct_test_fbp("fbp_11",
            function(test_fbp) {
              non_fuel <- copy(test_fbp)
              non_fuel$FuelType <- "NF"
@@ -49,10 +51,12 @@ test_that("fbp_11", {
              # HACK: for now change type here
              actual$FD <- as.logical(actual$FD)
              return(actual)
-           })
+           }),"NaNs produced")
 })
+## Returns NA and warns ad nauseum
 test_that("fbp_12", {
-  fct_test_fbp("fbp_12",
+  expect_warning(
+    fct_test_fbp("fbp_12",
            function(test_fbp) {
              water <- copy(test_fbp)
              water$FuelType <- "WA"
@@ -60,5 +64,5 @@ test_that("fbp_12", {
              # HACK: for now change type here
              actual$FD <- as.logical(actual$FD)
              return(actual)
-           })
+           }),"NaNs produced")
 })

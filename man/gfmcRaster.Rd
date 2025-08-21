@@ -34,6 +34,7 @@ also an equivalent Grass Fuel Moisture Code. All equations come from Wotton
 (2009) as cited below unless otherwise specified.
 }
 \examples{
+require(terra)
 set.seed(5123)
 test_gfmc_r <- rast(
   nrows = 25,

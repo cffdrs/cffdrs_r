@@ -270,6 +270,7 @@
 #' # The dataset is the standard test data for FBP system
 #' # provided by Wotton et al (2009), and randomly assigned
 #' # to a stack of raster layers
+#' require(terra)
 #' test_fbpRaster <- rast(
 #'   system.file("extdata", "test_fbpRaster.tif", package = "cffdrs")
 #' )
