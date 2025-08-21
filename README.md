@@ -7,7 +7,7 @@
 
 
 # cffdrs
-This project provides a group of new functions to calculate the outputs of the two main components of the [Canadian Forest Fire Danger Rating System (CFFDRS) Van Wagner and Pickett (1985)](https://cfs.nrcan.gc.ca/publications?id=19973) at various time scales: the [Fire Weather Index (FWI) System Wan Wagner (1985)](https://cfs.nrcan.gc.ca/publications?id=19927) and the [Fire Behaviour Prediction (FBP) System Forestry Canada Fire Danger Group (1992)](https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf). Some functions have two versions, table and raster based.
+This project provides a group of new functions to calculate the outputs of the two main components of the [Canadian Forest Fire Danger Rating System (CFFDRS) Van Wagner and Pickett (1985)](https://ostrnrcan-dostrncan.canada.ca/entities/publication/29706108-2891-4e5d-a59a-a77c96bc507c) at various time scales: the [Fire Weather Index (FWI) System Wan Wagner (1985)](https://ostrnrcan-dostrncan.canada.ca/entities/publication/d96e56aa-e836-4394-ba29-3afe91c3aa6c) and the [Fire Behaviour Prediction (FBP) System Forestry Canada Fire Danger Group (1992)](https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf). Some functions have two versions, table and raster based.
 
 ## Installation
 

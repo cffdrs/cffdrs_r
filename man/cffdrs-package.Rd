@@ -40,7 +40,7 @@ outputs. Sixteen fuel types are included in the FBP System, covering mainly
 major vegetation types in Canada.
 
 \tabular{ll}{ Package: \tab cffdrs\cr Type: \tab Package\cr Version: \tab
-1.9.1\cr Date: \tab 2025-07-09\cr License: \tab GPL-2\cr } This package
+1.9.2\cr Date: \tab 2025-07-09\cr License: \tab GPL-2\cr } This package
 includes eleven functions. Seven functions, \code{\link{fwi}},
 \code{\link{fwiRaster}}, \code{\link{hffmc}}, \code{\link{hffmcRaster}},
 \code{\link{sdmc}}, \code{\link{gfmc}}, and

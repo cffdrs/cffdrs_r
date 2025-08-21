@@ -137,7 +137,7 @@ b_fs
 Wotton, B.M. and Flannigan, M.D. (1993). Length of the fire
 season in a changing climate. Forestry Chronicle, 69, 187-192.
 
-\url{https://www.ualberta.ca/~flanniga/publications/1993_Wotton_Flannigan.pdf}
+\url{https://sites.ualberta.ca/~flanniga/publications/1993_Wotton_Flannigan.pdf}
 
 Lawson, B.D. and O.B. Armitage. 2008. Weather guide for the Canadian Forest
 Fire Danger Rating System. Nat. Resour. Can., Can. For. Serv., North. For.

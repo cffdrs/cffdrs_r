@@ -4,39 +4,38 @@ Title: Canadian Forest Fire Danger Rating System
 Version: 1.9.2
 Date: 2024-01-19
 Authors@R: c(
-    person("Xianli", "Wang", email = "Xianli.Wang@nrcan-rncan.gc.ca", role =  "aut"),
-    person("Alan", "Cantin", email = "Alan.Cantin@nrcan-rncan.gc.ca", role = "aut"),
-    person("Marc-André", "Parisien", email = "Marc-Andre.Parisien@nrcan-rncan.gc.ca", role = "aut"),
-    person("Mike", "Wotton", email = "Mike.Wotton@nrcan-rncan.gc.ca", role = "aut"),
+    person("Xianli", "Wang", , "Xianli.Wang@nrcan-rncan.gc.ca", role = "aut"),
+    person("Alan", "Cantin", , "Alan.Cantin@nrcan-rncan.gc.ca", role = "aut"),
+    person("Marc-André", "Parisien", , "Marc-Andre.Parisien@nrcan-rncan.gc.ca", role = "aut"),
+    person("Mike", "Wotton", , "Mike.Wotton@nrcan-rncan.gc.ca", role = "aut"),
     person("Kerry", "Anderson", role = "aut"),
-    person("Brett", "Moore", email = "Brett.Moore@nrcan-rncan.gc.ca", role = c("cre","aut")),
-    person("Tom", "Schiks", email = "Tom.Schiks@ontario.ca", role = "aut"),
-    person("Mike", "Flannigan", email = "MFlannigan@tru.ca", role = "aut")
+    person("Brett", "Moore", , "Brett.Moore@nrcan-rncan.gc.ca", role = c("cre", "aut")),
+    person("Tom", "Schiks", , "Tom.Schiks@ontario.ca", role = "aut"),
+    person("Mike", "Flannigan", , "MFlannigan@tru.ca", role = "aut")
   )
 Description: This project provides a group of new functions to calculate
     the outputs of the two main components of the Canadian Forest Fire
     Danger Rating System (CFFDRS) Van Wagner and Pickett (1985)
-    <https://cfs.nrcan.gc.ca/publications?id=19973>) at various time
+    <https://ostrnrcan-dostrncan.canada.ca/entities/publication/29706108-2891-4e5d-a59a-a77c96bc507c>) at various time
     scales: the Fire Weather Index (FWI) System Wan Wagner (1985)
-    <https://cfs.nrcan.gc.ca/publications?id=19927> and the Fire Behaviour
+    <https://ostrnrcan-dostrncan.canada.ca/entities/publication/d96e56aa-e836-4394-ba29-3afe91c3aa6c> and the Fire Behaviour
     Prediction (FBP) System Forestry Canada Fire Danger Group (1992)
     <https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/10068.pdf>. Some functions
     have two versions, table and raster based.
 License: GPL-2
 URL: https://github.com/cffdrs/cffdrs_r
-BugReports: 
-    https://github.com/cffdrs/cffdrs_r/issues/new/choose
+BugReports: https://github.com/cffdrs/cffdrs_r/issues/new/choose
 Depends:
     R (>= 3.5)
 Imports:
-    sf,
-    terra,
     data.table,
-    foreach,
     doParallel,
+    foreach,
     geosphere,
     methods,
-    parallel
+    parallel,
+    sf,
+    terra
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

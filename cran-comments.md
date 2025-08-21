@@ -1,11 +1,9 @@
 # R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
 
 * This is a resubmission.
-* Adjust to HTTPS per request of automatic pre-test.
-* Removed dependence on the following archived projects  **raster** and one or
-* more of the retiring packages **rgdal**, **rgeos** or **maptools**
-* A new maintainer has been identified
-* A number of optimizations have been implemented
-* There are now tests for all functions in the package
+* Moved `data.table` from depends to imports
+* Calculating exact FFMC coefficient rather than hard coding
+* Fixed bug when no FUELTYPE present in `fbp`
+* Ensured bug reporting location is at the github location
