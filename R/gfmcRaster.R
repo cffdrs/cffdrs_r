@@ -32,6 +32,7 @@
 #' @export gfmcRaster
 #'
 #' @examples
+#' require(terra)
 #' set.seed(5123)
 #' test_gfmc_r <- rast(
 #'   nrows = 25,
