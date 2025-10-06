@@ -20,11 +20,12 @@
 
 foliar_moisture_content <- function(LAT, LONG, ELV, DJ, D0,FMCo=NULL) {
 
-  if(!is.null(FMCo) | is.na(FMCo) & LAT < 0){FMC <- FMCo;
+  warning({if(any(LAT < 7 | LONG < 140 | LONG > 52)){"Location outside of North America. Please define an FMC override in the FMCo variable."}})
+  if(any(!is.null(FMCo) | is.na(FMCo) & LAT < 0)){FMC <- FMCo;
                      message("FMC Override provided, returning as FMC.");
                      return(FMC)
             }
-  warning({if(LAT < 7 | LONG < 140 | LONG > 52){"Location outside of North America. Please define an FMC override in the FMCo variable."}})
+  
   D0 <- foliar_moisture_content_minimum(LAT, LONG, ELV, DJ, D0)
 
   # Number of days between day of year and date of min FMC
