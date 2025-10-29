@@ -426,7 +426,8 @@ fbpRaster <- function(
   names(out) <- select
   # FBP <- FBP[, ..select]
   for (i in select) {
-    out[[i]] <- FBP[[i]]
+    new <- setValues(out[i],FBP[i])
+    out[[i]] <- new
   }
   return(out)
 }
