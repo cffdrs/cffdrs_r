@@ -282,6 +282,7 @@ fire_behaviour_prediction <- function(
   )
 
   FMC <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, FMC)
+  D0 <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, D0)
 
   ############################################################################
   #                         END
