@@ -26,6 +26,7 @@ foliar_moisture_content <- function(LAT, LONG, ELV, DJ, D0=NA,FMCo=NULL) {
                      return(FMC)
   }
 
+  ## In the event a user wants to calculate the FMC outside of the FBP function this will ensure D0 gets calculated.
   D0 <- if(any(D0 <= 0| is.na(D0))){foliar_moisture_content_minimum(LAT, LONG, ELV, DJ, D0)}else{D0}
 
   # Number of days between day of year and date of min FMC
