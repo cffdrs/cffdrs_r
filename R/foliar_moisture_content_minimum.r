@@ -4,7 +4,7 @@
 #' All variables names are laid out in the same manner as Forestry Canada
 #' Fire Danger Group (FCFDG) (1992). Development and Structure of the
 #' Canadian Forest Fire Behavior Prediction System." Technical Report
-#' ST-X-3, Forestry Canada, Ottawa, Ontario. This function returns the date of 
+#' ST-X-3, Forestry Canada, Ottawa, Ontario. This function returns the date of
 #' minimum foliar moisture content.
 #'
 #' @param LAT    Latitude (decimal degrees)
@@ -17,7 +17,7 @@
 #' @return D0: Date of minimum foliar moisture content
 #' @noRd
 
-foliar_moisture_content_minimum <- function(LAT, LONG, ELV, DJ, D0) {
+foliar_moisture_content_minimum <- function(LAT, LONG, ELV, DJ,D0) {
 
   # Initialize vectors
 
@@ -29,21 +29,20 @@ foliar_moisture_content_minimum <- function(LAT, LONG, ELV, DJ, D0) {
   # Eqs. 1 & 3 (FCFDG 1992)
 
   LATN <- ifelse(
-    D0 <= 0,
+    D0 <= 0|is.na(D0),
     ifelse(
       ELV <= 0,
       46 + 23.4 * exp(-0.0360 * (150 - LONG)),
       43 + 33.7 * exp(-0.0351 * (150 - LONG))
-    ),
-    LATN
-  )
+    ),LATN)
+
 
   # Calculate Date of minimum foliar moisture content
 
   # Eqs. 2 & 4 (FCFDG 1992)
 
   D0 <- ifelse(
-    D0 <= 0,
+    D0 <= 0|is.na(D0),
     ifelse(
       ELV <= 0,
       151 * (LAT / LATN),
