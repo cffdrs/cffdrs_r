@@ -46,7 +46,7 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   )
   # The real moisture content of pine litter ranges up to about 250 percent,
   # so we cap it at 250
-                     <- ifelse(wmo > 250, 250, wmo)
+  wmo <- ifelse(wmo > 250, 250, wmo)
   # Eq. 4 Equilibrium moisture content from drying
   ed <- (0.942 * (rh^0.679) + (11 * exp((rh - 100) / 10))
     + 0.18 * (21.1 - temp) * (1 - 1 / exp(rh * 0.115)))
@@ -87,3 +87,4 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   .Deprecated("fine_fuel_moisture_code")
   return(fine_fuel_moisture_code(...))
 }
+
