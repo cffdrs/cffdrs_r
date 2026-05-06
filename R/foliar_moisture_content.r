@@ -21,13 +21,16 @@
 foliar_moisture_content <- function(LAT, LONG, ELV, DJ, D0=NA,FMCo=NULL) {
 
   if(any(LAT < 7 | LONG > 140 | LONG < 52)){warning({"Location outside of North America. Please define an FMC override in the FMCo variable."})}
-  if(any(!is.null(FMCo) | is.na(FMCo) & LAT < 0)){FMC <- FMCo;
+  if(!is.null(FMCo)){
+  if(!is.na(FMCo)){FMC <- FMCo;
                      message("FMC Override provided, returning as FMC.");
                      return(FMC)
-  }
+  }}
 
   ## In the event a user wants to calculate the FMC outside of the FBP function this will ensure D0 gets calculated.
+
   D0 <- if(any(D0 <= 0| is.na(D0))){foliar_moisture_content_minimum(LAT, LONG, ELV, DJ, D0)}else{D0}
+
 
   # Number of days between day of year and date of min FMC
 
