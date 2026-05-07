@@ -9,6 +9,20 @@ will append it to the output so allow the user to see the `D0` in the output.
 
 # cffdrs 1.9.2
 
+# version 1.9.2
+
+---
+
+## Enhancments
+
+- Moved `data.table` from depends to imports
+- Calculating exact FFMC coefficient rather than hard coding
+
+## Fixes
+
+- Fixed bug when no FUELTYPE present in `fbp`
+- Ensured bug reporting location is at the github location
+
 # version 1.9.0
 
 ---

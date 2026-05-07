@@ -62,7 +62,7 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   )
   # Eq. 6b Affect of temperature on  drying rate
   x <- z * 0.581 * exp(0.0365 * temp)
-  # Eq. 8
+  # Eq. 9
   wm <- ifelse(wmo < ed & wmo < ew, ew - (ew - wmo) / (10^x), wmo)
   # Eq. 7a (ko) Log wetting rate at the normal temperature of 21.1 C
   z <- ifelse(
@@ -73,7 +73,7 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   )
   # Eq. 7b Affect of temperature on  wetting rate
   x <- z * 0.581 * exp(0.0365 * temp)
-  # Eq. 9
+  # Eq. 8
   wm <- ifelse(wmo > ed, ed + (wmo - ed) / (10^x), wm)
   # Eq. 10 Final ffmc calculation
   ffmc1 <- (59.5 * (250 - wm)) / (FFMC_COEFFICIENT + wm)
@@ -87,3 +87,4 @@ fine_fuel_moisture_code <- function(ffmc_yda, temp, rh, ws, prec) {
   .Deprecated("fine_fuel_moisture_code")
   return(fine_fuel_moisture_code(...))
 }
+
