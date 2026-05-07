@@ -1,3 +1,12 @@
+# cffdrs 1.10.0
+
+## Enhancements
+
+### Updated Foliar Moisture Content
+
+Foliar moisture content now properly calculates the date of minimum moisture and
+will append it to the output so allow the user to see the `D0` in the output.
+
 # cffdrs 1.9.2
 
 # version 1.9.0
