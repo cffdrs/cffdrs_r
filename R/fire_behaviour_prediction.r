@@ -220,7 +220,11 @@ fire_behaviour_prediction <- function(
   LAT <- ifelse(LAT < -90 | LAT > 90, 0, LAT)
   LAT <- ifelse(is.na(LAT), 55, LAT)
   LONG <- ifelse(LONG < -180 | LONG > 360, 0, LONG)
+  LONG <- ifelse(LONG > 180, LONG - 180, LONG)
   LONG <- ifelse(is.na(LONG), -120, LONG)
+  # Any negative longitudes (western hemisphere) are translated to positive
+  #  longitudes
+  LONG <- ifelse(LONG < 0, -LONG, LONG)
   THETA <- ifelse(is.na(THETA) | THETA < -2 * pi | THETA > 2 * pi, 0, THETA)
   SD <- ifelse(SD < 0 | SD > 1e+05, -999, SD)
   SD <- ifelse(is.na(SD), 0, SD)
@@ -247,9 +251,7 @@ fire_behaviour_prediction <- function(
   WAZ <- ifelse(WAZ > 2 * pi, WAZ - 2 * pi, WAZ)
   SAZ <- ASPECT + pi
   SAZ <- ifelse(SAZ > 2 * pi, SAZ - 2 * pi, SAZ)
-  # Any negative longitudes (western hemisphere) are translated to positive
-  #  longitudes
-  LONG <- ifelse(LONG < 0, -LONG, LONG)
+
   ############################################################################
   #                         END
   ############################################################################
@@ -272,12 +274,16 @@ fire_behaviour_prediction <- function(
   }
   CBH <- crown_base_height(FUELTYPE, CBH, SD, SH)
   CFL <- crown_fuel_load(FUELTYPE, CFL)
+  D0 <- ifelse(D0 <= 0, foliar_moisture_content_minimum(LAT, LONG, ELV, DJ, D0), D0)
   FMC <- ifelse(
     FMC <= 0 | FMC > 120 | is.na(FMC),
     foliar_moisture_content(LAT, LONG, ELV, DJ, D0),
     FMC
   )
+
   FMC <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, FMC)
+  D0 <- ifelse(FUELTYPE %in% c("D1", "S1", "S2", "S3", "O1A", "O1B"), 0, D0)
+
   ############################################################################
   #                         END
   ############################################################################

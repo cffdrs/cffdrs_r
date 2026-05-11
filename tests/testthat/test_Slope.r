@@ -2,6 +2,7 @@ test_that("Slope", {
   fctSlope <- function(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI) {
     return(as.data.table(slope_adjustment(FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI)))
   }
+  suppressWarnings(
   checkData("Slope",
     fctSlope,
     list(
@@ -22,5 +23,5 @@ test_that("Slope", {
     ),
     split_args = TRUE,
     with_input = TRUE
-  )
+  ))
 })

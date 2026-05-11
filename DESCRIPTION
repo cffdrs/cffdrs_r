@@ -1,8 +1,8 @@
 Type: Package
 Package: cffdrs
 Title: Canadian Forest Fire Danger Rating System
-Version: 1.9.2
-Date: 2025-08-21
+Version: 1.10.0
+Date: 2026-05-07
 Authors@R: c(
     person("Xianli", "Wang", , "Xianli.Wang@nrcan-rncan.gc.ca", role = "aut"),
     person("Alan", "Cantin", , "Alan.Cantin@nrcan-rncan.gc.ca", role = "aut"),
