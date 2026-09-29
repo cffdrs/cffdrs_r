@@ -300,8 +300,9 @@ fire_behaviour_prediction <- function(
     return(RAZ0)
   }
   RAZ <- ifelse(GS > 0 & FFMC > 0, RAZ0, WAZ)
-  # Calculate or keep Initial Spread Index (ISI)
-  ISI <- ifelse(ISI > 0, ISI, initial_spread_index(FFMC, WSV, TRUE))
+   # Always calculate or Initial Spread Index (ISI), this ensures FBP Modifcation
+  #  is completed
+  ISI <- initial_spread_index(FFMC, WSV, TRUE)
   # HACK: C6 ROS depends on CFB so do this to not repeat calculations
   ros_vars <- rate_of_spread_extended(FUELTYPE, ISI, BUI, FMC, SFC, PC, PDF, CC, CBH)
   ROS <- ros_vars$ROS
