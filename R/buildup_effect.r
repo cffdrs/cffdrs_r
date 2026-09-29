@@ -15,20 +15,27 @@
 #' @noRd
 
 buildup_effect <- function(FUELTYPE, BUI) {
+
+    # Negative BUI is an internal sentinel meaning "disable the BUI effect".
+    # D-2 Green Aspen threshold from Alexander (2010); see cffdrs.constants.
+    if(FUELTYPE == "D2" & 0 <= BUI & BUI < 80) {
+        return(0.0)
+    }
+    
   # Fuel Type String represenations
   d <- c(
     "C1", "C2", "C3", "C4", "C5", "C6", "C7",
-    "D1", "M1", "M2", "M3", "M4", "S1", "S2", "S3", "O1A", "O1B"
+    "D1","D2", "M1", "M2", "M3", "M4", "S1", "S2", "S3", "O1A", "O1B"
   )
   # The average BUI for the fuel type - as referenced by the "d" list above
   BUIo <- c(
     72, 64, 62, 66, 56, 62, 106,
-    32, 50, 50, 50, 50, 38, 63, 31, 01, 01
+    32, 32, 50, 50, 50, 50, 38, 63, 31, 01, 01
   )
   # Proportion of maximum possible spread rate that is reached at a standard BUI
   Q <- c(
     0.9, 0.7, 0.75, 0.8, 0.8, 0.8, 0.85,
-    0.9, 0.8, 0.8, 0.8, 0.8, 0.75, 0.75, 0.75, 1.0, 1.0
+    0.9, 0.9, 0.8, 0.8, 0.8, 0.8, 0.75, 0.75, 0.75, 1.0, 1.0
   )
   names(BUIo) <- names(Q) <- d
   # Eq. 54 (FCFDG 1992) The Buildup Effect

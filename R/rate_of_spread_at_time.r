@@ -21,7 +21,7 @@
 rate_of_spread_at_time <- function(FUELTYPE, ROSeq, HR, CFB) {
   # Eq. 72 - alpha constant value, dependent on fuel type
   alpha <- ifelse(
-    FUELTYPE %in% c("C1", "O1A", "O1B", "S1", "S2", "S3", "D1"),
+    FUELTYPE %in% c("C1", "O1A", "O1B", "S1", "S2", "S3", "D1","D2"),
     0.115,
     0.115 - 18.8 * (CFB**2.5) * exp(-8 * CFB)
   )

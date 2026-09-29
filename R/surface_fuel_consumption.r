@@ -93,6 +93,14 @@ surface_fuel_consumption <- function(FUELTYPE, FFMC, BUI, PC, GFL) {
     12.0 * (1 - exp(-0.0166 * BUI)) + 20.0 * (1 - exp(-0.0210 * BUI)),
     SFC
   )
+  ## D-2 Equations added GLC-x-10 Wotton et. al. 2009 pg 29
+  SFC <- ifelse(
+    FUELTYPE == "D2",
+    ifelse(BUI < 80:
+            0.0,
+            1.5 * (1 - exp(-0.0183 * BUI))),
+    SFC
+  )
   # Constrain SFC value
   SFC <- ifelse(SFC <= 0, 0.000001, SFC)
   return(SFC)

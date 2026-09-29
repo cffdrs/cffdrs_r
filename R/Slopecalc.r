@@ -29,7 +29,6 @@
 #' @param PDF       Percent Dead Balsam Fir (%)
 #' @param CC        Constant
 #' @param CBH       Crown Base Height (m)
-#' @param ISI       Initial Spread Index
 #'
 #' @returns  RAZ and WSV
 #'    - Rate of spread azimuth (degrees) and Wind Slope speed (km/hr)
@@ -38,7 +37,7 @@
 #'
 
 slope_adjustment <- function(
-    FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH, ISI) {
+    FUELTYPE, FFMC, BUI, WS, WAZ, GS, SAZ, FMC, SFC, PC, PDF, CC, CBH) {
   NoBUI <- rep(-1, length(FFMC))
   # Eq. 39 (FCFDG 1992) - Calculate Spread Factor
   SF <- ifelse(GS >= 70, 10, exp(3.533 * (GS / 100)^1.2))
